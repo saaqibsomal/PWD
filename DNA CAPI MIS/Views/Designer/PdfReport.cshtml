@@ -1,0 +1,345 @@
+﻿@model System.Data.DataTable
+
+
+@{
+    ViewBag.Title = "RHS";
+}
+@section Scripts {
+    <script>
+        var viewURL = "/Designer/Excel/";
+    </script>
+
+}
+
+<link href="~/Content/DSDS/dsds.css" rel="stylesheet" type="text/css" />
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML to PDF</title>
+    <!-- Include jsPDF library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+    <!-- Include DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+
+    <!-- Include DataTables JavaScript -->
+
+</head>
+<style>
+    .model {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.5);
+    }
+
+    .model-content {
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+<style>
+    .optionsRadios {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+<style>
+    /* Style for the table */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    /* Style for table headers */
+    th {
+        background-color: #007bff; /* Blue header color */
+        color: #fff; /* Text color */
+        font-weight: bold;
+        text-align: left;
+    }
+    /* Style for table cells */
+    td {
+        border: 1px solid #dddddd; /* Border color for cells */
+        padding: 8px;
+    }
+    /* Alternate row color */
+    tr:nth-child(even) {
+        background-color: #f2f2f2; /* Light gray */
+    }
+</style>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    li {
+        margin-bottom: 20px;
+    }
+
+    .criteria {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+        .criteria label {
+            font-weight: bold;
+        }
+
+        .criteria select {
+            padding: 5px;
+            width: 180px;
+        }
+
+        .criteria .sufficient {
+            color: green;
+        }
+
+        .criteria .quite-sufficient {
+            color: orange;
+        }
+
+        .criteria .poor {
+            color: red;
+        }
+</style>
+
+<div class="row desktop">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title" style="width:100%">Report</h3>
+                <h2>Monitoring Visits Report</h2>
+
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="col-md-4 col-sm-12" style="padding-left: 18px">
+                                @Html.DropDownList("Checklist", ViewBag.Checklist as List<SelectListItem>, "Monitoring Checklist For All", htmlAttributes: new { @class = "form-control", id = "Checklist" })
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div style="overflow-x: auto; margin-top: 10px;margin-right:5px;">
+                    <table id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>SN#</th>
+                                <th>Monitoring List</th>
+                                <th>District Name</th>
+                                <th>Center Name</th>
+                                <th>Monitoring DateTime</th>
+                                <th>Officer Name</th>
+                                <th>Coordinate</th>
+                                <th>View</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody"></tbody>
+                    </table>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.datatables.net/2.0.5/js/dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#PdfGen").click(function () {
+            $("#pdfModel").css("display", "block");
+        });
+
+        $(".close").click(function () {
+            $("#pdfModel").css("display", "none");
+        });
+
+        $(window).click(function (event) {
+            if (event.target == $("#pdfModel")[0]) {
+                $("#pdfModel").css("display", "none");
+            }
+        });
+
+    });
+
+    $(document).ready(function () {
+
+
+        $.ajax({
+            type: 'POST',
+            url: "/Designer/CreatePDFBySurvey/" + 0,
+            data: {},
+            success: function (data) {
+
+                $('#tbody').empty();
+                var tbody = $('#tbody');
+                $.each(data, function (index, item) {
+                    var row = $('<tr></tr>');
+                    row.append('<td>' + parseInt(index+1)  + '</td>');
+                    row.append('<td>' + item.Project + '</td>');
+                    row.append('<td>' + item.DistrictName + '</td>');
+                    row.append('<td>' + item.CenterName + '</td>');
+                    row.append('<td>' + item.Created + '</td>');
+                    row.append('<td>' + item.SurveyorName + '</td>');
+                    row.append('<td>' + item.Longitude + "," + item.Latitude  + '</td>');
+                    row.append('<td><a href="#"   > View </a></td>');
+
+                    row.click(function () {
+                        // Call your function here, passing the subject number as a parameter
+                        OpenReport(item.sbjnum, item.CenterName);
+                    });
+
+                    tbody.append(row);
+                });
+                let table = new DataTable('#dataTable');
+              //  $('.dt-layout-row').css('text-align', 'right');
+                $('.dt-length').hide();
+                $('.dt-input').addClass('form-control');
+                $('.dt-search').addClass('col-md-4');
+                $('.dt-search').css('padding-left', '3px');
+                $('.dt-search').css('padding-bottom', '3px');
+
+
+ 
+            }
+        });
+
+
+
+    });
+
+
+
+
+
+
+    $('#Checklist').change(function () {
+        var id = $("#Checklist").find('option:selected').val();
+        if (id == "") {
+            id = 0;
+        }
+        $.ajax({
+            type: 'POST',
+            url: "/Designer/CreatePDFBySurvey/" + id,
+            data: {},
+            success: function (data) {
+
+                $('#tbody').empty();
+                var tbody = $('#tbody');
+                $.each(data, function (index, item) {
+                    var row = $('<tr></tr>');
+                    row.append('<td>' + parseInt(index + 1) + '</td>');
+                    row.append('<td>' + item.Project + '</td>');
+                    row.append('<td>' + item.DistrictName + '</td>');
+                    row.append('<td>' + item.CenterName + '</td>');
+                    row.append('<td>' + item.Created + '</td>');
+                    row.append('<td>' + item.SurveyorName + '</td>');
+                    row.append('<td>' + item.Longitude + "," + item.Latitude + '</td>');
+                    row.append('<td><a href="#" onclick= > View </a></td>');
+                    row.click(function () {
+                        // Call your function here, passing the subject number as a parameter
+                        OpenReport(item.sbjnum, item.Project);
+                    });
+
+                    tbody.append(row);
+                });
+                let table = new DataTable('#dataTable');
+                $('.t-search').css('padding-left', '3px');
+  
+                $('.dt-length').hide();
+                $('.dt-input').addClass('form-control');
+                $('.dt-search').addClass('col-md-4');
+                $('.dt-search').css('padding-bottom', '3px');
+            }
+        });
+
+    });
+
+    function OpenReport(sbjnum, Project) {
+        var Pro;
+        if ($("#Checklist").find('option:selected').text().includes("-")) {
+            Pro = $("#Checklist").find('option:selected').text().split('-')[1];
+        } else {
+            Pro = $("#Checklist").find('option:selected').text();
+        }
+
+        var heading = Pro;
+        var url = 'http://localhost:54050/Designer/Report?id=' + sbjnum + '&Heading=' + Project;
+
+        // Open the URL in a new tab/window
+        window.open(url, '_blank');
+
+
+
+    }
+
+
+</script>
