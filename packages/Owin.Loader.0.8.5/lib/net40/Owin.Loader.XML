@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Owin.Loader</name>
+    </assembly>
+    <members>
+        <member name="T:Owin.Loader.DefaultLoader">
+            <summary>
+            Locates the startup class based on the following convention:
+            AssemblyName.Startup, with a method named Configuration
+            </summary>
+        </member>
+        <member name="M:Owin.Loader.DefaultLoader.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Owin.Loader.DefaultLoader.#ctor(System.Func{System.String,System.Action{Owin.IAppBuilder}})">
+            <summary>
+            Allows for a fallback loader to be specified.
+            </summary>
+            <param name="next"></param>
+        </member>
+        <member name="M:Owin.Loader.DefaultLoader.#ctor(System.Func{System.String,System.Action{Owin.IAppBuilder}},System.Func{System.Type,System.Object})">
+            <summary>
+            Allows for a fallback loader and a Dependency Injection activator to be specified.
+            </summary>
+            <param name="next"></param>
+            <param name="activator"></param>
+        </member>
+        <member name="M:Owin.Loader.DefaultLoader.Load(System.String)">
+            <summary>
+            Executes the loader, searching for the entry point by name.
+            </summary>
+            <param name="startupName">The name of the assembly and type entry point</param>
+            <returns></returns>
+        </member>
+        <member name="T:Owin.Loader.NullLoader">
+            <summary>
+            A default fallback loader that does nothing.
+            </summary>
+        </member>
+        <member name="M:Owin.Loader.NullLoader.Load(System.String)">
+            <summary>
+            A placeholder method that always returns null.
+            </summary>
+            <param name="startup"></param>
+            <returns>null.</returns>
+        </member>
+        <member name="P:Owin.Loader.NullLoader.Instance">
+            <summary>
+            A singleton instance of the NullLoader type.
+            </summary>
+        </member>
+    </members>
+</doc>
