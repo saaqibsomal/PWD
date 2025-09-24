@@ -3454,3 +3454,36 @@
 /DNA CAPI MIS/obj/Release/PWD CAPI MIS.csproj.FileListAbsolute.txt
 /DNA CAPI MIS/PWD CAPI MIS.csproj.user
 /DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/System.Net.Http.Formatting.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/Microsoft.Owin.Cors.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/Newtonsoft.Json.Bson.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/Newtonsoft.Json.Bson.pdb
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/Owin.Loader.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/System.Threading.Tasks.Extensions.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/System.Web.Cors.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/System.Web.Http.Cors.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/System.Web.Http.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/Views/Designer/Dashboard.cshtml
+/DNA CAPI MIS/Properties/PublishProfiles/FolderProfile1.pubxml
+/DNA CAPI MIS/Properties/PublishProfiles/FolderProfile1.pubxml.user
+/DNA CAPI MIS/bin/Microsoft.Owin.Cors.xml
+/DNA CAPI MIS/bin/Microsoft.Owin.xml
+/DNA CAPI MIS/bin/Newtonsoft.Json.Bson.pdb
+/DNA CAPI MIS/bin/Newtonsoft.Json.Bson.xml
+/DNA CAPI MIS/bin/Newtonsoft.Json.dll
+/DNA CAPI MIS/bin/Newtonsoft.Json.xml
+/DNA CAPI MIS/bin/Owin.Loader.xml
+/DNA CAPI MIS/bin/System.Threading.Tasks.Extensions.xml
+/DNA CAPI MIS/bin/System.Web.Http.Cors.xml
+/DNA CAPI MIS/bin/System.Web.Http.dll
+/DNA CAPI MIS/bin/System.Web.Http.xml
+/DNA CAPI MIS/obj/Debug/build.force
+/.vs/IMCL CAPI MIS/v17/DocumentLayout.backup.json
+/.vs/IMCL CAPI MIS/v17/DocumentLayout.json
+/DNA CAPI MIS/Controllers/DesignerController.cs
+/.vs/IMCL CAPI MIS/CopilotIndices/17.14.827.52834/CodeChunks.db
+/.vs/IMCL CAPI MIS/CopilotIndices/17.14.827.52834/CodeChunks.db-shm
+/.vs/IMCL CAPI MIS/CopilotIndices/17.14.827.52834/CodeChunks.db-wal
+/.vs/IMCL CAPI MIS/CopilotIndices/17.14.827.52834/SemanticSymbols.db
+/.vs/IMCL CAPI MIS/CopilotIndices/17.14.827.52834/SemanticSymbols.db-shm
+/.vs/IMCL CAPI MIS/CopilotIndices/17.14.827.52834/SemanticSymbols.db-wal
+*.Up2Date
