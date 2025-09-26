@@ -1197,13 +1197,12 @@
             url: "/Designer/OpenReport/" + sbjnum,
             data: {},
             success: function (data) {
-
                 $("#Heading").text("Monitoring Report (" + Heading + ")");
-               // $("#SubHeading").text("(For " + Heading + ")");
                 $("#NameOfDistrict").text(data.Field.NameOfDistrict);
                 $("#NameOfCenter").text(data.Field.NameOfCenter);
                 $("#DateOfVisit").text(data.Field.DateOfVisit);
                 $("#TimeOfVisit").text(data.Field.TimeOfVisit);
+
                 $("#OpenCloseStatus").text(data.Field.OpenCloseStatus);
                 try {
                     $('#Coordinate').text(data.RawData[0].Longitude + "," + data.RawData[0].Latitude);
