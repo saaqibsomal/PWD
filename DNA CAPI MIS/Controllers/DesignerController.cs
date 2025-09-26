@@ -5751,12 +5751,12 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
         }
 
 
-        public DashboardResponse GetDashboard(string StartDate, string Enddate)
+        public DashboardResponse GetDashboard(DashboardRequest req)
         {
             DashboardResponse response = new DashboardResponse();
             try
             {
-                response = service.OpenClose(StartDate, Enddate);
+                response = service.Dashboard(req);
                 response.Message = "Success";
             }
             catch(Exception ex)
