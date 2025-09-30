@@ -3498,3 +3498,31 @@
 /DNA CAPI MIS/bin/Microsoft.Extensions.Primitives.dll
 /DNA CAPI MIS/bin/Microsoft.Extensions.Primitives.xml
 /DNA CAPI MIS/bin/Microsoft.Net.Http.Headers.dll
+/DNA CAPI MIS/bin/Microsoft.Net.Http.Headers.xml
+/DNA CAPI MIS/bin/System.Buffers.dll
+/DNA CAPI MIS/bin/System.Buffers.xml
+/DNA CAPI MIS/bin/System.Runtime.CompilerServices.Unsafe.dll
+/DNA CAPI MIS/bin/System.Runtime.CompilerServices.Unsafe.xml
+/DNA CAPI MIS/bin/System.Text.Encodings.Web.dll
+/DNA CAPI MIS/bin/System.Text.Encodings.Web.xml
+/packages/Microsoft.AspNetCore.Http.Abstractions.2.3.0
+/packages/Microsoft.AspNetCore.Http.Features.2.3.0
+/packages/Microsoft.Extensions.Primitives.8.0.0
+/packages/Microsoft.AspNetCore.Mvc.Abstractions.2.3.0/.signature.p7s
+/packages/Microsoft.AspNetCore.Mvc.Abstractions.2.3.0/lib/netstandard2.0/Microsoft.AspNetCore.Mvc.Abstractions.dll
+/packages/Microsoft.AspNetCore.Mvc.Abstractions.2.3.0/lib/netstandard2.0/Microsoft.AspNetCore.Mvc.Abstractions.xml
+/packages/Microsoft.AspNetCore.Mvc.Abstractions.2.3.0/Microsoft.AspNetCore.Mvc.Abstractions.2.3.0.nupkg
+/packages/Microsoft.Net.Http.Headers.2.3.0/lib/netstandard2.0/Microsoft.Net.Http.Headers.dll
+/packages/Microsoft.Net.Http.Headers.2.3.0/.signature.p7s
+/packages/Microsoft.Net.Http.Headers.2.3.0/lib/netstandard2.0/Microsoft.Net.Http.Headers.xml
+/packages/Microsoft.Net.Http.Headers.2.3.0/Microsoft.Net.Http.Headers.2.3.0.nupkg
+/packages/System.Buffers.4.5.1/lib/net461/System.Buffers.dll
+/packages/System.Buffers.4.5.1/lib/net461/System.Buffers.xml
+/packages/System.Buffers.4.5.1/lib/netcoreapp2.0/_._
+/packages/System.Buffers.4.5.1/lib/netstandard1.1/System.Buffers.dll
+/packages/System.Buffers.4.5.1/lib/netstandard1.1/System.Buffers.xml
+/packages/System.Buffers.4.5.1/lib/netstandard2.0/System.Buffers.dll
+/packages/System.Buffers.4.5.1/lib/netstandard2.0/System.Buffers.xml
+/packages/System.Buffers.4.5.1/lib/uap10.0.16299/_._
+/packages/System.Buffers.4.5.1/ref/net45/System.Buffers.xml
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/Views/Shared/_ReportPartial.cshtml
