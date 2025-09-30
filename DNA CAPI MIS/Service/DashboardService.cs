@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web.Mvc;
 
 namespace DNA_CAPI_MIS.Service
 {
@@ -17,16 +18,36 @@ namespace DNA_CAPI_MIS.Service
         public dynamic Dashboard(DashboardRequest req)
         {
             DashboardResponse response = new DashboardResponse();
-            OpenClose(req, response);
-            NumberOfVisitor(req, response);
-            StatusOfBuilding(req, response);
 
+            MSUOpenClose(req, response);
+            RHSOpenClose(req, response);
+            FWCOpenClose(req, response);
+            NumberOfVisitor(req, response);
+            
+            
+            StatusOfBuilding(req, response);
             return response;
         }
 
 
 
+        public int GetFHSCenter()
+        {
+           var Central = dbContext.ProjectFieldSample.Where(x => x.IsActive && "50446".Contains(x.FieldID.ToString()));
+           return 0;
+        }
 
+        public int GetMSUCenter()
+        {
+            var Central = dbContext.ProjectFieldSample.Where(x => x.IsActive && "50486".Contains(x.FieldID.ToString()));
+            return 0;
+        }
+
+        public int GetFWCCenter()
+        {
+            var Central = dbContext.ProjectFieldSample.Where(x => x.IsActive && "55588".Contains(x.FieldID.ToString()));
+            return 0;
+        }
 
         private void NumberOfVisitor(DashboardRequest req, DashboardResponse response)
         {
@@ -105,7 +126,77 @@ FieldValue6 as StatusOfBuilding,
             response.Grid3 = Grid;
         }
 
-        private void OpenClose(DashboardRequest req, DashboardResponse response)
+        private void MSUOpenClose(DashboardRequest req, DashboardResponse response)
+        {
+            string Query = $@"
+ 
+-- MSU
+WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
+        MAX(CASE WHEN sd.FieldId = 50482 THEN sd.[FieldValue] END) AS IsOpen,
+        MAX(CASE WHEN sd.FieldId in( 50484) THEN sd.[FieldValue] END) AS District,
+        MAX(CASE WHEN sd.FieldId = 50486 THEN sd.[FieldValue] END) AS Center
+    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and s.Created between '{req.StartDate}' and '{req.EndDate}' GROUP BY s.ProjectID, sd.sbjnum),
+cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
+  INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 50484 
+    INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  50486),
+SplitStatus AS (    SELECT    cwt.ProjectID,   cwt.DistrictTitle,  cwt.CenterTitle,   value AS StatusCode
+    FROM   cte_with_titles cwt   CROSS APPLY dbo.SplitStringValue(cwt.IsOpen, ',') 
+ where (cwt.DistrictTitle like '%{req.DistrictName}%' or '' = '{req.DistrictName}') and (cwt.CenterTitle like  '%{req.CenterName}%' or '' = '{req.CenterName}')
+)
+SELECT 
+    ProjectID, CASE    WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close' END AS Title, COUNT(*) AS OpenClose
+FROM   SplitStatus ss GROUP BY  ProjectID,  CASE   WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close'   END ORDER BY  Title;
+";
+
+
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = "";
+            }
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = "";
+            }
+            var OpenClose = dbContext.Database.SqlQuery<PieChartOC>(Query);
+
+            response.MSUOpenClose = OpenClose.ToList();
+        }
+
+        private void FWCOpenClose(DashboardRequest req, DashboardResponse response)
+        {
+            string Query = $@"
+-- FWC
+
+WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
+        MAX(CASE WHEN sd.FieldId = 55585 THEN sd.[FieldValue] END) AS IsOpen,
+        MAX(CASE WHEN sd.FieldId in( 55587) THEN sd.[FieldValue] END) AS District,
+        MAX(CASE WHEN sd.FieldId = 55588 THEN sd.[FieldValue] END) AS Center
+    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and s.Created between '{req.StartDate}' and '{req.EndDate}' GROUP BY s.ProjectID, sd.sbjnum),
+cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
+  INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 55587 
+    INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  55588),
+SplitStatus AS (    SELECT    cwt.ProjectID,   cwt.DistrictTitle,  cwt.CenterTitle,   value AS StatusCode
+    FROM   cte_with_titles cwt   CROSS APPLY dbo.SplitStringValue(cwt.IsOpen, ',') 
+ where (cwt.DistrictTitle like '%{req.DistrictName}%' or '' = '{req.DistrictName}') and (cwt.CenterTitle like  '%{req.CenterName}%' or '' = '{req.CenterName}')
+)
+SELECT 
+    ProjectID, CASE    WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close' END AS Title, COUNT(*) AS OpenClose
+FROM   SplitStatus ss GROUP BY  ProjectID,  CASE   WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close'   END ORDER BY  Title;";
+
+
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = "";
+            }
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = "";
+            }
+            var OpenClose = dbContext.Database.SqlQuery<PieChartOC>(Query);
+
+            response.FWCOpenClose = OpenClose.ToList();
+        }
+        private void RHSOpenClose(DashboardRequest req, DashboardResponse response)
         {
             string Query = $@"
 -- RHS
@@ -126,44 +217,72 @@ SELECT
     ProjectID, CASE    WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close' END AS Title, COUNT(*) AS OpenClose
 FROM   SplitStatus ss GROUP BY  ProjectID,  CASE   WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close'   END ORDER BY  Title;
 
--- MSU
-WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
-        MAX(CASE WHEN sd.FieldId = 50482 THEN sd.[FieldValue] END) AS IsOpen,
-        MAX(CASE WHEN sd.FieldId in( 50484) THEN sd.[FieldValue] END) AS District,
-        MAX(CASE WHEN sd.FieldId = 50486 THEN sd.[FieldValue] END) AS Center
-    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and s.Created between '{req.StartDate}' and '{req.EndDate}' GROUP BY s.ProjectID, sd.sbjnum),
-cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
-  INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 50484 
-    INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  50486),
-SplitStatus AS (    SELECT    cwt.ProjectID,   cwt.DistrictTitle,  cwt.CenterTitle,   value AS StatusCode
-    FROM   cte_with_titles cwt   CROSS APPLY dbo.SplitStringValue(cwt.IsOpen, ',') 
- where (cwt.DistrictTitle like '%{req.DistrictName}%' or '' = '{req.DistrictName}') and (cwt.CenterTitle like  '%{req.CenterName}%' or '' = '{req.CenterName}')
-)
-SELECT 
-    ProjectID, CASE    WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close' END AS Title, COUNT(*) AS OpenClose
-FROM   SplitStatus ss GROUP BY  ProjectID,  CASE   WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close'   END ORDER BY  Title;
+";
 
--- FWC
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = "";
+            }
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = "";
+            }
+            var OpenClose = dbContext.Database.SqlQuery<PieChartOC>(Query);
 
-WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
-        MAX(CASE WHEN sd.FieldId = 55585 THEN sd.[FieldValue] END) AS IsOpen,
-        MAX(CASE WHEN sd.FieldId in( 55587) THEN sd.[FieldValue] END) AS District,
-        MAX(CASE WHEN sd.FieldId = 55588 THEN sd.[FieldValue] END) AS Center
-    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and s.Created between '{req.StartDate}' and '{req.EndDate}' GROUP BY s.ProjectID, sd.sbjnum),
-cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
-  INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 55587 
-    INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  55588),
-SplitStatus AS (    SELECT    cwt.ProjectID,   cwt.DistrictTitle,  cwt.CenterTitle,   value AS StatusCode
-    FROM   cte_with_titles cwt   CROSS APPLY dbo.SplitStringValue(cwt.IsOpen, ',') 
- where (cwt.DistrictTitle like '%{req.DistrictName}%' or '' = '{req.DistrictName}') and (cwt.CenterTitle like  '%{req.CenterName}%' or '' = '{req.CenterName}')
-)
-SELECT 
-    ProjectID, CASE    WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close' END AS Title, COUNT(*) AS OpenClose
-FROM   SplitStatus ss GROUP BY  ProjectID,  CASE   WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close'   END ORDER BY  Title;";
+            response.RHSOpenClose = OpenClose.ToList();
+        }
 
-            var OpenClose = dbContext.Database.SqlQuery<BarChart>(Query);
+        public List<SDPsStatus> SDPStatus(DashboardRequest req)
+        {
+            string  Where = $"where s.ProjectID in ({req.ProjectId})";
+            string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
 
-            response.OpenClose = OpenClose.ToList();
+;with cte as (
+	  select s.ProjectID,  s.sbjnum, s.Created, 
+       
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+	   
+		sd5.fieldId as FieldId5, sd5.fieldValue as FieldValue5,
+		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
+		sd7.fieldId as FieldId7, sd7.fieldValue as FieldValue7,
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue order by s.created desc) as RowNum
+	from survey s
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+		inner join SurveyData sd5 on s.sbjnum = sd5.sbjnum and sd5.FieldId in (55591,50495,52571) -- Premises
+	    inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (55570,50482,55585) -- Open Close Center Status
+		inner join SurveyData sd7 on s.sbjnum = sd7.sbjnum and sd7.FieldId in (50437,50634,55590) -- Status 
+		{Where})
+select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as ProjectName, fs2.Title as District ,fs3.Title as Center, 
+ FieldValue5 
+ as Premises,
+case when FieldValue6 =1 then 'Open' else 'Close' end as OpenClose,
+ FieldValue7 as Status, convert(varchar, Created,101) asDate
+    into #Graph from cte
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
+	inner join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
+	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
+	inner join ProjectFieldSample fs7 on cte.FieldId7 = fs7.FieldID and fs7.Code IN (cte.FieldValue7)
+    where RowNum = 1 and created between '{req.StartDate}' and '{req.EndDate}' select * from #Graph";
+
+
+            if(string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = string.Empty;
+            }
+
+            var con = dbContext.Database.SqlQuery<SDPsStatus>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
+            return con.ToList();
         }
     }
 }

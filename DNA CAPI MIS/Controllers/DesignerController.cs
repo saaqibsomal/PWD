@@ -22,6 +22,7 @@ using System.Web.Mvc;
 using System.Web.Services.Description;
 using System.Web.UI.WebControls;
 
+
 namespace DNA_CAPI_MIS.Controllers
 {
     public class DesignerController : Controller
@@ -4488,6 +4489,9 @@ case when FieldValue6 =1 then 'Open' else 'Close' end as OpenClose,
             var con = db.Database.SqlQuery<Grid2>(Sql).ToList().Where(x => x.District.Contains(Des) && x.Center.Contains(Cen));
             return Json(con);
         }
+
+
+
         public JsonResult Grid3(string id)
         {
 
@@ -5750,8 +5754,8 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
             return Json(con);
         }
 
-
-        public DashboardResponse GetDashboard(DashboardRequest req)
+        [HttpPost]
+        public JsonResult GetDashboard( DashboardRequest req)
         {
             DashboardResponse response = new DashboardResponse();
             try
@@ -5759,11 +5763,11 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
                 response = service.Dashboard(req);
                 response.Message = "Success";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.Message = ex.Message;
             }
-            return response;
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
     }
 }

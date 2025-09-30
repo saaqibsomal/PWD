@@ -11,11 +11,30 @@ namespace DNA_CAPI_MIS.Models
     {
 
         public string Message { get; set; }
-        public SurveyorStats All { get; set; }
-        public SurveyorStats RHS { get; set; }
-        public SurveyorStats MSU { get; set; }
-        public SurveyorStats FWC { get; set; }
-        public List<BarChart> OpenClose { get; set; }
-        public List<Grid3> Grid3 { get; set; }
+        public SurveyorStats All { get; set; } = new SurveyorStats();
+        public SurveyorStats RHS { get; set; } = new SurveyorStats();
+        public SurveyorStats MSU { get; set; } = new SurveyorStats();
+        public SurveyorStats FWC { get; set; } = new SurveyorStats();
+        public List<PieChartOC> MSUOpenClose { get; set; } = new List<PieChartOC>();
+        public List<PieChartOC> FWCOpenClose { get; set; } = new List<PieChartOC>();
+        public List<PieChartOC> RHSOpenClose { get; set; } = new List<PieChartOC>();
+        public List<Grid3> Grid3 { get; set; } = new List<Grid3>();
+        public int AllCnt { get; set; } = 0;
+        public int RHSCnt { get; set; } = 0;
+        public int MSUCnt { get; set; } = 0;
+        public int FWCCnt { get; set; } = 0;
+    }
+
+
+    public class SDPsStatus
+    {
+        public string asDate { get; set; }
+        public string ProjectName { get; set; }
+        public string District { get; set; }
+        public string Center { get; set; }
+        public string Premises { get; set; }
+        public string OpenClose { get; set; }
+        public string Status { get; set; }
+
     }
 }
