@@ -27,5 +27,22 @@ namespace DNA_CAPI_MIS.Controllers
             }
             return Json(sdpStatus, JsonRequestBehavior.AllowGet);
         }
+        
+        
+        
+        [HttpPost]
+        public JsonResult StaffPosition(DashboardRequest req)
+        {
+            List<StuffPosition> sdpStatus = new List<StuffPosition>();
+            try
+            {
+                sdpStatus  = service.StuffDetailReportData(req);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Json(sdpStatus, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -284,5 +284,55 @@ case when FieldValue6 =1 then 'Open' else 'Close' end as OpenClose,
             var con = dbContext.Database.SqlQuery<SDPsStatus>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
             return con.ToList();
         }
+
+
+        public List<StuffPosition> StuffDetailReportData(DashboardRequest req)
+        {
+
+            string Where = $"where s.ProjectID in ({req.ProjectId})";
+            string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
+
+;with cte as (
+	select  s.sbjnum, s.Created, s.ProjectID,
+       
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+	   
+		sd5.fieldId as FieldId5, sd5.fieldValue as FieldValue5,
+	
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue order by s.created desc) as RowNum
+	from survey s
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+		Inner join SurveyData sd5 on s.sbjnum = sd5.sbjnum and sd5.FieldId in (55592,50496,50635) {Where})
+         	
+
+select  convert(varchar, Created,101) asDate,  fs2.Title as District ,fs3.Title as Center, 
+ FieldValue5 
+ as Remarks
+    into #Graph from cte
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
+	Left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
+
+    where RowNum = 1 and len(FieldValue5)  between 1 and 19 and created between '{req.StartDate}' and '{req.EndDate}' select * from #Graph
+
+ 
+";
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = string.Empty;
+            }
+            var stuffPosition = dbContext.Database.SqlQuery<StuffPosition>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
+            return stuffPosition.ToList();
+        }
     }
 }
