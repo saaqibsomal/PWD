@@ -4470,7 +4470,7 @@ END
 	    inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (55570,50482,55585) -- Open Close Center Status
 		inner join SurveyData sd7 on s.sbjnum = sd7.sbjnum and sd7.FieldId in (50437,50634,55590) -- Status 
 		{Where})
-select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as ProjectName, fs2.Title as District ,fs3.Title as Center, 
+select distinct (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as ProjectName, fs2.Title as District ,fs3.Title as Center, 
  FieldValue5 
  as Premises,
 case when FieldValue6 =1 then 'Open' else 'Close' end as OpenClose,
@@ -4481,7 +4481,7 @@ case when FieldValue6 =1 then 'Open' else 'Close' end as OpenClose,
 	inner join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
 	inner join ProjectFieldSample fs7 on cte.FieldId7 = fs7.FieldID and fs7.Code IN (cte.FieldValue7)
-    where RowNum = 1 and created between '{sd}' and '{ed}' select * from #Graph   
+    where   created between '{sd}' and '{ed}' select * from #Graph   
 
  
 ";
