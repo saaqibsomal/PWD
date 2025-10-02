@@ -23,6 +23,9 @@ namespace DNA_CAPI_MIS.Models
         public int RHSCnt { get; set; } = 0;
         public int MSUCnt { get; set; } = 0;
         public int FWCCnt { get; set; } = 0;
+
+
+        public ContraceptiveStockPositionModel contraceptiveStockPositionModel { get; set; } = new ContraceptiveStockPositionModel();
     }
 
 

@@ -297,6 +297,7 @@
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\AnalyzerModels.cs" />
     <Compile Include="Models\AnalyzerViews.cs" />
+    <Compile Include="Models\ContraceptiveStockPositionResponse.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\DashboardRequest.cs" />
     <Compile Include="Models\DashboardResponse.cs" />

@@ -44,5 +44,19 @@ namespace DNA_CAPI_MIS.Controllers
             }
             return Json(sdpStatus, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public JsonResult ContraceptiveStockPosition(DashboardRequest req)
+        {
+            ContraceptiveStockPositionModel sdpStatus = new ContraceptiveStockPositionModel();
+            try
+            {
+                sdpStatus  = service.ContraceptiveStockPosition(req);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Json(sdpStatus, JsonRequestBehavior.AllowGet);
+        }
     }
 }

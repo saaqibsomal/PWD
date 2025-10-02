@@ -4793,7 +4793,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 
 	
-    where RowNum = 1 and len(FieldValue5) > 20 and created between '{sd}' and '{ed}' select * from #Graph   
+    where RowNum = 1 and len(FieldValue5) > 20 and Convert(datetime, Created,101) between '{sd}' and '{ed}' select * from #Graph   
 
  
 ";
