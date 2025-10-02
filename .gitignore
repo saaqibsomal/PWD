@@ -3526,3 +3526,12 @@
 /packages/System.Buffers.4.5.1/lib/uap10.0.16299/_._
 /packages/System.Buffers.4.5.1/ref/net45/System.Buffers.xml
 /DNA CAPI MIS/obj/Release/Package/PackageTmp/Views/Shared/_ReportPartial.cshtml
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/Microsoft.AspNetCore.Http.Abstractions.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/Microsoft.AspNetCore.Http.Features.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/Microsoft.AspNetCore.Mvc.Abstractions.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/Microsoft.AspNetCore.Routing.Abstractions.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/Microsoft.Extensions.Primitives.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/Microsoft.Net.Http.Headers.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/System.Buffers.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/System.Runtime.CompilerServices.Unsafe.dll
+/DNA CAPI MIS/obj/Release/Package/PackageTmp/bin/System.Text.Encodings.Web.dll
