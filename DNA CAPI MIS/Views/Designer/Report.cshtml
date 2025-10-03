@@ -121,8 +121,8 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-       
-                <div class="model" id="pdfModel" >
+
+                <div class="model" id="pdfModel">
                     <div class="model-content">
                         <button id="downloadPDFBtn" class="fa-2x fa fa-print">  Print</button>
                         <div id="PdfReportDiv">
@@ -130,37 +130,37 @@
 
                             <!-- RHS-A Section -->
                             @*<h3 id="SubHeading"></h3>*@
-                        <table>
-                            <tr>
-                                <td>Name of District:</td>
-                                <td id="NameOfDistrict"> </td>
-                                <td>Name Of Center:</td>
-                                <td id="NameOfCenter"> </td>
-                            </tr>
-                            <tr>
-                                <td>Date of visit:</td>
-                                <td id="DateOfVisit"> </td>
-                                <td>Time:</td>
-                                <td id="TimeOfVisit"> </td>
-                            </tr>
-                            <tr>
-                                <td>Status:</td>
-                                <td   id="OpenCloseStatus">
-                                    N/A
-                                </td>
-                                <td>Coordinate:</td>
-                                <td   id="Coordinate">
-                                    N/A
-                                </td>
-                            </tr>
+                            <table>
+                                <tr>
+                                    <td>Name of District:</td>
+                                    <td id="NameOfDistrict"> </td>
+                                    <td>Name Of Center:</td>
+                                    <td id="NameOfCenter"> </td>
+                                </tr>
+                                <tr>
+                                    <td>Date of visit:</td>
+                                    <td id="DateOfVisit"> </td>
+                                    <td>Time:</td>
+                                    <td id="TimeOfVisit"> </td>
+                                </tr>
+                                <tr>
+                                    <td>Status:</td>
+                                    <td id="OpenCloseStatus">
+                                        N/A
+                                    </td>
+                                    <td>Coordinate:</td>
+                                    <td id="Coordinate">
+                                        N/A
+                                    </td>
+                                </tr>
 
-                             
 
-                        </table>
 
-                            <div>
+                            </table>
 
-                                <!-- Staff Position -->
+                            <div id="OtherStaffPosition" hidden>
+
+                                <!-- Staff Position For Other-->
                                 <h3 style="margin-top:30px;margin-bottom:5px">Staff Position</h3>
 
                                 <table>
@@ -239,10 +239,81 @@
                             </div>
 
 
-                           
+                            <div id="FWCStaffPosition" hidden>
+
+                                <!-- Staff Position For FWC-->
+                                <h3 style="margin-top:30px;margin-bottom:5px">Staff Position</h3>
+
+                                <table>
+
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Designation</th>
+                                            <th>Name</th>
+                                            <th>Present/Absent/Leave</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Field Technical Officer (FTO)</td>
+                                            <td id="FWCPName1"></td>
+                                            <td id="FWCStaffPos1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Family Welfare Councilor</td>
+                                            <td id="FWCPName2"></td>
+                                            <td id="FWCStaffPos2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Family Welfare Worker</td>
+                                            <td id="FWCPName3"></td>
+                                            <td id="FWCStaffPos3"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Family Welfare Assistant (M)</td>
+                                            <td id="FWCPName4"></td>
+                                            <td id="FWCStaffPos4"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>Family Welfare Assistant (F)r</td>
+                                            <td id="FWCPName5"></td>
+                                            <td id="FWCStaffPos5"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>Social Mobilizer</td>
+                                            <td id="FWCPName6"></td>
+                                            <td id="FWCStaffPos6"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td>Helper</td>
+                                            <td id="FWCPName7"></td>
+                                            <td id="FWCStaffPos7"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>8</td>
+                                            <td>Chowkidar</td>
+                                            <td id="FWCPName8"></td>
+                                            <td id="FWCStaffPos8"></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
 
 
-                            <div >
+
+
+
+                            <div>
                                 <h3 style="margin-top:30px;margin-bottom:5px">Indication/Sign Board</h3>
                                 <table>
                                     <thead>
@@ -373,23 +444,21 @@
                                     </tr>
                                     <tr>
                                         <td>2</td>
-                                        <td>Oral Pills (POP)</td>
-                                        <td id="CSPS1"></td>
-                                        <td id="CSPE1"> </td>
+                                        <td>POP</td>
+                                        <td id="CSPS2"></td>
+                                        <td id="CSPE2"></td>
 
                                     </tr>
                                     <tr>
                                         <td>3</td>
-                                        <td>OP (COC)</td>
-                                        <td id="CSPS2"></td>
-                                        <td id="CSPE2"></td>
-
-
+                                        <td>COC</td>
+                                        <td id="CSPS1"></td>
+                                        <td id="CSPE1"> </td>
                                     </tr>
 
                                     <tr>
                                         <td>4</td>
-                                        <td>OP (ECP) (COC)</td>
+                                        <td>ECP</td>
                                         <td id="CSPS3"> </td>
                                         <td id="CSPE3"> </td>
 
@@ -397,7 +466,7 @@
 
                                     <tr>
                                         <td>5</td>
-                                        <td>3 months Inj:/Depo (COC)</td>
+                                        <td>3 Months Inj (Depo)</td>
                                         <td id="CSPS4"> </td>
                                         <td id="CSPE4">  </td>
 
@@ -405,7 +474,7 @@
 
                                     <tr>
                                         <td>6</td>
-                                        <td>Syana Press</td>
+                                        <td>3 Month Inj (Syana Press)</td>
                                         <td id="CSPS5"> </td>
                                         <td id="CSPE5">  </td>
 
@@ -427,7 +496,7 @@
 
                                     </tr>
 
-                                    <tr>
+                                    <tr class="FWCCSPerformance">
                                         <td>9</td>
                                         <td>Implanon</td>
                                         <td id="CSPS8"> </td>
@@ -435,14 +504,14 @@
 
                                     </tr>
 
-                                    <tr>
+                                    <tr class="FWCCSPerformance">
                                         <td>10</td>
                                         <td>Tubaligation (TL)</td>
                                         <td id="CSPS9"> </td>
                                         <td id="CSPE9"> </td>
 
                                     </tr>
-                                    <tr>
+                                    <tr class="FWCCSPerformance">
                                         <td>11</td>
                                         <td>NSV</td>
                                         <td id="CSPS10"> </td>
@@ -454,7 +523,7 @@
                             </table>
 
 
-                            <div>
+                            <div class="FWC_MCP">
 
                                 <h3 style="margin-top:30px;margin-bottom:5px">Last 3 months’ Contraceptive performance</h3>
                                 <table>
@@ -787,14 +856,14 @@
                                     </tr>
                                     <tr>
                                         <td>1</td>
-                                        <td>Minilap Kits</td>
+                                        <td>IUD Kits</td>
                                         <td id="Quantity1"></td>
                                         <td id="FuniGB1"></td>
 
                                     </tr>
                                     <tr>
                                         <td>2</td>
-                                        <td>IUCD Kits</td>
+                                        <td>B.P. Apparatus</td>
                                         <td id="Quantity2"></td>
                                         <td id="FuniGB2"></td>
 
@@ -802,42 +871,42 @@
 
                                     <tr>
                                         <td>3</td>
-                                        <td>B.P. Apparatus</td>
+                                        <td>Stethoscope</td>
                                         <td id="Quantity3"></td>
                                         <td id="FuniGB3"></td>
 
                                     </tr>
                                     <tr>
-                                        <td>3</td>
-                                        <td>B.P. Apparatus</td>
+                                        <td>4</td>
+                                        <td>Thermometer</td>
                                         <td id="Quantity4"></td>
                                         <td id="FuniGB4"></td>
 
                                     </tr>
                                     <tr>
                                         <td>5</td>
-                                        <td>Thermometer</td>
+                                        <td>Weighting Machine</td>
                                         <td id="Quantity5"></td>
                                         <td id="FuniGB5"></td>
 
                                     </tr>
                                     <tr>
                                         <td>6</td>
-                                        <td>Weighing machine</td>
+                                        <td>Stove</td>
                                         <td id="Quantity6"></td>
                                         <td id="FuniGB6"></td>
 
                                     </tr>
                                     <tr>
                                         <td>7</td>
-                                        <td>Stove</td>
+                                        <td>Autoclave</td>
                                         <td id="Quantity7"></td>
                                         <td id="FuniGB7"></td>
 
                                     </tr>
                                     <tr>
                                         <td>8</td>
-                                        <td>O.T. Lights</td>
+                                        <td>Sterlizer</td>
                                         <td id="Quantity8"></td>
                                         <td id="FuniGB8"></td>
 
@@ -845,47 +914,47 @@
 
                                     <tr>
                                         <td>9</td>
-                                        <td>Hydraulic Table</td>
+                                        <td>Screen</td>
                                         <td id="Quantity9"></td>
                                         <td id="FuniGB9"></td>
 
                                     </tr>
-                                    <tr>
+                                    <tr class="FWCEqiptment">
                                         <td>10</td>
                                         <td>Autoclave</td>
                                         <td id="Quantity10"></td>
                                         <td id="FuniGB10"></td>
 
                                     </tr>
-                                    <tr>
+                                    <tr class="FWCEqiptment">
                                         <td>11</td>
                                         <td>Oxygen Cylinder</td>
                                         <td id="Quantity11"></td>
                                         <td id="FuniGB11"></td>
 
                                     </tr>
-                                    <tr>
+                                    <tr class="FWCEqiptment">
                                         <td>12</td>
                                         <td>Aspirating Pumps</td>
                                         <td id="Quantity12"></td>
                                         <td id="FuniGB12"></td>
 
                                     </tr>
-                                    <tr>
+                                    <tr class="FWCEqiptment">
                                         <td>13</td>
                                         <td>Wheel Chair</td>
                                         <td id="Quantity13"></td>
                                         <td id="FuniGB13"></td>
 
                                     </tr>
-                                    <tr>
+                                    <tr class="FWCEqiptment">
                                         <td>14</td>
                                         <td>Stretcher</td>
                                         <td id="Quantity14"></td>
                                         <td id="FuniGB14"></td>
 
                                     </tr>
-                                    <tr>
+                                    <tr class="FWCEqiptment">
                                         <td>15</td>
                                         <td>Generator</td>
                                         <td id="Quantity15"></td>
@@ -893,13 +962,13 @@
 
                                     </tr>
 
-                                    <tr>
+                                    <tr class="FWCEqiptment">
                                         <td>16</td>
                                         <td>Screen</td>
                                         <td id="Quantity16"></td>
                                         <td id="FuniGB16"></td>
 
-                                    </tr>
+                                    </trclass="FWCEqiptment">
                                 </table>
                             </div>
 
@@ -939,22 +1008,30 @@
                                 </tr>
                                 <tr>
                                     <td>5</td>
-                                    <td>Insertion Table</td>
+                                    <td>Revolving Stool</td>
                                     <td id="FPQuantity5"></td>
                                     <td id="FunPos5"></td>
                                 </tr>
                                 <tr>
                                     <td>6</td>
-                                    <td>Revolving stool</td>
+                                    <td>Insertion Table</td>
                                     <td id="FPQuantity6"></td>
                                     <td id="FunPos6"></td>
                                 </tr>
                                 <tr>
                                     <td>7</td>
-                                    <td>Medicine cabinet</td>
+                                    <td>Medicine Cabinet</td>
                                     <td id="FPQuantity7"></td>
                                     <td id="FunPos7"></td>
                                 </tr>
+
+                                <tr>
+                                    <td>8</td>
+                                    <td>Stretcher</td>
+                                    <td id="FPQuantity8"></td>
+                                    <td id="FunPos8"></td>
+                                </tr>
+
                             </table>
                             <h3 style="margin-top:30px;margin-bottom:5px">Technical Monitoring Checklist</h3>
                             <table>
@@ -1078,12 +1155,15 @@
                             </table>
 
                             <div style="text-align:center;margin-top:10px;left:10px">
+
+                                <h3 style="margin-top:30px;margin-bottom:5px">No. of visits paid during last three months by: Monitoring Officer, from PWDS</h3>
+                                @*<label style="margin-top:2px" id="LastThreeMonth">No. of visits paid during last three months by:</label><br />*@
                                 <table>
                                     <thead>
                                         <tr>
 
                                             <th>No.of Visits</th>
-
+                                            <th>PWDS officer from</th>
                                             <th>Name of visiting Officer</th>
                                         </tr>
                                     </thead>
@@ -1092,12 +1172,14 @@
                                         <tr>
 
                                             <td id="NOV0">1</td>
+                                            <td id="PWDS0">Provincial Team</td>
                                             <td id="NOVN0">  </td>
 
                                         </tr>
                                         <tr>
 
                                             <td id="NOV1">2</td>
+                                            <td id="PWDS1">Regional Director</td>
                                             <td id="NOVN1"> </td>
 
                                         </tr>
@@ -1105,17 +1187,20 @@
 
 
                                             <td id="NOV2">3</td>
+                                            <td id="PWDS2">DPWO</td>
                                             <td id="NOVN2"> </td>
 
                                         </tr>
                                         <tr>
 
                                             <td id="NOV3">4</td>
+                                            <td id="PWDS3">Dy.DPWO/Medical Officer/Demographer</td>
                                             <td id="NOVN3"> </td>
                                         </tr>
                                         <tr>
 
                                             <td id="NOV4">5</td>
+                                            <td id="PWDS4">TPWO</td>
                                             <td id="NOVN4"> </td>
                                         </tr>
 
@@ -1128,17 +1213,17 @@
 
                                     <form style="text-align:left">
 
-                                        <label for="supervisory-visits"> <u id="NoOfSup"></u>&nbsp;&nbsp; No. of supervisory visits of RHS As conducted during month by Medical Officer:</label><br/>
+                                        @*<label for="supervisory-visits"> <u id="NoOfSup"></u>&nbsp;&nbsp; No. of supervisory visits of RHS As conducted during month by Medical Officer:</label><br />*@
                                         @*<label for="dcit-meetings"><u id="DCIT"></u>No. of DCIT meetings attended by Medical Officer in last 6 months:</label><br/>*@
-                                    <label style="margin-top:2px" for="hmc-meeting">Meeting with Hospital Management Committee:&nbsp;&nbsp;<u id="HospitalManagement"></u></label><br/>
-                                        <label  style="margin-top:2px" id="LastThreeMonth">No. of visits paid during last three months by:</label><br/>
-                                        <ul>
+                                        @*<label style="margin-top:2px" for="hmc-meeting">Meeting with Hospital Management Committee:&nbsp;&nbsp;<u id="HospitalManagement"></u></label><br />*@
+                                        @*<label style="margin-top:2px" id="LastThreeMonth">No. of visits paid during last three months by:</label><br />*@
+                                        @*<ul>
                                             <li> <label for="provincial-team">Provincial Team:&nbsp;&nbsp;<u id="Last6Field1">  &nbsp;&nbsp;</u></label> </li>
                                             <li> <label for="regional-director">Regional Director:&nbsp;&nbsp;<u id="Last6Field2">&nbsp;&nbsp;</u></label>  </li>
                                             <li> <label for="regional-director">DPWO:&nbsp;&nbsp;<u id="Last6Field3"></u></label>  </li>
                                             <li> <label for="regional-director">Dy.DPWO/Medical Officer/Demographer:&nbsp;&nbsp;<u id="Last6Field4"></u></label>  </li>
                                             <li> <label for="regional-director">TPWO:&nbsp;&nbsp;<u id="Last6Field5"></u></label>  </li>
-                                        </ul>
+                                        </ul>*@
                                         <label for="remarks">Remarks of Monitoring Officer:&nbsp;&nbsp;<u id="RemarksofMonitoringOfficer"></u></label> <br />
                                         ____________________________________________________________
                                         ____________________________________________________________
@@ -1197,32 +1282,49 @@
             url: "/Designer/OpenReport/" + sbjnum,
             data: {},
             success: function (data) {
-            
+
                 $("#Heading").text("Monitoring Report (" + Heading + ")");
-               // $("#SubHeading").text("(For " + Heading + ")");
+                // $("#SubHeading").text("(For " + Heading + ")");
                 $("#NameOfDistrict").text(data.Field.NameOfDistrict);
                 $("#NameOfCenter").text(data.Field.NameOfCenter);
                 $("#DateOfVisit").text(data.Field.DateOfVisit);
                 $("#TimeOfVisit").text(data.Field.TimeOfVisit);
                 $("#OpenCloseStatus").text(data.Field.OpenCloseStatus);
                 try {
-                    $('#Coordinate').text(data.RawData[0].Latitude + "," +  data.RawData[0].Longitude);
+                    $('#Coordinate').text(data.RawData[0].Latitude + "," + data.RawData[0].Longitude);
                 } catch (ex) {
 
                 }
                 var PositionName = data.Field.StaffPosition.split(',');
 
-                $("#PName1").text(PositionName[0]);
-                $("#PName2").text(PositionName[1]);
-                $("#PName3").text(PositionName[2]);
-                $("#PName4").text(PositionName[3]);
-                $("#PName5").text(PositionName[4]);
-                $("#PName6").text(PositionName[5]);
-                $("#PName7").text(PositionName[6]);
-                $("#PName8").text(PositionName[7]);
-                $("#PName9").text(PositionName[8]);
-                $("#PName10").text(PositionName[9]);
+                if (Heading.includes('FWC')) {
 
+                    $("#FWCPName1").text(PositionName[0]);
+                    $("#FWCPName2").text(PositionName[1]);
+                    $("#FWCPName3").text(PositionName[2]);
+                    $("#FWCPName4").text(PositionName[3]);
+                    $("#FWCPName5").text(PositionName[4]);
+                    $("#FWCPName6").text(PositionName[5]);
+                    $("#FWCPName7").text(PositionName[6]);
+                    $("#FWCPName8").text(PositionName[7]);
+                    $('#OtherStaffPosition').hide();
+                    $('#FWCStaffPosition').show();
+                }
+                else {
+
+                    $("#PName1").text(PositionName[0]);
+                    $("#PName2").text(PositionName[1]);
+                    $("#PName3").text(PositionName[2]);
+                    $("#PName4").text(PositionName[3]);
+                    $("#PName5").text(PositionName[4]);
+                    $("#PName6").text(PositionName[5]);
+                    $("#PName7").text(PositionName[6]);
+                    $("#PName8").text(PositionName[7]);
+                    $("#PName9").text(PositionName[8]);
+                    $("#PName10").text(PositionName[9]);
+                    $('#OtherStaffPosition').show();
+                    $('#FWCStaffPosition').hide();
+                }
 
                 var Indication = data.Field.Indication.split(",");
 
@@ -1245,36 +1347,45 @@
                 $("#SOB2").text(SOB[2] == "1" ? "Available" : "Not Available ");
 
                 var DCR = data.Field.DailyClientRegister.split(',');
-                $("#DCR1").text(DCR[0]);
-                $("#DCR2").text(DCR[1]);
-                $("#DCR3").text(DCR[2]);
-
+                if (DCR[0] != "N/A") {
+                    $("#DCR1").text(DCR[0] == "Available" ? "Yes" : (DCR[0] == undefined ? "" : "No"));
+                    $("#DCR2").text(DCR[1] == "Available" ? "Yes" : (DCR[1] == undefined ? "" : "No"));
+                    $("#DCR3").text(DCR[2] == "Available" ? "Yes" : (DCR[2] == undefined ? "" : "No"));
+                }
                 var DMB = data.Field.MonthlyBreakup.split(',');
-                $("#DMB1").text(DMB[0]);
-                $("#DMB2").text(DMB[1]);
-                $("#DMB3").text(DMB[2]);
-
+                if (DMB[0] != "N/A") {
+                    $("#DMB1").text(DMB[0] == "Available" ? "Yes" : (DMB[0] == undefined ? "" : "No"));
+                    $("#DMB2").text(DMB[1] == "Available" ? "Yes" : (DMB[1] == undefined ? "" : "No"));
+                    $("#DMB3").text(DMB[2] == "Available" ? "Yes" : (DMB[2] == undefined ? "" : "No"));
+                }
                 var MSR = data.Field.MedicineStockRegister.split(',');
-                $("#MSR1").text(MSR[0]);
-                $("#MSR2").text(MSR[1]);
-                $("#MSR3").text(MSR[2]);
-
+                if (MSR[0] != "N/A") {
+                    $("#MSR1").text(MSR[0] == "Available" ? "Yes" : (MSR[0] == undefined ? "" : "No"));
+                    $("#MSR2").text(MSR[1] == "Available" ? "Yes" : (MSR[1] == undefined ? "" : "No"));
+                    $("#MSR3").text(MSR[2] == "Available" ? "Yes" : (MSR[2] == undefined ? "" : "No"));
+                }
 
                 var CSR = data.Field.ContraceptiveStockRegister.split(',');
-                $("#CSR1").text(CSR[0]);
-                $("#CSR2").text(CSR[1]);
-                $("#CSR3").text(CSR[2]);
+
+                if (CSR[0] != "N/A") {
+                    $("#CSR1").text(CSR[0] == "Available" ? "Yes" : (CSR[0] == undefined ? "" : "No"));
+                    $("#CSR2").text(CSR[1] == "Available" ? "Yes" : (CSR[1] == undefined ? "" : "No"));
+                    $("#CSR3").text(CSR[2] == "Available" ? "Yes" : (CSR[2] == undefined ? "" : "No"));
+                }
 
                 var LB = data.Field.LogBook.split(',');
-                $("#LB1").text(LB[0]);
-                $("#LB2").text(LB[1]);
-                $("#LB3").text(LB[2]);
+                if (LB[0] != "N/A") {
+                    $("#LB1").text(LB[0] == "Maintained" ? "No" : (CSR[0] == undefined ? "" : "Yes"));
+                    $("#LB2").text(LB[1] == "Maintained" ? "No" : (CSR[1] == undefined ? "" : "Yes"));
+                    $("#LB3").text(LB[2] == "Maintained" ? "No" : (CSR[2] == undefined ? "" : "Yes"));
+                }
 
                 var DSR = data.Field.DeadStockRegister.split(',');
-                $("#DSR1").text(DSR[0]);
-                $("#DSR2").text(DSR[1]);
-                $("#DSR3").text(DSR[2]);
-
+                if (DSR[0] != "N/A") {
+                    $("#DSR1").text(DSR[0] == "Maintained" ? "No" : (DSR[0] == undefined ? "" : "Yes"));
+                    $("#DSR2").text(DSR[1] == "Maintained" ? "No" : (DSR[1] == undefined ? "" : "Yes"));
+                    $("#DSR3").text(DSR[2] == "Maintained" ? "No" : (DSR[2] == undefined ? "" : "Yes"));
+                }
 
                 var IEC = data.Field.IECMaterial.split(',');
                 $("#IecMat1").text(IEC[0]);
@@ -1283,9 +1394,9 @@
 
 
                 var MEC = data.Field.MECWheel.split(',');
-                $("#MecWheel1").text(MEC[0]);
-                $("#MecWheel2").text(MEC[1]);
-                $("#MecWheel3").text(MEC[2]);
+                $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" :  "No"));
+                $("#MecWheel2").text(MEC[1] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
+                $("#MecWheel3").text(MEC[2] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
 
 
                 var EP = data.Field.EquipmentPosition.split(',');
@@ -1324,18 +1435,18 @@
 
 
                 var cons = data.Field.COUNSELING.split(',');
-                $("#cons1").text(cons[0] == "1" ? "No" : "Yes");
-                $("#cons2").text(cons[1] == "1" ? "No" : "Yes");
-                $("#cons3").text(cons[2] == "1" ? "No" : "Yes");
-                $("#cons4").text(cons[3] == "1" ? "No" : "Yes");
-                $("#cons5").text(cons[4] == "1" ? "No" : "Yes");
+                $("#cons1").text(cons[0] == "1" ? "Yes" : "No");
+                $("#cons2").text(cons[1] == "1" ? "Yes" : "No");
+                $("#cons3").text(cons[2] == "1" ? "Yes" : "No");
+                $("#cons4").text(cons[3] == "1" ? "Yes" : "No");
+                $("#cons5").text(cons[4] == "1" ? "Yes" : "No");
 
                 var SD = data.Field.SERVICEDELIVERY.split(',');
-                $("#SD1").text(SD[0] == "1" ? "No" : "Yes");
-                $("#SD2").text(SD[1] == "1" ? "No" : "Yes");
-                $("#SD3").text(SD[2] == "1" ? "No" : "Yes");
-                $("#SD4").text(SD[3] == "1" ? "No" : "Yes");
-                $("#SD5").text(SD[4] == "1" ? "No" : "Yes");
+                $("#SD1").text(SD[0] == "1" ? "Yes" : "No");
+                $("#SD2").text(SD[1] == "1" ? "Yes" : "No");
+                $("#SD3").text(SD[2] == "1" ? "Yes" : "No");
+                $("#SD4").text(SD[3] == "1" ? "Yes" : "No");
+                $("#SD5").text(SD[4] == "1" ? "Yes" : "No");
 
                 var FuniGB = data.Field.EquipmentCondition.split(',');
 
@@ -1349,13 +1460,23 @@
                 $("#FuniGB7").text(FuniGB[6] == "1" ? "N/A" : FuniGB[6] == "2" ? "Good" : FuniGB[6] == "3" ? "Satisfactory" : "Poor");
                 $("#FuniGB8").text(FuniGB[7] == "1" ? "N/A" : FuniGB[7] == "2" ? "Good" : FuniGB[7] == "3" ? "Satisfactory" : "Poor");
                 $("#FuniGB9").text(FuniGB[8] == "1" ? "N/A" : FuniGB[8] == "2" ? "Good" : FuniGB[8] == "3" ? "Satisfactory" : "Poor");
-                $("#FuniGB10").text(FuniGB[9] == "1" ? "N/A" : FuniGB[9] == "2" ? "Good" : FuniGB[9] == "3" ? "Satisfactory" : "Poor");
-                $("#FuniGB11").text(FuniGB[10] == "1" ? "N/A" : FuniGB[10] == "2" ? "Good" : FuniGB[10] == "3" ? "Satisfactory" : "Poor");
-                $("#FuniGB12").text(FuniGB[11] == "1" ? "N/A" : FuniGB[11] == "2" ? "Good" : FuniGB[11] == "3" ? "Satisfactory" : "Poor");
-                $("#FuniGB13").text(FuniGB[12] == "1" ? "N/A" : FuniGB[12] == "2" ? "Good" : FuniGB[12] == "3" ? "Satisfactory" : "Poor");
-                $("#FuniGB14").text(FuniGB[13] == "1" ? "N/A" : FuniGB[13] == "2" ? "Good" : FuniGB[13] == "3" ? "Satisfactory" : "Poor");
-                $("#FuniGB15").text(FuniGB[14] == "1" ? "N/A" : FuniGB[14] == "2" ? "Good" : FuniGB[14] == "3" ? "Satisfactory" : "Poor");
-                $("#FuniGB16").text(FuniGB[15] == "1" ? "N/A" : FuniGB[15] == "2" ? "Good" : FuniGB[15] == "3" ? "Satisfactory" : "Poor");
+
+                if (Heading.includes('FWC')) {
+                    $("#FuniGB10").text(FuniGB[9] == "1" ? "N/A" : FuniGB[9] == "2" ? "Good" : FuniGB[9] == "3" ? "Satisfactory" : "Poor");
+                    $("#FuniGB11").text(FuniGB[10] == "1" ? "N/A" : FuniGB[10] == "2" ? "Good" : FuniGB[10] == "3" ? "Satisfactory" : "Poor");
+                    $("#FuniGB12").text(FuniGB[11] == "1" ? "N/A" : FuniGB[11] == "2" ? "Good" : FuniGB[11] == "3" ? "Satisfactory" : "Poor");
+                    $("#FuniGB13").text(FuniGB[12] == "1" ? "N/A" : FuniGB[12] == "2" ? "Good" : FuniGB[12] == "3" ? "Satisfactory" : "Poor");
+                    $("#FuniGB14").text(FuniGB[13] == "1" ? "N/A" : FuniGB[13] == "2" ? "Good" : FuniGB[13] == "3" ? "Satisfactory" : "Poor");
+                    $("#FuniGB15").text(FuniGB[14] == "1" ? "N/A" : FuniGB[14] == "2" ? "Good" : FuniGB[14] == "3" ? "Satisfactory" : "Poor");
+                    $("#FuniGB16").text(FuniGB[15] == "1" ? "N/A" : FuniGB[15] == "2" ? "Good" : FuniGB[15] == "3" ? "Satisfactory" : "Poor");
+                    $('.FWCEqiptment').hide();
+                }
+
+                else
+                {
+                    $('.FWCEqiptment').show();
+                   
+                }
 
                 var FunPos = data.Field.FurniturePositionCondition.split(',');
 
@@ -1366,21 +1487,38 @@
                 $("#FunPos5").text(FunPos[4] == "1" ? "N/A" : FunPos[4] == "2" ? "Good" : FunPos[4] == "3" ? "Satisfactory" : "Poor");
                 $("#FunPos6").text(FunPos[5] == "1" ? "N/A" : FunPos[5] == "2" ? "Good" : FunPos[5] == "3" ? "Satisfactory" : "Poor");
                 $("#FunPos7").text(FunPos[6] == "1" ? "N/A" : FunPos[6] == "2" ? "Good" : FunPos[6] == "3" ? "Satisfactory" : "Poor");
+                $("#FunPos8").text(FunPos[7] == "1" ? "N/A" : FunPos[7] == "2" ? "Good" : FunPos[7] == "3" ? "Satisfactory" : "Poor");
 
 
+
+
+                // For Other
                 var StaffPos = data.Field.StaffPositionNames.split(',');
 
-                $("#StaffPos1").text(StaffPos[0] == "1" ? "Present" : StaffPos[0] == "Absent" ? "Good" : StaffPos[0] == "Leave" ? "Satisfactory" : "Vacant");
-                $("#StaffPos2").text(StaffPos[1] == "1" ? "Present" : StaffPos[1] == "Absent" ? "Good" : StaffPos[1] == "Leave" ? "Satisfactory" : "Vacant");
-                $("#StaffPos3").text(StaffPos[2] == "1" ? "Present" : StaffPos[2] == "Absent" ? "Good" : StaffPos[2] == "Leave" ? "Satisfactory" : "Vacant");
-                $("#StaffPos4").text(StaffPos[3] == "1" ? "Present" : StaffPos[3] == "Absent" ? "Good" : StaffPos[3] == "Leave" ? "Satisfactory" : "Vacant");
-                $("#StaffPos5").text(StaffPos[4] == "1" ? "Present" : StaffPos[4] == "Absent" ? "Good" : StaffPos[4] == "Leave" ? "Satisfactory" : "Vacant");
-                $("#StaffPos6").text(StaffPos[5] == "1" ? "Present" : StaffPos[5] == "Absent" ? "Good" : StaffPos[5] == "Leave" ? "Satisfactory" : "Vacant");
-                $("#StaffPos7").text(StaffPos[6] == "1" ? "Present" : StaffPos[6] == "Absent" ? "Good" : StaffPos[6] == "Leave" ? "Satisfactory" : "Vacant");
-                $("#StaffPos8").text(StaffPos[7] == "1" ? "Present" : StaffPos[7] == "Absent" ? "Good" : StaffPos[7] == "Leave" ? "Satisfactory" : "Vacant");
-                $("#StaffPos9").text(StaffPos[8] == "1" ? "Present" : StaffPos[8] == "Absent" ? "Good" : StaffPos[8] == "Leave" ? "Satisfactory" : "Vacant");
-                $("#StaffPos10").text(StaffPos[9] == "1" ? "Present" : StaffPos[9] == "Absent" ? "Good" : StaffPos[9] == "Leave" ? "Satisfactory" : "Vacant");
 
+                if (Heading.includes('FWC')) {
+
+                    $("#FWCStaffPos1").text(StaffPos[0] == "1" ? "Present" : StaffPos[0] == "2" ? "Absent" : StaffPos[0] == "3" ? "Leave" : "Vacant");
+                    $("#FWCStaffPos2").text(StaffPos[1] == "1" ? "Present" : StaffPos[1] == "2" ? "Absent" : StaffPos[1] == "3" ? "Leave" : "Vacant");
+                    $("#FWCStaffPos3").text(StaffPos[2] == "1" ? "Present" : StaffPos[2] == "2" ? "Absent" : StaffPos[2] == "3" ? "Leave" : "Vacant");
+                    $("#FWCStaffPos4").text(StaffPos[3] == "1" ? "Present" : StaffPos[3] == "2" ? "Absent" : StaffPos[3] == "3" ? "Leave" : "Vacant");
+                    $("#FWCStaffPos5").text(StaffPos[4] == "1" ? "Present" : StaffPos[4] == "2" ? "Absent" : StaffPos[4] == "3" ? "Leave" : "Vacant");
+                    $("#FWCStaffPos6").text(StaffPos[5] == "1" ? "Present" : StaffPos[5] == "2" ? "Absent" : StaffPos[5] == "3" ? "Leave" : "Vacant");
+                    $("#FWCStaffPos7").text(StaffPos[6] == "1" ? "Present" : StaffPos[6] == "2" ? "Absent" : StaffPos[6] == "3" ? "Leave" : "Vacant");
+                    $("#FWCStaffPos8").text(StaffPos[7] == "1" ? "Present" : StaffPos[7] == "2" ? "Absent" : StaffPos[7] == "3" ? "Leave" : "Vacant");
+                }
+                else {
+                    $("#StaffPos1").text(StaffPos[0] == "1" ? "Present" : StaffPos[0] == "2" ? "Absent" : StaffPos[0] == "3" ? "Leave" : "Vacant");
+                    $("#StaffPos2").text(StaffPos[1] == "1" ? "Present" : StaffPos[1] == "2" ? "Absent" : StaffPos[1] == "3" ? "Leave" : "Vacant");
+                    $("#StaffPos3").text(StaffPos[2] == "1" ? "Present" : StaffPos[2] == "2" ? "Absent" : StaffPos[2] == "3" ? "Leave" : "Vacant");
+                    $("#StaffPos4").text(StaffPos[3] == "1" ? "Present" : StaffPos[3] == "2" ? "Absent" : StaffPos[3] == "3" ? "Leave" : "Vacant");
+                    $("#StaffPos5").text(StaffPos[4] == "1" ? "Present" : StaffPos[4] == "2" ? "Absent" : StaffPos[4] == "3" ? "Leave" : "Vacant");
+                    $("#StaffPos6").text(StaffPos[5] == "1" ? "Present" : StaffPos[5] == "2" ? "Absent" : StaffPos[5] == "3" ? "Leave" : "Vacant");
+                    $("#StaffPos7").text(StaffPos[6] == "1" ? "Present" : StaffPos[6] == "2" ? "Absent" : StaffPos[6] == "3" ? "Leave" : "Vacant");
+                    $("#StaffPos8").text(StaffPos[7] == "1" ? "Present" : StaffPos[7] == "2" ? "Absent" : StaffPos[7] == "3" ? "Leave" : "Vacant");
+                    $("#StaffPos9").text(StaffPos[8] == "1" ? "Present" : StaffPos[8] == "2" ? "Absent" : StaffPos[8] == "3" ? "Leave" : "Vacant");
+                    $("#StaffPos10").text(StaffPos[9] == "1" ? "Present" : StaffPos[9] == "2" ? "Absent" : StaffPos[9] == "3" ? "Leave" : "Vacant");
+                }
 
                 var CP = data.Field.ClientsPresent.split(',');
                 $("#CP1").text(CP[0]);
@@ -1405,57 +1543,64 @@
 
 
 
-                //  $("#NOV0").text();
+                $("#NOV0").text(NoV[0].split(',')[0].split('-')[1]);
                 $("#NOVN0").text(NoV[0].split(',')[1]);
 
-                //  $("#NOV1").text();
+                $("#NOV1").text(NoV[1].split(',')[0].split('-')[1]);
                 $("#NOVN1").text(NoV[1].split(',')[1]);
 
-                // $("#NOV2").text();
+                $("#NOV2").text(NoV[2].split(',')[0].split('-')[1]);
                 $("#NOVN2").text(NoV[2].split(',')[1]);
 
-                //  $("#NOV3").text();
+                $("#NOV3").text(NoV[3].split(',')[0].split('-')[1]);
                 $("#NOVN3").text(NoV[3].split(',')[1]);
 
-                //  $("#NOV5").text();
+                $("#NOV4").text(NoV[4].split(',')[0].split('-')[1]);
                 $("#NOVN4").text(NoV[4].split(',')[1]);
-             
+
                 try {
-                    var CSP = data.Field.StockOfMed.split('|')
+                    var CSP = data.Field.StockOfCon.split('|')
                     //1-600,2024-04-30
                     //    | 2 - 500,2024 - 04 - 30 | 3 - 56, 2024 - 04 - 30 | 4 - 30, 2024 - 04 - 30 | 5 - 6, 2024 - 04 - 30 | 6 - 5, 2024 - 04 - 30 | 7 - 42, 2024 - 04 - 28 | 8 - 26, 2024 - 04 - 19
-                    $('#CSPS0').text(CSP[0].split(',')[1]);
-                    $('#CSPE0').text(CSP[0].split(',')[2]);
+                    $('#CSPS0').text(CSP[0].split(',')[0].split('-')[1]);
+                    $('#CSPE0').text(CSP[0].split(',')[1]);
 
-                    $('#CSPS1').text(CSP[1].split(',')[1]);
-                    $('#CSPE1').text(CSP[1].split(',')[2]);
+                    $('#CSPS1').text(CSP[1].split(',')[0].split('-')[1]);
+                    $('#CSPE1').text(CSP[1].split(',')[1]);
 
-                    $('#CSPS2').text(CSP[2].split(',')[1]);
-                    $('#CSPE2').text(CSP[2].split(',')[2]);
+                    $('#CSPS2').text(CSP[2].split(',')[0].split('-')[1]);
+                    $('#CSPE2').text(CSP[2].split(',')[1]);
 
-                    $('#CSPS3').text(CSP[3].split(',')[1]);
-                    $('#CSPE3').text(CSP[3].split(',')[2]);
+                    $('#CSPS3').text(CSP[3].split(',')[0].split('-')[1]);
+                    $('#CSPE3').text(CSP[3].split(',')[1]);
 
-                    $('#CSPS4').text(CSP[4].split(',')[1]);
-                    $('#CSPE4').text(CSP[4].split(',')[2]);
+                    $('#CSPS4').text(CSP[4].split(',')[0].split('-')[1]);
+                    $('#CSPE4').text(CSP[4].split(',')[1]);
 
-                    $('#CSPS5').text(CSP[5].split(',')[1]);
-                    $('#CSPE5').text(CSP[5].split(',')[2]);
+                    $('#CSPS5').text(CSP[5].split(',')[0].split('-')[1]);
+                    $('#CSPE5').text(CSP[5].split(',')[1]);
 
-                    $('#CSPS6').text(CSP[6].split(',')[1]);
-                    $('#CSPE6').text(CSP[6].split(',')[2]);
+                    $('#CSPS6').text(CSP[6].split(',')[0].split('-')[1]);
+                    $('#CSPE6').text(CSP[6].split(',')[1]);
 
-                    $('#CSPS7').text(CSP[7].split(',')[1]);
-                    $('#CSPE7').text(CSP[7].split(',')[2]);
+                    $('#CSPS7').text(CSP[7].split(',')[0].split('-')[1]);
+                    $('#CSPE7').text(CSP[7].split(',')[1]);
 
-                    $('#CSPS8').text(CSP[8].split(',')[1]);
-                    $('#CSPE8').text(CSP[8].split(',')[2]);
+                    if (!Heading.includes('FWC')) {
 
-                    $('#CSPS9').text(CSP[9].split(',')[1]);
-                    $('#CSPE9').text(CSP[9].split(',')[2]);
+                        $('#CSPS8').text(CSP[8].split(',')[0].split('-')[1]);
+                        $('#CSPE8').text(CSP[8].split(',')[1]);
 
-                    $('#CSPS10').text(CSP[10].split(',')[1]);
-                    $('#CSPE10').text(CSP[10].split(',')[2]);
+                        $('#CSPS9').text(CSP[9].split(',')[0].split('-')[1]);
+                        $('#CSPE9').text(CSP[9].split(',')[1]);
+
+                        $('#CSPS10').text(CSP[10].split(',')[0].split('-')[1]);
+                        $('#CSPE10').text(CSP[10].split(',')[1]);
+                        $('.FWCCSPerformance').show();
+                    }
+                    else {
+                        $('.FWCCSPerformance').hide();
+                    }
                 }
                 catch (ex) {
 
@@ -1464,51 +1609,56 @@
 
                 try {
 
-                    var CSP = data.Field.Last3Contraceptive.split('|')
-                    $('#CSF0').text(CSP[0].split(',')[0].split("-")[1]);
-                    $('#CSS0').text(CSP[0].split(',')[1]);
-                    $('#CST0').text(CSP[0].split(',')[2]);
+                    if (!Heading.includes('FWC')) {
+                        $('.FWC_MCP').show();
+                        var CSP = data.Field.Last3Contraceptive.split('|')
+                        $('#CSF0').text(CSP[0].split(',')[0].split("-")[1]);
+                        $('#CSS0').text(CSP[0].split(',')[1]);
+                        $('#CST0').text(CSP[0].split(',')[2]);
 
-                    $('#CSF1').text(CSP[1].split(',')[0].split("-")[1]);
-                    $('#CSS1').text(CSP[1].split(',')[1]);
-                    $('#CST1').text(CSP[1].split(',')[2]);
+                        $('#CSF1').text(CSP[1].split(',')[0].split("-")[1]);
+                        $('#CSS1').text(CSP[1].split(',')[1]);
+                        $('#CST1').text(CSP[1].split(',')[2]);
 
-                    $('#CSF2').text(CSP[2].split(',')[0].split("-")[1]);
-                    $('#CSS2').text(CSP[2].split(',')[1]);
-                    $('#CST2').text(CSP[2].split(',')[2]);
+                        $('#CSF2').text(CSP[2].split(',')[0].split("-")[1]);
+                        $('#CSS2').text(CSP[2].split(',')[1]);
+                        $('#CST2').text(CSP[2].split(',')[2]);
 
-                    $('#CSF3').text(CSP[3].split(',')[0].split("-")[1]);
-                    $('#CSS3').text(CSP[3].split(',')[1]);
-                    $('#CST3').text(CSP[3].split(',')[2]);
+                        $('#CSF3').text(CSP[3].split(',')[0].split("-")[1]);
+                        $('#CSS3').text(CSP[3].split(',')[1]);
+                        $('#CST3').text(CSP[3].split(',')[2]);
 
-                    $('#CSF4').text(CSP[4].split(',')[0].split("-")[1]);
-                    $('#CSS4').text(CSP[4].split(',')[1]);
-                    $('#CST4').text(CSP[4].split(',')[2]);
+                        $('#CSF4').text(CSP[4].split(',')[0].split("-")[1]);
+                        $('#CSS4').text(CSP[4].split(',')[1]);
+                        $('#CST4').text(CSP[4].split(',')[2]);
 
-                    $('#CSF5').text(CSP[5].split(',')[0].split("-")[1]);
-                    $('#CSS5').text(CSP[5].split(',')[1]);
-                    $('#CST5').text(CSP[5].split(',')[2]);
+                        $('#CSF5').text(CSP[5].split(',')[0].split("-")[1]);
+                        $('#CSS5').text(CSP[5].split(',')[1]);
+                        $('#CST5').text(CSP[5].split(',')[2]);
 
-                    $('#CSF6').text(CSP[6].split(',')[0].split("-")[1]);
-                    $('#CSS6').text(CSP[6].split(',')[1]);
-                    $('#CST6').text(CSP[6].split(',')[2]);
+                        $('#CSF6').text(CSP[6].split(',')[0].split("-")[1]);
+                        $('#CSS6').text(CSP[6].split(',')[1]);
+                        $('#CST6').text(CSP[6].split(',')[2]);
 
-                    $('#CSF7').text(CSP[7].split(',')[0].split("-")[1]);
-                    $('#CSS7').text(CSP[7].split(',')[1]);
-                    $('#CST7').text(CSP[7].split(',')[2]);
+                        $('#CSF7').text(CSP[7].split(',')[0].split("-")[1]);
+                        $('#CSS7').text(CSP[7].split(',')[1]);
+                        $('#CST7').text(CSP[7].split(',')[2]);
 
-                    $('#CSF8').text(CSP[8].split(',')[0].split("-")[1]);
-                    $('#CSS8').text(CSP[8].split(',')[1]);
-                    $('#CST8').text(CSP[8].split(',')[2]);
+                        $('#CSF8').text(CSP[8].split(',')[0].split("-")[1]);
+                        $('#CSS8').text(CSP[8].split(',')[1]);
+                        $('#CST8').text(CSP[8].split(',')[2]);
 
-                    $('#CSF9').text(CSP[9].split(',')[0].split("-")[1]);
-                    $('#CSS9').text(CSP[9].split(',')[1]);
-                    $('#CST9').text(CSP[9].split(',')[2]);
+                        $('#CSF9').text(CSP[9].split(',')[0].split("-")[1]);
+                        $('#CSS9').text(CSP[9].split(',')[1]);
+                        $('#CST9').text(CSP[9].split(',')[2]);
 
-                    $('#CSF10').text(CSP[10].split(',')[0].split("-")[1]);
-                    $('#CSS10').text(CSP[10].split(',')[1]);
-                    $('#CST10').text(CSP[10].split(',')[2]);
- 
+                        $('#CSF10').text(CSP[10].split(',')[0].split("-")[1]);
+                        $('#CSS10').text(CSP[10].split(',')[1]);
+                        $('#CST10').text(CSP[10].split(',')[2]);
+                    }
+                    else {
+                        $('.FWC_MCP').hide();
+                    }
 
                 }
                 catch (ex) {
@@ -1539,31 +1689,31 @@
 
                 try {
                     $('#NoOfSup').text(data.Field.NoOfSup);
-                  //  $('#DCIT').text(data.Field.DCIT)
+                    //  $('#DCIT').text(data.Field.DCIT)
                     $('#LastThreeMonth').text(data.Field.LastThreeMonth);
                     $('#HospitalManagement').text(data.Field.HospitalManagement);
                     $('#RemarksofMonitoringOfficer').text(data.Field.RemarksofMonitoringOfficer);
 
                     var Last6Field = data.Field.Last6Field.split('|');
 
-                    $('#Last6Field1').text(Last6Field[0].split(',')[1]);
-                    $('#Last6Field2').text(Last6Field[1].split(',')[1]);
-                    $('#Last6Field3').text(Last6Field[2].split(',')[1]);
-                    $('#Last6Field4').text(Last6Field[3].split(',')[1]);
-                    $('#Last6Field5').text(Last6Field[4].split(',')[1]);
+                    //$('#Last6Field1').text(Last6Field[0].split(',')[1]);
+                    //$('#Last6Field2').text(Last6Field[1].split(',')[1]);
+                    //$('#Last6Field3').text(Last6Field[2].split(',')[1]);
+                    //$('#Last6Field4').text(Last6Field[3].split(',')[1]);
+                    //$('#Last6Field5').text(Last6Field[4].split(',')[1]);
 
                 }
                 catch (ex) {
                 }
 
 
-               
+
             }
 
-             
-            
+
+
         });
-    } 
+    }
 
     $('#downloadPDFBtn').click(function () {
 
@@ -1575,7 +1725,7 @@
             $('#downloadPDFBtn').show(); // Hide the button after 5 seconds
         }, 5000); // 5000 milliseconds = 5 seconds
 
-     
+
     });
 
 

@@ -263,7 +263,7 @@ case when FieldValue6 =1 then 'Open' else 'Close' end as OpenClose,
 	inner join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
 	inner join ProjectFieldSample fs7 on cte.FieldId7 = fs7.FieldID and fs7.Code IN (cte.FieldValue7)
-    where RowNum = 1 and convert(datetime, s.Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select * from #Graph";
+    where RowNum = 1 and convert(datetime, Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select * from #Graph";
 
 
             if (string.IsNullOrEmpty(req.DistrictName))
