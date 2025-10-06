@@ -3418,29 +3418,22 @@ where s.projectID in ({Ids}) order by s.sbjnum desc
 
         [Authorize]
         [HttpGet]
-        public ActionResult Report(int id = 0)
+        public ActionResult FWCReport(int id = 0)
         {
+            return View();
+        }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult RHSReport(int id = 0)
+        {
+            return View();
+        }
 
-            //System.Data.Entity.Infrastructure.DbRawSqlQuery<SurveyReport> GetSurvey;
-            //System.Data.Entity.Infrastructure.DbRawSqlQuery<SurveyTitle> GetTitle;
-            //CreateDatatableReport(7120, "", id, out GetSurvey, out GetTitle);
-            //var titles = GetTitle.ToArray();
-            //string IntToString = "";
-
-            //var RawSurvey = GetSurvey;
-            //List<SurveyReport> Survey = GetTitleByIds(GetSurvey, titles, ref IntToString);
-            //DataTable dataTable = ToDataTable(Survey.ToList());
-            ////DataTable newDataTable = ColToRow(dataTable);
-            //PrintDataTable(dataTable);
-            //SurveyResponse data = new SurveyResponse();
-            //data.RawData = RawSurvey.ToList();
-            //var json = JsonConvert.SerializeObject(dataTable);
-            //data.DataTitle = JsonConvert.DeserializeObject<List<TitleValue>>(json);
-            //data.Field = BindValues(data.DataTitle, data.RawData);
-            //return Json(data, JsonRequestBehavior.AllowGet);
-
-
+        [Authorize]
+        [HttpGet]
+        public ActionResult MSUReport(int id = 0)
+        {
             return View();
         }
 

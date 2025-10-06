@@ -496,29 +496,7 @@
 
                                     </tr>
 
-                                    <tr class="FWCCSPerformance">
-                                        <td>9</td>
-                                        <td>Implanon</td>
-                                        <td id="CSPS8"> </td>
-                                        <td id="CSPE8"> </td>
-
-                                    </tr>
-
-                                    <tr class="FWCCSPerformance">
-                                        <td>10</td>
-                                        <td>Tubaligation (TL)</td>
-                                        <td id="CSPS9"> </td>
-                                        <td id="CSPE9"> </td>
-
-                                    </tr>
-                                    <tr class="FWCCSPerformance">
-                                        <td>11</td>
-                                        <td>NSV</td>
-                                        <td id="CSPS10"> </td>
-                                        <td id="CSPE10"> </td>
-
-                                    </tr>
-                                    <!-- Add more rows for other contraceptives -->
+                                   
                                 </tbody>
                             </table>
 
@@ -1559,47 +1537,41 @@
                 $("#NOVN4").text(NoV[4].split(',')[1]);
 
                 try {
-                    var CSP = data.Field.StockOfCon.split('|')
-                    //1-600,2024-04-30
-                    //    | 2 - 500,2024 - 04 - 30 | 3 - 56, 2024 - 04 - 30 | 4 - 30, 2024 - 04 - 30 | 5 - 6, 2024 - 04 - 30 | 6 - 5, 2024 - 04 - 30 | 7 - 42, 2024 - 04 - 28 | 8 - 26, 2024 - 04 - 19
-                    $('#CSPS0').text(CSP[0].split(',')[0].split('-')[1]);
-                    $('#CSPE0').text(CSP[0].split(',')[1]);
+                    var CSP = data.Field.StockOfCon.split('|');
 
-                    $('#CSPS1').text(CSP[1].split(',')[0].split('-')[1]);
-                    $('#CSPE1').text(CSP[1].split(',')[1]);
+                    function isValidDate(d) {
+                        const parsed = Date.parse(d);
+                        if (isNaN(parsed)) return false;
 
-                    $('#CSPS2').text(CSP[2].split(',')[0].split('-')[1]);
-                    $('#CSPE2').text(CSP[2].split(',')[1]);
+                        // Check if the date string starts with 1900 (e.g., 1900-01-01)
+                        if (d.startsWith("1900")) return false;
 
-                    $('#CSPS3').text(CSP[3].split(',')[0].split('-')[1]);
-                    $('#CSPE3').text(CSP[3].split(',')[1]);
-
-                    $('#CSPS4').text(CSP[4].split(',')[0].split('-')[1]);
-                    $('#CSPE4').text(CSP[4].split(',')[1]);
-
-                    $('#CSPS5').text(CSP[5].split(',')[0].split('-')[1]);
-                    $('#CSPE5').text(CSP[5].split(',')[1]);
-
-                    $('#CSPS6').text(CSP[6].split(',')[0].split('-')[1]);
-                    $('#CSPE6').text(CSP[6].split(',')[1]);
-
-                    $('#CSPS7').text(CSP[7].split(',')[0].split('-')[1]);
-                    $('#CSPE7').text(CSP[7].split(',')[1]);
-
-                    if (!Heading.includes('FWC')) {
-
-                        $('#CSPS8').text(CSP[8].split(',')[0].split('-')[1]);
-                        $('#CSPE8').text(CSP[8].split(',')[1]);
-
-                        $('#CSPS9').text(CSP[9].split(',')[0].split('-')[1]);
-                        $('#CSPE9').text(CSP[9].split(',')[1]);
-
-                        $('#CSPS10').text(CSP[10].split(',')[0].split('-')[1]);
-                        $('#CSPE10').text(CSP[10].split(',')[1]);
-                        $('.FWCCSPerformance').show();
+                        return true;
                     }
-                    else {
-                        $('.FWCCSPerformance').hide();
+
+                    for (var i = 0; i < CSP.length; i++) {
+                        var splitParts = CSP[i].split(',');
+
+                        if (splitParts.length !== 2) {
+                            $('#CSPS' + i).text('');
+                            $('#CSPE' + i).text('');
+                            continue;
+                        }
+
+                        // Extract values
+                        var leftPart = splitParts[0].substring(splitParts[0].indexOf('-') + 1).trim();
+                        var rightPart = splitParts[1].trim();
+
+                        if (isValidDate(leftPart) && !isNaN(rightPart)) {
+                            $('#CSPS' + i).text(rightPart);    // stock
+                            $('#CSPE' + i).text(leftPart);     // expiry
+                        } else if (!isNaN(leftPart) && isValidDate(rightPart)) {
+                            $('#CSPS' + i).text(leftPart);     // stock
+                            $('#CSPE' + i).text(rightPart);    // expiry
+                        } else {
+                            $('#CSPS' + i).text('');
+                            $('#CSPE' + i).text('');
+                        }
                     }
                 }
                 catch (ex) {
@@ -1672,12 +1644,21 @@
                     for (var i = 0; i < data.Field.StockOfMed.split('|').length; i++) {
 
                         var NOME = data.Field.StockOfMed.split('|')
-
-
                         html += '<tr>';
                         html += '<td>' + NOME[i].split(',')[0].split('-')[1] + '</td>'
-                        html += '<td>' + NOME[i].split(',')[1] + '</td>'
-                        html += '<td>' + NOME[i].split(',')[2] + '</td>'
+
+                        if (NOME[i].split(',')[1] === "0") {
+                            html += '<td>' + "" + '</td>'
+                        }
+                        else {
+                            html += '<td>' + NOME[i].split(',')[1] + '</td>'
+                        }
+                        if (NOME[i].split(',')[2].includes("1900")) {
+                            html += '<td>' + "" + '</td>'
+                        }
+                        else {
+                            html += '<td>' + NOME[i].split(',')[2] + '</td>'
+                        }
                         html += '</tr>';
                     }
                     $('#tbodyNOM').html(html);
