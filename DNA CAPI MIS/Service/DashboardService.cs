@@ -26,7 +26,7 @@ namespace DNA_CAPI_MIS.Service
             NumberOfVisitor(req, response);
             StatusOfBuilding(req, response);
             response.contraceptiveStockPositionModel = ContraceptiveStockPosition(req);
-         
+            response.FuniturePosition =  FuniturePosition(req);
             return response;
         }
 
@@ -501,10 +501,9 @@ SELECT * FROM #Graph order by asDate desc;
 
             return response;
         }
-
-
-        public List<Grid3> StatusOfBuildings(DashboardRequest req)
+        public List<Grid14> FuniturePosition(DashboardRequest req)
         {
+
             string Where = $"where s.ProjectID in ({req.ProjectId})";
             string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
 BEGIN
@@ -516,46 +515,47 @@ END
        
 		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
 		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
-	   
 		sd5.fieldId as FieldId5, sd5.fieldValue as FieldValue5,
-		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
-		sd7.fieldId as FieldId7, sd7.fieldValue as FieldValue7,
-	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue,sd7.fieldValue,sd7.fieldValue order by s.created desc) as RowNum
+	    sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
+
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue order by s.created desc) as RowNum
 	from survey s
 		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
 		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
-		Inner join SurveyData sd5 on s.sbjnum = sd5.sbjnum and sd5.FieldId in (55594,50498,50461) -- indicate Sign
-	    Inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (50557,50500,55595) -- Status of Building
-		left  join SurveyData sd7 on s.sbjnum = sd7.sbjnum and sd7.FieldId in (50462,50499,55596) -- Cleanliess
-		{Where} )
+		Inner join SurveyData sd5 on s.sbjnum = sd5.sbjnum and sd5.FieldId in (50512,50474,55615) -- FP
+		Inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (50513,53570,55616) -- FPQ
+		{Where}
+		)
 select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as ProjectName, fs2.Title as District ,fs3.Title as Center, 
- FieldValue5 
- as IndicateSign,
-FieldValue6 as StatusOfBuilding,
- case when  FieldValue7 = '1' then 'Satisfactory' when FieldValue7 = '2' then 'Not Satisfactory' else '' end  as Cleanliness ,
+ FieldValue5 as FP,
+  FieldValue6 as FPQ,
+ cte.FieldId5,
+
   convert(varchar, Created,101) asDate,
  sbjnum
     into #Graph from cte
 	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
-	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
-	left join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
-	left join ProjectFieldSample fs7 on cte.FieldId7 = fs7.FieldID and fs7.Code IN (cte.FieldValue7)
-    where RowNum = 1 and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select * from #Graph   
+	inner join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID 
+	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID 
+	
+    where RowNum = 1 and len(FieldValue6) > 5 and created  BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select distinct * from #Graph   
 
  
 ";
-
-            if(string.IsNullOrEmpty(req.DistrictName))
+            if (string.IsNullOrEmpty(req.DistrictName))
             {
-                req.DistrictName = "";
+                req.DistrictName = string.Empty;
             }
+
             if (string.IsNullOrEmpty(req.CenterName))
             {
-                req.CenterName = "";
+                req.CenterName = string.Empty;
             }
-            var con = dbContext.Database.SqlQuery<Grid3>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
+            var con = dbContext.Database.SqlQuery<Grid14>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
             return con.ToList();
         }
+
+
     }
 }

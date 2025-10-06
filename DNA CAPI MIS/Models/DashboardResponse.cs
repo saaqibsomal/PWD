@@ -19,6 +19,7 @@ namespace DNA_CAPI_MIS.Models
         public List<PieChartOC> FWCOpenClose { get; set; } = new List<PieChartOC>();
         public List<PieChartOC> RHSOpenClose { get; set; } = new List<PieChartOC>();
         public List<Grid3> Grid3 { get; set; } = new List<Grid3>();
+        public List<Grid14> FuniturePosition { get; set; } = new List<Grid14>();
         public int AllCnt { get; set; } = 0;
         public int RHSCnt { get; set; } = 0;
         public int MSUCnt { get; set; } = 0;
