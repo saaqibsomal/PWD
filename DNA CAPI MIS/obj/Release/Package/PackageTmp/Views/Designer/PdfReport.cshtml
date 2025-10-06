@@ -332,13 +332,22 @@
         }
 
         var heading = Pro;
-        var url = 'http://localhost:54050/Designer/Report?id=' + sbjnum + '&Heading=' + Project;
 
-        // Open the URL in a new tab/window
+        // Dynamic base URL
+        var baseUrl = window.location.origin + "/Designer/";
+
+        var url = "";
+        if (Project.includes("MSU")) {
+            url = baseUrl + 'MSUReport?id=' + sbjnum + '&Heading=' + Project;
+        }
+        else if (Project.includes("RHS")) {
+            url = baseUrl + 'RHSReport?id=' + sbjnum + '&Heading=' + Project;
+        }
+        else {
+            url = baseUrl + 'FWCReport?id=' + sbjnum + '&Heading=' + Project;
+        }
+
         window.open(url, '_blank');
-
-
-
     }
 
 
