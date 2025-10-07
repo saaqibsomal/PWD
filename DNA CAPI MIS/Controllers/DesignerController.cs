@@ -3814,7 +3814,7 @@ where s.projectID in ({Ids}) order by s.sbjnum desc
                     var TechnicalMonitoringChecklist = data.Where(x => x.Title.ToUpper().Contains("Technical Monitoring Checklist".ToUpper())).FirstOrDefault();
                     if (TechnicalMonitoringChecklist != null)
                     {
-                        field.TechnicalMonitoringChecklist = TechnicalMonitoringChecklist.FieldValue;
+                        field.TechnicalMonitoringChecklist = TechnicalMonitoringChecklist.FieldValue.Replace("Hand Washing Protocols Followed","No");
                     }
                     else
                     {

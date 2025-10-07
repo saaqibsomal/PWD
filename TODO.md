@@ -1,0 +1,5 @@
+- [ ] Consolidate and standardize table CSS styles
+- [x] Update Bootstrap classes to Bootstrap 3 equivalents (col-6 to col-xs-6)
+- [ ] Fix invalid HTML tag in Equipment Position table
+- [ ] Adjust container width for better table alignment
+- [ ] Ensure consistent text alignment and spacing

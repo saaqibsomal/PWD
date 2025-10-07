@@ -177,62 +177,62 @@
                                         <tr>
                                             <td>1</td>
                                             <td>Women Medical Officer</td>
-                                            <td id="PName1"></td>
-                                            <td id="StaffPos1"></td>
+                                            <td id="FWCPName1"></td>
+                                            <td id="FWCStaffPos1"></td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
                                             <td>Accounts Assistant</td>
-                                            <td id="PName2"></td>
-                                            <td id="StaffPos2"></td>
+                                            <td id="FWCPName2"></td>
+                                            <td id="FWCStaffPos2"></td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
                                             <td>Theater Nurse</td>
-                                            <td id="PName3"></td>
-                                            <td id="StaffPos3"></td>
+                                            <td id="FWCPName3"></td>
+                                            <td id="FWCStaffPos3"></td>
                                         </tr>
                                         <tr>
                                             <td>4</td>
                                             <td>O.T. Technician</td>
-                                            <td id="PName4"></td>
-                                            <td id="StaffPos4"></td>
+                                            <td id="FWCPName4"></td>
+                                            <td id="FWCStaffPos4"></td>
                                         </tr>
                                         <tr>
                                             <td>5</td>
                                             <td>Family Welfare Councilor</td>
-                                            <td id="PName5"></td>
-                                            <td id="StaffPos5"></td>
+                                            <td id="FWCPName5"></td>
+                                            <td id="FWCStaffPos5"></td>
                                         </tr>
                                         <tr>
                                             <td>6</td>
                                             <td>Family Welfare Worker</td>
-                                            <td id="PName6"></td>
-                                            <td id="StaffPos6"></td>
+                                            <td id="FWCPName6"></td>
+                                            <td id="FWCStaffPos6"></td>
                                         </tr>
                                         <tr>
                                             <td>7</td>
                                             <td>Family Welfare Assistant (F)</td>
-                                            <td id="PName7"></td>
-                                            <td id="StaffPos7"></td>
+                                            <td id="FWCPName7"></td>
+                                            <td id="FWCStaffPos7"></td>
                                         </tr>
                                         <tr>
                                             <td>8</td>
                                             <td>Driver</td>
-                                            <td id="PName8"></td>
-                                            <td id="StaffPos8"></td>
+                                            <td id="FWCPName8"></td>
+                                            <td id="FWCStaffPos8"></td>
                                         </tr>
                                         <tr>
                                             <td>9</td>
                                             <td>Helper</td>
-                                            <td id="PName9"></td>
-                                            <td id="StaffPos9"></td>
+                                            <td id="FWCPName9"></td>
+                                            <td id="FWCStaffPos9"></td>
                                         </tr>
                                         <tr>
                                             <td>10</td>
                                             <td>Sweeper</td>
-                                            <td id="PName10"></td>
-                                            <td id="StaffPos10"></td>
+                                            <td id="FWCPName10"></td>
+                                            <td id="FWCStaffPos10"></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1405,11 +1405,11 @@
                 $("#FPQuantity7").text(FP[6]);
 
                 var TMC = data.Field.TechnicalMonitoringChecklist.split(',');
-                $("#TMC1").text(TMC[0]);
-                $("#TMC2").text(TMC[1]);
-                $("#TMC3").text(TMC[2]);
-                $("#TMC4").text(TMC[3]);
-                $("#TMC5").text(TMC[4]);
+                $("#TMC1").text(TMC[0] == "No" ? "No" : "Yes");
+                $("#TMC2").text(TMC[1] == "No" ? "No" : "Yes");
+                $("#TMC3").text(TMC[2] == "No" ? "No" : "Yes");
+                $("#TMC4").text(TMC[3] == "No" ? "No" : "Yes");
+                $("#TMC5").text(TMC[4] == "No" ? "No" : "Yes");
 
 
                 var cons = data.Field.COUNSELING.split(',');
