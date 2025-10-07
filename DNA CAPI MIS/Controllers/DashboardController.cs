@@ -1,7 +1,9 @@
 ﻿using DNA_CAPI_MIS.Models;
 using DNA_CAPI_MIS.Service;
+using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -57,6 +59,24 @@ namespace DNA_CAPI_MIS.Controllers
                 throw;
             }
             return Json(sdpStatus, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult MonitoringVisitsReport(DashboardRequest req)
+        {
+            List<PdfDetailReport> report = new List<PdfDetailReport>();
+            try
+            {
+
+                var name = User.Identity.Name;
+                var users = User;
+                report = service.MonitoringVisitsReport(req, name, users);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Json(report, JsonRequestBehavior.AllowGet);
         }
     }
 }

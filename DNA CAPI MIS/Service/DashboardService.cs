@@ -3,11 +3,13 @@ using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Office2010.Ink;
 using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Principal;
 using System.Text;
 using System.Web.Mvc;
 
@@ -26,7 +28,7 @@ namespace DNA_CAPI_MIS.Service
             NumberOfVisitor(req, response);
             StatusOfBuilding(req, response);
             response.contraceptiveStockPositionModel = ContraceptiveStockPosition(req);
-            response.FuniturePosition =  FuniturePosition(req);
+            response.FuniturePosition = FuniturePosition(req);
             return response;
         }
 
@@ -328,7 +330,7 @@ select  convert(varchar, Created,101) asDate,  fs2.Title as District ,fs3.Title 
             var stuffPosition = dbContext.Database.SqlQuery<StuffPosition>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
             return stuffPosition.ToList();
         }
-        public   ContraceptiveStockPositionModel  ContraceptiveStockPosition(DashboardRequest req)
+        public ContraceptiveStockPositionModel ContraceptiveStockPosition(DashboardRequest req)
         {
             string Where = $"where s.ProjectID in ({req.ProjectId})";
             string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
@@ -557,5 +559,69 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
         }
 
 
+        public List<PdfDetailReport> MonitoringVisitsReport(DashboardRequest req, string name, IPrincipal User)
+        {
+            var District = string.Empty;
+            bool isAdmin = false;
+            if (User.IsInRole("Admin"))
+            {
+                var GetDistrict = name.Split('_');
+                var removeAtRat = GetDistrict[1].Split('@');
+                District = removeAtRat[0];
+                isAdmin = true;
+            }
+            else
+            {
+                if (name.Contains("_"))
+                {
+                    isAdmin = false;
+                }
+                else
+                {
+                    District = "";
+                }
+            }
+
+            string Query = $@"
+IF OBJECT_ID('tempdb..#SurveyReport') IS NOT NULL
+    DROP TABLE #SurveyReport
+
+select Convert(varchar,s.Longitude) Longitude, Convert(varchar,s.Latitude) Latitude ,s.sbjnum, Convert(varchar,s.Created,101) Created, s.SurveyorName,
+Convert(varchar,isnull((select top 1 sd.FieldValue from SurveyData sd where sd.FieldId in (50435,50484,55587) and sd.sbjnum = s.sbjnum),0)) as District,
+Convert(varchar,isnull((select top 1 sd.FieldValue from SurveyData sd where sd.FieldId in (50446,50486,55588) and sd.sbjnum = s.sbjnum),0)) as Center,
+Convert(varchar,isnull((select top 1 sd.FieldId from SurveyData sd where sd.FieldId in (50435,50484,55587) and sd.sbjnum = s.sbjnum),0)) as DistrictFieldID,
+Convert(varchar,isnull((select top 1  sd.FieldId from SurveyData sd where sd.FieldId in (50446,50486,55588) and sd.sbjnum = s.sbjnum),0)) as CenterFieldId
+, case when s.projectID = 7120 then 'RHS-S' when  s.projectID = 7121 then 'MSU' when s.projectID = 7122 then 'FWC' else '' end as Project
+into #SurveyReport
+from Survey  s 
+where s.projectID in ({req.ProjectId}) order by s.sbjnum desc
+ select sp.*,isnull(pfD.Title,'') DistrictName, isnull(pfC.Title,'') CenterName  from #SurveyReport sp 
+ Left join   ProjectFieldSample pfC on sp.Center = pfC.Code and sp.CenterFieldId = pfC.FieldID
+ Left join ProjectFieldSample pfD on sp.District = pfD.Code and sp.DistrictFieldID = pfD.FieldID 
+ order by Created desc
+"; 
+            
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = string.Empty;
+            }
+            var GetSurvey = dbContext.Database.SqlQuery<PdfDetailReport>(Query);
+            if (isAdmin)
+            {
+                return GetSurvey.ToList();
+            }
+            else
+            {
+                var DistrictWise = GetSurvey.Where(x => x.DistrictName.ToUpper().Contains(req.DistrictName) && x.CenterName.Contains(req.CenterName)).ToList();
+                return DistrictWise.ToList();
+            }
+
+
+        }
     }
 }
