@@ -84,47 +84,95 @@ namespace DNA_CAPI_MIS.Service
         {
             string Where = $"where s.ProjectID in ({req.ProjectId})";
             string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
-BEGIN
     DROP TABLE #Graph;
-END
 
-;with cte as (
-	  select s.ProjectID,  s.sbjnum, s.Created, 
-       
-		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
-		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
-	   
-		sd5.fieldId as FieldId5, sd5.fieldValue as FieldValue5,
-		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
-		sd7.fieldId as FieldId7, sd7.fieldValue as FieldValue7,
-	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue,sd7.fieldValue,sd7.fieldValue order by s.created desc) as RowNum
-	from survey s
-		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
-		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
-		Inner join SurveyData sd5 on s.sbjnum = sd5.sbjnum and sd5.FieldId in (55594,50498,50461) -- indicate Sign
-	    Inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (50557,50500,55595) -- Status of Building
-		left  join SurveyData sd7 on s.sbjnum = sd7.sbjnum and sd7.FieldId in (50462,50499,55596) -- Cleanliess
-		{Where} )
-select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as ProjectName, fs2.Title as District ,fs3.Title as Center, 
- FieldValue5 
- as IndicateSign,
-FieldValue6 as StatusOfBuilding,
- case when  FieldValue7 = '1' then 'Satisfactory' when FieldValue7 = '2' then 'Not Satisfactory' else '' end  as Cleanliness ,
-  convert(varchar, Created,101) asDate,
- sbjnum
-    into #Graph from cte
-	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
-	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
-	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
-	left join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
-	left join ProjectFieldSample fs7 on cte.FieldId7 = fs7.FieldID and fs7.Code IN (cte.FieldValue7)
-    where RowNum = 1 and Convert(datetime, Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select * from #Graph   
+;WITH cte AS (
+    SELECT 
+        s.ProjectID,
+        s.sbjnum,
+        s.Created,
+        sd2.FieldId AS FieldId2, sd2.FieldValue AS FieldValue2,
+        sd3.FieldId AS FieldId3, sd3.FieldValue AS FieldValue3,
+        sd5.FieldId AS FieldId5, sd5.FieldValue AS FieldValue5,
+        sd6.FieldId AS FieldId6, sd6.FieldValue AS FieldValue6,
+        sd7.FieldId AS FieldId7, sd7.FieldValue AS FieldValue7,
+        DATENAME(MONTH, s.Created) AS MonthName,
+        MONTH(s.Created) AS MonthNum,
+        YEAR(s.Created) AS YearNum,
+        ROW_NUMBER() OVER (
+            PARTITION BY sd3.FieldValue, YEAR(s.Created), MONTH(s.Created)   -- per center per month
+            ORDER BY s.Created ASC                                           -- first inserted record
+        ) AS RowNum
+    FROM Survey s
+    INNER JOIN SurveyData sd2 ON s.sbjnum = sd2.sbjnum AND sd2.FieldId IN (50435, 50484, 55587) -- District
+    INNER JOIN SurveyData sd3 ON s.sbjnum = sd3.sbjnum AND sd3.FieldId IN (50446, 50486, 55588) -- Center
+    INNER JOIN SurveyData sd5 ON s.sbjnum = sd5.sbjnum AND sd5.FieldId IN (55594, 50498, 50461) -- Indicate Sign
+    INNER JOIN SurveyData sd6 ON s.sbjnum = sd6.sbjnum AND sd6.FieldId IN (50557, 50500, 55595) -- Status of Building
+    LEFT JOIN SurveyData sd7 ON s.sbjnum = sd7.sbjnum AND sd7.FieldId IN (50462, 50499, 55596)  -- Cleanliness
+    WHERE s.ProjectID IN ({req.ProjectId})
+)
+SELECT  
+    (SELECT TOP 1 p.[Name] FROM Project p WHERE p.Id = cte.ProjectID) AS ProjectName,
+    fs2.Title AS District,
+    fs3.Title AS Center,
+    FieldValue5 AS IndicateSign,
+    FieldValue6 AS StatusOfBuilding,
+    CASE 
+        WHEN FieldValue7 = '1' THEN 'Satisfactory'
+        WHEN FieldValue7 = '2' THEN 'Not Satisfactory'
+        ELSE ''
+    END AS Cleanliness,
+    CONVERT(VARCHAR, cte.Created, 101) AS [asDate],
+    cte.MonthName,
+    cte.YearNum,
+    cte.sbjnum,
+    cte.MonthNum
+INTO #Graph
+FROM cte
+INNER JOIN ProjectFieldSample fs2 ON cte.FieldId2 = fs2.FieldID AND fs2.Code IN (cte.FieldValue2)
+INNER JOIN ProjectFieldSample fs3 ON cte.FieldId3 = fs3.FieldID AND fs3.Code IN (cte.FieldValue3)
+LEFT JOIN ProjectFieldSample fs5 ON cte.FieldId5 = fs5.FieldID AND fs5.Code IN (cte.FieldValue5)
+LEFT JOIN ProjectFieldSample fs6 ON cte.FieldId6 = fs6.FieldID AND fs6.Code IN (cte.FieldValue6)
+LEFT JOIN ProjectFieldSample fs7 ON cte.FieldId7 = fs7.FieldID AND fs7.Code IN (cte.FieldValue7)
+WHERE RowNum = 1
+  AND CONVERT(DATETIME, cte.Created, 101) 
+      BETWEEN '{req.StartDate} 00:00:01' AND '{req.EndDate} 23:59:59';
+
+SELECT * FROM #Graph ORDER BY YearNum, MonthNum, Center;
+
 
  
 ";
 
             var Grid = dbContext.Database.SqlQuery<Grid3>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName)).ToList();
-            response.Grid3 = Grid;
+
+
+            // Parse the user's date range once
+            DateTime startDate = DateTime.Parse(req.StartDate);
+            DateTime endDate = DateTime.Parse(req.EndDate);
+
+            // Process with filtering, grouping by month, and removing duplicates
+            var Grid3 = Grid
+                .Select(x => new
+                {
+                    Record = x,
+                    DateParsed = DateTime.TryParse(x.asDate, out var dt) ? dt : (DateTime?)null
+                })
+                .Where(x => x.DateParsed != null)
+                .Where(x => x.DateParsed.Value >= startDate && x.DateParsed.Value <= endDate)
+                .Where(x => x.Record.District.Contains(req.DistrictName) &&
+                            x.Record.Center.Contains(req.CenterName))
+                .GroupBy(x => new
+                {
+                    x.DateParsed.Value.Year,
+                    x.DateParsed.Value.Month,
+                    x.Record.Center
+                })
+                .Select(g => g.OrderByDescending(x => x.DateParsed).First().Record) // latest per center per month
+                .ToList();
+
+
+            response.Grid3 = Grid3;
         }
         private void MSUOpenClose(DashboardRequest req, DashboardResponse response)
         {

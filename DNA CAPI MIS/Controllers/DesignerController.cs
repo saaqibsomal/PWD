@@ -3400,7 +3400,7 @@ where s.projectID in ({Ids}) order by s.sbjnum desc
  select sp.*,isnull(pfD.Title,'') DistrictName, isnull(pfC.Title,'') CenterName  from #SurveyReport sp 
  Left join   ProjectFieldSample pfC on sp.Center = pfC.Code and sp.CenterFieldId = pfC.FieldID
  Left join ProjectFieldSample pfD on sp.District = pfD.Code and sp.DistrictFieldID = pfD.FieldID 
- order by Created desc
+ order by sbjnum desc,Created desc
 ";
             var GetSurvey = db.Database.SqlQuery<PdfDetailReport>(Query);
             if (isAdmin)
