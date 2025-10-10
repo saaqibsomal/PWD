@@ -1103,7 +1103,17 @@
                 $("#DateOfVisit").text(data.Field.DateOfVisit);
                 $("#TimeOfVisit").text(data.Field.TimeOfVisit);
                 $("#OpenCloseStatus").text(data.Field.OpenCloseStatus);
-                $("#signature").text(data.RawData[9].FieldValue);
+                const item = data.RawData.find(
+                    (entry) => entry.Title.toLowerCase() === "Name and Designation of Monitoring Officer".toLowerCase()
+                );
+
+                if (item) {
+                    console.log(item.FieldValue);
+                    $("#signature").text(item.FieldValue);
+                } else {
+                    console.log("Title not found.");
+                }
+
                 try {
                     $('#Coordinate').text(data.RawData[0].Latitude + "," + data.RawData[0].Longitude);
                 } catch (ex) {
