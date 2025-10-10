@@ -381,14 +381,15 @@
                                     </tr>
                                     <tr>
                                         <td>2</td>
-                                        <td>POP</td>
+                                 
+                                        <td>COC</td>
                                         <td id="CSPS2"></td>
                                         <td id="CSPE2"></td>
 
                                     </tr>
                                     <tr>
                                         <td>3</td>
-                                        <td>COC</td>
+                                        <td>POP</td>
                                         <td id="CSPS1"></td>
                                         <td id="CSPE1"> </td>
                                     </tr>
@@ -666,14 +667,14 @@
                                     </tr>
                                     <tr>
                                         <td>1</td>
-                                        <td>IUD Kits</td>
+                                        <td>Minilap kits</td>
                                         <td id="Quantity1"></td>
                                         <td id="FuniGB1"></td>
 
                                     </tr>
                                     <tr>
                                         <td>2</td>
-                                        <td>B.P. Apparatus</td>
+                                        <td>Iud kits</td>
                                         <td id="Quantity2"></td>
                                         <td id="FuniGB2"></td>
 
@@ -681,42 +682,42 @@
 
                                     <tr>
                                         <td>3</td>
-                                        <td>Stethoscope</td>
+                                        <td>B.P. Apparatus</td>
                                         <td id="Quantity3"></td>
                                         <td id="FuniGB3"></td>
 
                                     </tr>
                                     <tr>
                                         <td>4</td>
-                                        <td>Thermometer</td>
+                                        <td>Stethoscope</td>
                                         <td id="Quantity4"></td>
                                         <td id="FuniGB4"></td>
 
                                     </tr>
                                     <tr>
                                         <td>5</td>
-                                        <td>Weighting Machine</td>
+                                        <td>Thermometer</td>
                                         <td id="Quantity5"></td>
                                         <td id="FuniGB5"></td>
 
                                     </tr>
                                     <tr>
                                         <td>6</td>
-                                        <td>Stove</td>
+                                        <td>Weighting Machine</td>
                                         <td id="Quantity6"></td>
                                         <td id="FuniGB6"></td>
 
                                     </tr>
                                     <tr>
                                         <td>7</td>
-                                        <td>Autoclave</td>
+                                        <td>Stove</td>
                                         <td id="Quantity7"></td>
                                         <td id="FuniGB7"></td>
 
                                     </tr>
                                     <tr>
                                         <td>8</td>
-                                        <td>Sterlizer</td>
+                                        <td>OT Lights</td>
                                         <td id="Quantity8"></td>
                                         <td id="FuniGB8"></td>
 
@@ -724,7 +725,7 @@
 
                                     <tr>
                                         <td>9</td>
-                                        <td>Screen</td>
+                                        <td>Hydrolic Table</td>
                                         <td id="Quantity9"></td>
                                         <td id="FuniGB9"></td>
 
@@ -1028,17 +1029,19 @@
                                         @*<label style="margin-top:2px" for="hmc-meeting">Meeting with Hospital Management Committee:&nbsp;&nbsp;<u id="HospitalManagement"></u></label><br />*@
                                         @*<label style="margin-top:2px" id="LastThreeMonth">No. of visits paid during last three months by:</label><br />*@
                                         @*<ul>
-                                                <li> <label for="provincial-team">Provincial Team:&nbsp;&nbsp;<u id="Last6Field1">  &nbsp;&nbsp;</u></label> </li>
-                                                <li> <label for="regional-director">Regional Director:&nbsp;&nbsp;<u id="Last6Field2">&nbsp;&nbsp;</u></label>  </li>
-                                                <li> <label for="regional-director">DPWO:&nbsp;&nbsp;<u id="Last6Field3"></u></label>  </li>
-                                                <li> <label for="regional-director">Dy.DPWO/Medical Officer/Demographer:&nbsp;&nbsp;<u id="Last6Field4"></u></label>  </li>
-                                                <li> <label for="regional-director">TPWO:&nbsp;&nbsp;<u id="Last6Field5"></u></label>  </li>
-                                            </ul>*@
+            <li> <label for="provincial-team">Provincial Team:&nbsp;&nbsp;<u id="Last6Field1">  &nbsp;&nbsp;</u></label> </li>
+            <li> <label for="regional-director">Regional Director:&nbsp;&nbsp;<u id="Last6Field2">&nbsp;&nbsp;</u></label>  </li>
+            <li> <label for="regional-director">DPWO:&nbsp;&nbsp;<u id="Last6Field3"></u></label>  </li>
+            <li> <label for="regional-director">Dy.DPWO/Medical Officer/Demographer:&nbsp;&nbsp;<u id="Last6Field4"></u></label>  </li>
+            <li> <label for="regional-director">TPWO:&nbsp;&nbsp;<u id="Last6Field5"></u></label>  </li>
+        </ul>*@
+                                        <br />
+                                        <br />
                                         <label for="remarks">Remarks of Monitoring Officer:&nbsp;&nbsp;<u id="RemarksofMonitoringOfficer"></u></label> <br />
-                                        ____________________________________________________________
-                                        ____________________________________________________________
-                                        <label for="signature">Signature:</label>
 
+                                        <br />
+                                        <br />
+                                        <label> Name and Designation of Monitoring Officer :&nbsp;&nbsp;<u for="signature" id="signature"></u></label>
                                         <br>
 
                                     </form>
@@ -1100,6 +1103,7 @@
                 $("#DateOfVisit").text(data.Field.DateOfVisit);
                 $("#TimeOfVisit").text(data.Field.TimeOfVisit);
                 $("#OpenCloseStatus").text(data.Field.OpenCloseStatus);
+                $("#signature").text(data.RawData[9].FieldValue);
                 try {
                     $('#Coordinate').text(data.RawData[0].Latitude + "," + data.RawData[0].Longitude);
                 } catch (ex) {
@@ -1300,22 +1304,14 @@
                 $("#FuniGB7").text(FuniGB[6] == "1" ? "N/A" : FuniGB[6] == "2" ? "Good" : FuniGB[6] == "3" ? "Satisfactory" : "Poor");
                 $("#FuniGB8").text(FuniGB[7] == "1" ? "N/A" : FuniGB[7] == "2" ? "Good" : FuniGB[7] == "3" ? "Satisfactory" : "Poor");
                 $("#FuniGB9").text(FuniGB[8] == "1" ? "N/A" : FuniGB[8] == "2" ? "Good" : FuniGB[8] == "3" ? "Satisfactory" : "Poor");
-
-                if (Heading.includes('FWC')) {
-                    $("#FuniGB10").text(FuniGB[9] == "1" ? "N/A" : FuniGB[9] == "2" ? "Good" : FuniGB[9] == "3" ? "Satisfactory" : "Poor");
-                    $("#FuniGB11").text(FuniGB[10] == "1" ? "N/A" : FuniGB[10] == "2" ? "Good" : FuniGB[10] == "3" ? "Satisfactory" : "Poor");
-                    $("#FuniGB12").text(FuniGB[11] == "1" ? "N/A" : FuniGB[11] == "2" ? "Good" : FuniGB[11] == "3" ? "Satisfactory" : "Poor");
-                    $("#FuniGB13").text(FuniGB[12] == "1" ? "N/A" : FuniGB[12] == "2" ? "Good" : FuniGB[12] == "3" ? "Satisfactory" : "Poor");
-                    $("#FuniGB14").text(FuniGB[13] == "1" ? "N/A" : FuniGB[13] == "2" ? "Good" : FuniGB[13] == "3" ? "Satisfactory" : "Poor");
-                    $("#FuniGB15").text(FuniGB[14] == "1" ? "N/A" : FuniGB[14] == "2" ? "Good" : FuniGB[14] == "3" ? "Satisfactory" : "Poor");
-                    $("#FuniGB16").text(FuniGB[15] == "1" ? "N/A" : FuniGB[15] == "2" ? "Good" : FuniGB[15] == "3" ? "Satisfactory" : "Poor");
-                    $('.FWCEqiptment').hide();
-                }
-
-                else {
-                    $('.FWCEqiptment').show();
-
-                }
+                $("#FuniGB10").text(FuniGB[9] == "1" ? "N/A" : FuniGB[9] == "2" ? "Good" : FuniGB[9] == "3" ? "Satisfactory" : "Poor");
+                $("#FuniGB11").text(FuniGB[10] == "1" ? "N/A" : FuniGB[10] == "2" ? "Good" : FuniGB[10] == "3" ? "Satisfactory" : "Poor");
+                $("#FuniGB12").text(FuniGB[11] == "1" ? "N/A" : FuniGB[11] == "2" ? "Good" : FuniGB[11] == "3" ? "Satisfactory" : "Poor");
+                $("#FuniGB13").text(FuniGB[12] == "1" ? "N/A" : FuniGB[12] == "2" ? "Good" : FuniGB[12] == "3" ? "Satisfactory" : "Poor");
+                $("#FuniGB14").text(FuniGB[13] == "1" ? "N/A" : FuniGB[13] == "2" ? "Good" : FuniGB[13] == "3" ? "Satisfactory" : "Poor");
+                $("#FuniGB15").text(FuniGB[14] == "1" ? "N/A" : FuniGB[14] == "2" ? "Good" : FuniGB[14] == "3" ? "Satisfactory" : "Poor");
+                $("#FuniGB16").text(FuniGB[15] == "1" ? "N/A" : FuniGB[15] == "2" ? "Good" : FuniGB[15] == "3" ? "Satisfactory" : "Poor");
+               
 
                 var FunPos = data.Field.FurniturePositionCondition.split(',');
 

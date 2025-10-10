@@ -1009,17 +1009,19 @@
                                         @*<label style="margin-top:2px" for="hmc-meeting">Meeting with Hospital Management Committee:&nbsp;&nbsp;<u id="HospitalManagement"></u></label><br />*@
                                         @*<label style="margin-top:2px" id="LastThreeMonth">No. of visits paid during last three months by:</label><br />*@
                                         @*<ul>
-                                            <li> <label for="provincial-team">Provincial Team:&nbsp;&nbsp;<u id="Last6Field1">  &nbsp;&nbsp;</u></label> </li>
-                                            <li> <label for="regional-director">Regional Director:&nbsp;&nbsp;<u id="Last6Field2">&nbsp;&nbsp;</u></label>  </li>
-                                            <li> <label for="regional-director">DPWO:&nbsp;&nbsp;<u id="Last6Field3"></u></label>  </li>
-                                            <li> <label for="regional-director">Dy.DPWO/Medical Officer/Demographer:&nbsp;&nbsp;<u id="Last6Field4"></u></label>  </li>
-                                            <li> <label for="regional-director">TPWO:&nbsp;&nbsp;<u id="Last6Field5"></u></label>  </li>
-                                        </ul>*@
+            <li> <label for="provincial-team">Provincial Team:&nbsp;&nbsp;<u id="Last6Field1">  &nbsp;&nbsp;</u></label> </li>
+            <li> <label for="regional-director">Regional Director:&nbsp;&nbsp;<u id="Last6Field2">&nbsp;&nbsp;</u></label>  </li>
+            <li> <label for="regional-director">DPWO:&nbsp;&nbsp;<u id="Last6Field3"></u></label>  </li>
+            <li> <label for="regional-director">Dy.DPWO/Medical Officer/Demographer:&nbsp;&nbsp;<u id="Last6Field4"></u></label>  </li>
+            <li> <label for="regional-director">TPWO:&nbsp;&nbsp;<u id="Last6Field5"></u></label>  </li>
+        </ul>*@
+                                        <br />
+                                        <br />
                                         <label for="remarks">Remarks of Monitoring Officer:&nbsp;&nbsp;<u id="RemarksofMonitoringOfficer"></u></label> <br />
-                                        ____________________________________________________________
-                                        ____________________________________________________________
-                                        <label for="signature">Signature:</label>
 
+                                        <br />
+                                        <br />
+                                        <label> Name and Designation of Monitoring Officer :&nbsp;&nbsp;<u for="signature" id="signature"></u></label>
                                         <br>
 
                                     </form>
@@ -1081,6 +1083,7 @@
                 $("#DateOfVisit").text(data.Field.DateOfVisit);
                 $("#TimeOfVisit").text(data.Field.TimeOfVisit);
                 $("#OpenCloseStatus").text(data.Field.OpenCloseStatus);
+                $("#signature").text(data.RawData[10].FieldValue);
                 try {
                     $('#Coordinate').text(data.RawData[0].Latitude + "," + data.RawData[0].Longitude);
                 } catch (ex) {
