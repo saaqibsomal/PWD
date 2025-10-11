@@ -367,7 +367,75 @@
         padding-right: 15px;
         padding-left: 15px;
     }
+
+    /* Loading Indicator */
+    .loader-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        backdrop-filter: blur(5px);
+    }
+
+    .loader {
+        width: 60px;
+        height: 60px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #007bff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        position: relative;
+    }
+
+    .loader::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 30px;
+        height: 30px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #0056b3;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite reverse;
+    }
+
+    .loader-text {
+        margin-top: 20px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #007bff;
+        text-align: center;
+    }
+
+    @@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loader-content {
+        text-align: center;
+    }
+
+    .loader.hidden {
+        display: none;
+    }
 </style>
+
+<!-- Loading Indicator -->
+<div id="loader" class="loader-container">
+    <div class="loader-content">
+        <div class="loader"></div>
+        <div class="loader-text">Loading MSU Report Data...</div>
+    </div>
+</div>
 
 <div class="report-container">
     <div class="report-header">
@@ -1438,18 +1506,22 @@
                 $("#CP3").text(CP[2]);
                 $("#CP4").text(CP[3]);
 
+                try {
+                    var PService = data.Field.PerformanceOfService.split('|');
 
-                var PService = data.Field.PerformanceOfService.split('|');
+                    $("#posn1").text(PService[0].split(',')[0].split('-')[1]);
+                    $("#posn2").text(PService[1].split(',')[0].split('-')[1]);
+                    $("#posn3").text(PService[2].split(',')[0].split('-')[1]);
+                    $("#posn4").text(PService[3].split(',')[0].split('-')[1]);
+                    $("#poso1").text(PService[0].split(',')[1]);
+                    $("#poso2").text(PService[1].split(',')[1]);
+                    $("#poso3").text(PService[2].split(',')[1]);
+                    $("#poso4").text(PService[3].split(',')[1]);
+                }
+                catch (ex)
+                {
 
-                $("#posn1").text(PService[0].split(',')[0].split('-')[1]);
-                $("#posn2").text(PService[1].split(',')[0].split('-')[1]);
-                $("#posn3").text(PService[2].split(',')[0].split('-')[1]);
-                $("#posn4").text(PService[3].split(',')[0].split('-')[1]);
-                $("#poso1").text(PService[0].split(',')[1]);
-                $("#poso2").text(PService[1].split(',')[1]);
-                $("#poso3").text(PService[2].split(',')[1]);
-                $("#poso4").text(PService[3].split(',')[1]);
-
+                }
 
                 //var NoV = data.Field.NoVisitor.split('|');
 
@@ -1468,23 +1540,28 @@
                 //$("#NOV4").text(NoV[4].split(',')[0].split('-')[1]);
                 //$("#NOVN4").text(NoV[4].split(',')[1]);
 
-                var NoV = data.Field.NoVisitor.split('|');
+                try {
 
-                NoV.forEach(function (item, index) {
-                    var parts = item.split(',');
-                    var firstPart = parts[0].split('-');
+                    var NoV = data.Field.NoVisitor.split('|');
 
-                    var val1 = firstPart[1];
-                    var val2 = parts[1];
+                    NoV.forEach(function (item, index) {
+                        var parts = item.split(',');
+                        var firstPart = parts[0].split('-');
 
-                    // Determine which is number and which is text
-                    var number = isNaN(val1) ? val2 : val1;
-                    var text = isNaN(val1) ? val1 : val2;
+                        var val1 = firstPart[1];
+                        var val2 = parts[1];
 
-                    $("#NOV" + index).text(number);
-                    $("#NOVN" + index).text(text);
-                });
+                        // Determine which is number and which is text
+                        var number = isNaN(val1) ? val2 : val1;
+                        var text = isNaN(val1) ? val1 : val2;
 
+                        $("#NOV" + index).text(number);
+                        $("#NOVN" + index).text(text);
+                    });
+                }
+                catch (ex) {
+
+                }
 
                 try {
                     var CSP = data.Field.StockOfCon.split('|');
@@ -1643,8 +1720,15 @@
 
     // Add status badges when data is loaded
     $(document).ready(function() {
+        // Show loader initially
+        $('#loader').show();
+        
         // Add badges after a short delay to ensure data is loaded
-        setTimeout(addStatusBadges, 1000);
+        setTimeout(function() {
+            addStatusBadges();
+            // Hide loader after data is processed
+            $('#loader').fadeOut(500);
+        }, 1000);
     });
 
 
