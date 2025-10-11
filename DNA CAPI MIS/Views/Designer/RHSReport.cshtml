@@ -1179,45 +1179,6 @@
         </div>
 
         <div class="report-section">
-            <h3 class="section-title">No. of visits paid during last three months by: Monitoring Officer, from PWDS</h3>
-            <table class="modern-table">
-                <thead>
-                    <tr>
-                        <th>No.of Visits</th>
-                        <th>PWDS officer from</th>
-                        <th>Name of visiting Officer</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td id="NOV0" data-type="number">1</td>
-                        <td id="PWDS0">Provincial Team</td>
-                        <td id="NOVN0">  </td>
-                    </tr>
-                    <tr>
-                        <td id="NOV1" data-type="number">2</td>
-                        <td id="PWDS1">Regional Director</td>
-                        <td id="NOVN1"> </td>
-                    </tr>
-                    <tr>
-                        <td id="NOV2" data-type="number">3</td>
-                        <td id="PWDS2">DPWO</td>
-                        <td id="NOVN2"> </td>
-                    </tr>
-                    <tr>
-                        <td id="NOV3" data-type="number">4</td>
-                        <td id="PWDS3">Dy.DPWO/Medical Officer/Demographer</td>
-                        <td id="NOVN3"> </td>
-                    </tr>
-                    <tr>
-                        <td id="NOV4" data-type="number">5</td>
-                        <td id="PWDS4">TPWO</td>
-                        <td id="NOVN4"> </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="report-section">
             <h3 class="section-title">Final Remarks</h3>
             <div class="form-section">
                 <label class="form-label" for="remarks">Remarks of Monitoring Officer:&nbsp;&nbsp;<u id="RemarksofMonitoringOfficer"></u></label>
@@ -1253,15 +1214,13 @@
 <script>
 
     $(document).ready(function () {
-
         var urlParams = new URLSearchParams(window.location.search);
 
         // Get the value of a specific parameter, for example, 'id'
         var id = urlParams.get('id');
         var Heading = urlParams.get('Heading');
         OpenReport(id, Heading);
-
-    })
+    });
 
     function OpenReport(sbjnum, Heading) {
         var Pro;
@@ -1275,6 +1234,7 @@
             url: "/Designer/OpenReport/" + sbjnum,
             data: {},
             success: function (data) {
+               // $('#loader').fadeOut(500); // Hide loader at start
 
                 $("#Heading").text("Monitoring Report (" + Heading + ")");
                 $("#NOVO").text(data.DataTitle[0].SurveyorName);
@@ -1554,80 +1514,6 @@
 
                 }
 
-                try {
-                    var NoV = data.Field.NoVisitor.split('|');
-                    $("#NOV0").text(NoV[0].split(',')[0].split('-')[1]);
-                    $("#NOVN0").text(NoV[0].split(',')[1]);
-
-                    $("#NOV1").text(NoV[1].split(',')[0].split('-')[1]);
-                    $("#NOVN1").text(NoV[1].split(',')[1]);
-
-                    $("#NOV2").text(NoV[2].split(',')[0].split('-')[1]);
-                    $("#NOVN2").text(NoV[2].split(',')[1]);
-
-                    $("#NOV3").text(NoV[3].split(',')[0].split('-')[1]);
-                    $("#NOVN3").text(NoV[3].split(',')[1]);
-
-                    $("#NOV4").text(NoV[4].split(',')[0].split('-')[1]);
-                    $("#NOVN4").text(NoV[4].split(',')[1]);
-                }
-                catch (ex) {
-
-                }
-
-
-                try {
-                    var CSP = data.Field.StockOfCon.split('|');
-
-                    function isValidDate(d) {
-                        const parsed = Date.parse(d);
-                        if (isNaN(parsed)) return false;
-
-                        // Check if the date string starts with 1900 (e.g., 1900-01-01)
-                        if (d.startsWith("1900")) return false;
-
-                        return true;
-                    }
-
-                    for (var i = 0; i < CSP.length; i++) {
-                        var splitParts = CSP[i].split(',');
-
-                        if (splitParts.length !== 2) {
-                            $('#CSPS' + i).text('0');
-                            $('#CSPE' + i).text('');
-                            continue;
-                        }
-
-                        // Extract values
-                        var leftPart = splitParts[0].substring(splitParts[0].indexOf('-') + 1).trim();
-                        var rightPart = splitParts[1].trim();
-
-                        if (isValidDate(leftPart) && !isNaN(rightPart)) {
-                            $('#CSPS' + i).text(rightPart);    // stock
-                            $('#CSPE' + i).text(leftPart);     // expiry
-                        } else if (!isNaN(leftPart) && isValidDate(rightPart)) {
-                            $('#CSPS' + i).text(leftPart);     // stock
-                            $('#CSPE' + i).text(rightPart);    // expiry
-                        } else {
-                            $('#CSPS' + i).text('0');
-                            $('#CSPE' + i).text('');
-                        }
-                    }
-                }
-                catch (ex) {
-
-                }
-
-
-                try {
-
-                    
-
-                }
-                catch (ex) {
-
-                }
-
 
                 try {
                     var html = '';
@@ -1679,7 +1565,10 @@
                 }
 
 
-
+                setTimeout(function () {
+                    addStatusBadges();
+                    $('#loader').fadeOut(500);
+                }, 500);
             }
 
 
@@ -1730,15 +1619,7 @@
 
     // Add status badges when data is loaded
     $(document).ready(function() {
-        // Show loader initially
         $('#loader').show();
-        
-        // Add badges after a short delay to ensure data is loaded
-        setTimeout(function() {
-            addStatusBadges();
-            // Hide loader after data is processed
-            $('#loader').fadeOut(500);
-        }, 1000);
     });
 
 

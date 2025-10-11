@@ -15,12 +15,12 @@
 
 <style>
     /* ===== MODERN FWC REPORT STYLING ===== */
-    
+
     /* Base Styles */
     * {
         box-sizing: border-box;
     }
-    
+
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         margin: 0;
@@ -42,15 +42,15 @@
         overflow: hidden;
     }
 
-    .report-container::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
-        background: linear-gradient(90deg, #007bff, #0056b3, #004085);
-    }
+        .report-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #007bff, #0056b3, #004085);
+        }
 
     /* Header Styles */
     .report-header {
@@ -85,10 +85,10 @@
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .report-section:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-    }
+        .report-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
 
     .section-title {
         font-size: 1.4rem;
@@ -101,11 +101,11 @@
         align-items: center;
     }
 
-    .section-title::before {
-        content: '📋';
-        margin-right: 10px;
-        font-size: 1.2rem;
-    }
+        .section-title::before {
+            content: '📋';
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
 
     /* Table Styles */
     .modern-table {
@@ -119,62 +119,62 @@
         font-size: 0.95rem;
     }
 
-    .modern-table thead {
-        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    }
+        .modern-table thead {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        }
 
-    .modern-table th {
-        color: #ffffff;
-        font-weight: 600;
-        text-align: center;
-        padding: 15px 12px;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        border: none;
-    }
+        .modern-table th {
+            color: #ffffff;
+            font-weight: 600;
+            text-align: center;
+            padding: 15px 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none;
+        }
 
-    .modern-table td {
-        padding: 12px;
-        border-bottom: 1px solid #e9ecef;
-        border-right: 1px solid #e9ecef;
-        transition: background-color 0.3s ease;
-    }
+        .modern-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+            border-right: 1px solid #e9ecef;
+            transition: background-color 0.3s ease;
+        }
 
-    .modern-table tbody tr {
-        transition: all 0.3s ease;
-    }
+        .modern-table tbody tr {
+            transition: all 0.3s ease;
+        }
 
-    .modern-table tbody tr:hover {
-        background-color: #f8f9fa;
-        transform: scale(1.01);
-    }
+            .modern-table tbody tr:hover {
+                background-color: #f8f9fa;
+                transform: scale(1.01);
+            }
 
-    .modern-table tbody tr:nth-child(even) {
-        background-color: #f8f9fa;
-    }
+            .modern-table tbody tr:nth-child(even) {
+                background-color: #f8f9fa;
+            }
 
-    .modern-table tbody tr:nth-child(even):hover {
-        background-color: #e9ecef;
-    }
+                .modern-table tbody tr:nth-child(even):hover {
+                    background-color: #e9ecef;
+                }
 
-    /* Table Alignment */
-    .modern-table td:first-child,
-    .modern-table th:first-child {
-        text-align: left;
-        font-weight: 500;
-    }
+        /* Table Alignment */
+        .modern-table td:first-child,
+        .modern-table th:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
 
-    .modern-table td:not(:first-child) {
-        text-align: center;
-    }
+        .modern-table td:not(:first-child) {
+            text-align: center;
+        }
 
-    /* Numeric columns - right align */
-    .modern-table td[data-type="number"] {
-        text-align: right;
-        font-family: 'Courier New', monospace;
-        font-weight: 500;
-    }
+        /* Numeric columns - right align */
+        .modern-table td[data-type="number"] {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+            font-weight: 500;
+        }
 
     /* Status Badges */
     .status-badge {
@@ -248,10 +248,10 @@
         transition: all 0.3s ease;
     }
 
-    .criteria-item:hover {
-        border-color: #007bff;
-        box-shadow: 0 3px 10px rgba(0, 123, 255, 0.1);
-    }
+        .criteria-item:hover {
+            border-color: #007bff;
+            box-shadow: 0 3px 10px rgba(0, 123, 255, 0.1);
+        }
 
     .criteria-label {
         font-weight: 600;
@@ -280,14 +280,14 @@
         z-index: 1000;
     }
 
-    .print-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
-    }
+        .print-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
+        }
 
-    .print-button:active {
-        transform: translateY(0);
-    }
+        .print-button:active {
+            transform: translateY(0);
+        }
 
     /* Form Styles */
     .form-section {
@@ -311,20 +311,20 @@
             margin: 10px;
             padding: 20px;
         }
-        
+
         .report-title {
             font-size: 2rem;
         }
-        
+
         .modern-table {
             font-size: 0.85rem;
         }
-        
-        .modern-table th,
-        .modern-table td {
-            padding: 8px 6px;
-        }
-        
+
+            .modern-table th,
+            .modern-table td {
+                padding: 8px 6px;
+            }
+
         .criteria-container {
             grid-template-columns: 1fr;
         }
@@ -335,31 +335,31 @@
         body {
             background: white;
         }
-        
+
         .report-container {
             box-shadow: none;
             margin: 0;
             padding: 20px;
         }
-        
+
         .print-button {
             display: none;
         }
-        
+
         .report-section {
             break-inside: avoid;
             margin: 15px 0;
             box-shadow: none;
             border: 1px solid #dee2e6;
         }
-        
+
         .modern-table {
             box-shadow: none;
         }
-        
-        .modern-table tbody tr:hover {
-            transform: none;
-        }
+
+            .modern-table tbody tr:hover {
+                transform: none;
+            }
     }
 
     /* Legacy Support */
@@ -393,19 +393,19 @@
         position: relative;
     }
 
-    .loader::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 30px;
-        height: 30px;
-        border: 2px solid #f3f3f3;
-        border-top: 2px solid #0056b3;
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite reverse;
-    }
+        .loader::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #0056b3;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite reverse;
+        }
 
     .loader-text {
         margin-top: 20px;
@@ -416,8 +416,13 @@
     }
 
     @@keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 
     .loader-content {
@@ -441,12 +446,12 @@
     <button id="downloadPDFBtn" class="print-button">
         <i class="fa fa-print"></i> Print Report
     </button>
-    
+
     <div class="report-header">
         <h1 class="report-title" id="Heading">FWC Monitoring Report</h1>
         <p class="report-subtitle">Family Welfare Center Assessment Report</p>
     </div>
-    
+
     <div id="PdfReportDiv">
 
         <!-- Basic Information Section -->
@@ -490,7 +495,7 @@
             </table>
         </div>
 
-                        
+
 
 
         <!-- Staff Position Section -->
@@ -719,7 +724,7 @@
         </div>
 
 
-                            
+
 
         <!-- Performance of Service Outlet Section -->
         <div class="report-section">
@@ -878,415 +883,397 @@
         </div>
 
 
-                            <div>
+        <div>
 
 
-        <!-- Equipment Position Section -->
-        <div class="report-section">
-            <h3 class="section-title">Equipment Position</h3>
-            <table class="modern-table">
-                <thead>
-                    <tr>
-                        <th>S.No.</th>
-                        <th>Equipment</th>
-                        <th>Quantity Available</th>
-                        <th>Condition</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td data-type="number">1</td>
-                        <td>IUD Kits</td>
-                        <td data-type="number" id="Quantity1"></td>
-                        <td id="FuniGB1"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">2</td>
-                        <td>B.P. Apparatus</td>
-                        <td data-type="number" id="Quantity2"></td>
-                        <td id="FuniGB2"></td>
-                    </tr>
+            <!-- Equipment Position Section -->
+            <div class="report-section">
+                <h3 class="section-title">Equipment Position</h3>
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>S.No.</th>
+                            <th>Equipment</th>
+                            <th>Quantity Available</th>
+                            <th>Condition</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-type="number">1</td>
+                            <td>IUD Kits</td>
+                            <td data-type="number" id="Quantity1"></td>
+                            <td id="FuniGB1"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">2</td>
+                            <td>B.P. Apparatus</td>
+                            <td data-type="number" id="Quantity2"></td>
+                            <td id="FuniGB2"></td>
+                        </tr>
 
-                    <tr>
-                        <td data-type="number">3</td>
-                        <td>Stethoscope</td>
-                        <td data-type="number" id="Quantity3"></td>
-                        <td id="FuniGB3"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">4</td>
-                        <td>Thermometer</td>
-                        <td data-type="number" id="Quantity4"></td>
-                        <td id="FuniGB4"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">5</td>
-                        <td>Weighting Machine</td>
-                        <td data-type="number" id="Quantity5"></td>
-                        <td id="FuniGB5"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">6</td>
-                        <td>Stove</td>
-                        <td data-type="number" id="Quantity6"></td>
-                        <td id="FuniGB6"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">7</td>
-                        <td>Autoclave</td>
-                        <td data-type="number" id="Quantity7"></td>
-                        <td id="FuniGB7"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">8</td>
-                        <td>Sterilizer</td>
-                        <td data-type="number" id="Quantity8"></td>
-                        <td id="FuniGB8"></td>
-                    </tr>
+                        <tr>
+                            <td data-type="number">3</td>
+                            <td>Stethoscope</td>
+                            <td data-type="number" id="Quantity3"></td>
+                            <td id="FuniGB3"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">4</td>
+                            <td>Thermometer</td>
+                            <td data-type="number" id="Quantity4"></td>
+                            <td id="FuniGB4"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">5</td>
+                            <td>Weighting Machine</td>
+                            <td data-type="number" id="Quantity5"></td>
+                            <td id="FuniGB5"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">6</td>
+                            <td>Stove</td>
+                            <td data-type="number" id="Quantity6"></td>
+                            <td id="FuniGB6"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">7</td>
+                            <td>Autoclave</td>
+                            <td data-type="number" id="Quantity7"></td>
+                            <td id="FuniGB7"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">8</td>
+                            <td>Sterilizer</td>
+                            <td data-type="number" id="Quantity8"></td>
+                            <td id="FuniGB8"></td>
+                        </tr>
 
-                    <tr>
-                        <td data-type="number">9</td>
-                        <td>Screen</td>
-                        <td data-type="number" id="Quantity9"></td>
-                        <td id="FuniGB9"></td>
-                    </tr>
-                    <tr class="FWCEqiptment">
-                        <td data-type="number">10</td>
-                        <td>Autoclave</td>
-                        <td data-type="number" id="Quantity10"></td>
-                        <td id="FuniGB10"></td>
-                    </tr>
-                    <tr class="FWCEqiptment">
-                        <td data-type="number">11</td>
-                        <td>Oxygen Cylinder</td>
-                        <td data-type="number" id="Quantity11"></td>
-                        <td id="FuniGB11"></td>
-                    </tr>
-                    <tr class="FWCEqiptment">
-                        <td data-type="number">12</td>
-                        <td>Aspirating Pumps</td>
-                        <td data-type="number" id="Quantity12"></td>
-                        <td id="FuniGB12"></td>
-                    </tr>
-                    <tr class="FWCEqiptment">
-                        <td data-type="number">13</td>
-                        <td>Wheel Chair</td>
-                        <td data-type="number" id="Quantity13"></td>
-                        <td id="FuniGB13"></td>
-                    </tr>
-                    <tr class="FWCEqiptment">
-                        <td data-type="number">14</td>
-                        <td>Stretcher</td>
-                        <td data-type="number" id="Quantity14"></td>
-                        <td id="FuniGB14"></td>
-                    </tr>
-                    <tr class="FWCEqiptment">
-                        <td data-type="number">15</td>
-                        <td>Generator</td>
-                        <td data-type="number" id="Quantity15"></td>
-                        <td id="FuniGB15"></td>
-                    </tr>
+                        <tr>
+                            <td data-type="number">9</td>
+                            <td>Screen</td>
+                            <td data-type="number" id="Quantity9"></td>
+                            <td id="FuniGB9"></td>
+                        </tr>
+                        <tr class="FWCEqiptment">
+                            <td data-type="number">10</td>
+                            <td>Autoclave</td>
+                            <td data-type="number" id="Quantity10"></td>
+                            <td id="FuniGB10"></td>
+                        </tr>
+                        <tr class="FWCEqiptment">
+                            <td data-type="number">11</td>
+                            <td>Oxygen Cylinder</td>
+                            <td data-type="number" id="Quantity11"></td>
+                            <td id="FuniGB11"></td>
+                        </tr>
+                        <tr class="FWCEqiptment">
+                            <td data-type="number">12</td>
+                            <td>Aspirating Pumps</td>
+                            <td data-type="number" id="Quantity12"></td>
+                            <td id="FuniGB12"></td>
+                        </tr>
+                        <tr class="FWCEqiptment">
+                            <td data-type="number">13</td>
+                            <td>Wheel Chair</td>
+                            <td data-type="number" id="Quantity13"></td>
+                            <td id="FuniGB13"></td>
+                        </tr>
+                        <tr class="FWCEqiptment">
+                            <td data-type="number">14</td>
+                            <td>Stretcher</td>
+                            <td data-type="number" id="Quantity14"></td>
+                            <td id="FuniGB14"></td>
+                        </tr>
+                        <tr class="FWCEqiptment">
+                            <td data-type="number">15</td>
+                            <td>Generator</td>
+                            <td data-type="number" id="Quantity15"></td>
+                            <td id="FuniGB15"></td>
+                        </tr>
 
-                    <tr class="FWCEqiptment">
-                        <td data-type="number">16</td>
-                        <td>Screen</td>
-                        <td data-type="number" id="Quantity16"></td>
-                        <td id="FuniGB16"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                        <tr class="FWCEqiptment">
+                            <td data-type="number">16</td>
+                            <td>Screen</td>
+                            <td data-type="number" id="Quantity16"></td>
+                            <td id="FuniGB16"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Furniture Position Section -->
-        <div class="report-section">
-            <h3 class="section-title">Furniture Position</h3>
-            <table class="modern-table">
-                <thead>
-                    <tr>
-                        <th>S.No.</th>
-                        <th>Furniture</th>
-                        <th>Quantity Available</th>
-                        <th>Condition</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td data-type="number">1</td>
-                        <td>Office Table</td>
-                        <td data-type="number" id="FPQuantity1"></td>
-                        <td id="FunPos1"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">2</td>
-                        <td>Office Chairs</td>
-                        <td data-type="number" id="FPQuantity2"></td>
-                        <td id="FunPos2"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">3</td>
-                        <td>Benches</td>
-                        <td data-type="number" id="FPQuantity3"></td>
-                        <td id="FunPos3"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">4</td>
-                        <td>Examination Table</td>
-                        <td data-type="number" id="FPQuantity4"></td>
-                        <td id="FunPos4"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">5</td>
-                        <td>Revolving Stool</td>
-                        <td data-type="number" id="FPQuantity5"></td>
-                        <td id="FunPos5"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">6</td>
-                        <td>Insertion Table</td>
-                        <td data-type="number" id="FPQuantity6"></td>
-                        <td id="FunPos6"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">7</td>
-                        <td>Medicine Cabinet</td>
-                        <td data-type="number" id="FPQuantity7"></td>
-                        <td id="FunPos7"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">8</td>
-                        <td>Stretcher</td>
-                        <td data-type="number" id="FPQuantity8"></td>
-                        <td id="FunPos8"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- Technical Monitoring Checklist Section -->
-        <div class="report-section">
-            <h3 class="section-title">Technical Monitoring Checklist</h3>
-            <table class="modern-table">
-                <thead>
-                    <tr>
-                        <th>S.No.</th>
-                        <th>Infection Prevention Checklist</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td data-type="number">1</td>
-                        <td>Hand Washing Protocols followed</td>
-                        <td id="TMC1"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">2</td>
-                        <td>Decontamination Protocols followed</td>
-                        <td id="TMC2"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">3</td>
-                        <td>Cleaning (Instruments) is properly being done</td>
-                        <td id="TMC3"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">4</td>
-                        <td>High level disinfection is properly being done</td>
-                        <td id="TMC4"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">5</td>
-                        <td>Waste disposal properly done</td>
-                        <td id="TMC5"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-
-        <!-- Counseling Section -->
-        <div class="report-section">
-            <h3 class="section-title">Counseling</h3>
-            <table class="modern-table">
-                <thead>
-                    <tr>
-                        <th>S.No.</th>
-                        <th>Counseling Checklist</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td data-type="number">1</td>
-                        <td>Privacy maintained</td>
-                        <td id="cons1"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">2</td>
-                        <td>Is professional: Greets the woman/client politely, maintains/ensures confidentiality, speaks politely to the woman</td>
-                        <td id="cons2"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">3</td>
-                        <td>Is the method selected/provided by clients' will/choice</td>
-                        <td id="cons3"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">4</td>
-                        <td>Complete history of client taken</td>
-                        <td id="cons4"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">5</td>
-                        <td>Has the client been offered and described all methods</td>
-                        <td id="cons5"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <!-- Furniture Position Section -->
+            <div class="report-section">
+                <h3 class="section-title">Furniture Position</h3>
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>S.No.</th>
+                            <th>Furniture</th>
+                            <th>Quantity Available</th>
+                            <th>Condition</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-type="number">1</td>
+                            <td>Office Table</td>
+                            <td data-type="number" id="FPQuantity1"></td>
+                            <td id="FunPos1"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">2</td>
+                            <td>Office Chairs</td>
+                            <td data-type="number" id="FPQuantity2"></td>
+                            <td id="FunPos2"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">3</td>
+                            <td>Benches</td>
+                            <td data-type="number" id="FPQuantity3"></td>
+                            <td id="FunPos3"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">4</td>
+                            <td>Examination Table</td>
+                            <td data-type="number" id="FPQuantity4"></td>
+                            <td id="FunPos4"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">5</td>
+                            <td>Revolving Stool</td>
+                            <td data-type="number" id="FPQuantity5"></td>
+                            <td id="FunPos5"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">6</td>
+                            <td>Insertion Table</td>
+                            <td data-type="number" id="FPQuantity6"></td>
+                            <td id="FunPos6"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">7</td>
+                            <td>Medicine Cabinet</td>
+                            <td data-type="number" id="FPQuantity7"></td>
+                            <td id="FunPos7"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">8</td>
+                            <td>Stretcher</td>
+                            <td data-type="number" id="FPQuantity8"></td>
+                            <td id="FunPos8"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Technical Monitoring Checklist Section -->
+            <div class="report-section">
+                <h3 class="section-title">Technical Monitoring Checklist</h3>
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>S.No.</th>
+                            <th>Infection Prevention Checklist</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-type="number">1</td>
+                            <td>Hand Washing Protocols followed</td>
+                            <td id="TMC1"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">2</td>
+                            <td>Decontamination Protocols followed</td>
+                            <td id="TMC2"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">3</td>
+                            <td>Cleaning (Instruments) is properly being done</td>
+                            <td id="TMC3"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">4</td>
+                            <td>High level disinfection is properly being done</td>
+                            <td id="TMC4"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">5</td>
+                            <td>Waste disposal properly done</td>
+                            <td id="TMC5"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
 
-        <!-- Service Delivery Section -->
-        <div class="report-section">
-            <h3 class="section-title">Service Delivery</h3>
-            <table class="modern-table">
-                <thead>
-                    <tr>
-                        <th>S.No.</th>
-                        <th>Service Delivery Checklist</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td data-type="number">1</td>
-                        <td>Screening of client</td>
-                        <td id="SD1"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">2</td>
-                        <td>Instrument Tray is prepared with proper sterilization</td>
-                        <td id="SD2"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">3</td>
-                        <td>Confirmation of choice of method</td>
-                        <td id="SD3"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">4</td>
-                        <td>Method provided as per protocols</td>
-                        <td id="SD4"></td>
-                    </tr>
-                    <tr>
-                        <td data-type="number">5</td>
-                        <td>Instruction for follow-up given</td>
-                        <td id="SD5"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-                            <div style="text-align:center;margin-top:10px;left:10px">
-
-                                <h3 style="margin-top:30px;margin-bottom:5px">No. of visits paid during last three months by: Monitoring Officer, from PWDS</h3>
-                                @*<label style="margin-top:2px" id="LastThreeMonth">No. of visits paid during last three months by:</label><br />*@
-                                <table>
-                                    <thead>
-                                        <tr>
-
-                                            <th>No.of Visits</th>
-                                            <th>PWDS officer from</th>
-                                            <th>Name of visiting Officer</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr>
-
-                                            <td id="NOV0">1</td>
-                                            <td id="PWDS0">Provincial Team</td>
-                                            <td id="NOVN0">  </td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td id="NOV1">2</td>
-                                            <td id="PWDS1">Regional Director</td>
-                                            <td id="NOVN1"> </td>
-
-                                        </tr>
-                                        <tr>
+            <!-- Counseling Section -->
+            <div class="report-section">
+                <h3 class="section-title">Counseling</h3>
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>S.No.</th>
+                            <th>Counseling Checklist</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-type="number">1</td>
+                            <td>Privacy maintained</td>
+                            <td id="cons1"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">2</td>
+                            <td>Is professional: Greets the woman/client politely, maintains/ensures confidentiality, speaks politely to the woman</td>
+                            <td id="cons2"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">3</td>
+                            <td>Is the method selected/provided by clients' will/choice</td>
+                            <td id="cons3"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">4</td>
+                            <td>Complete history of client taken</td>
+                            <td id="cons4"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">5</td>
+                            <td>Has the client been offered and described all methods</td>
+                            <td id="cons5"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
 
-                                            <td id="NOV2">3</td>
-                                            <td id="PWDS2">DPWO</td>
-                                            <td id="NOVN2"> </td>
+            <!-- Service Delivery Section -->
+            <div class="report-section">
+                <h3 class="section-title">Service Delivery</h3>
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>S.No.</th>
+                            <th>Service Delivery Checklist</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-type="number">1</td>
+                            <td>Screening of client</td>
+                            <td id="SD1"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">2</td>
+                            <td>Instrument Tray is prepared with proper sterilization</td>
+                            <td id="SD2"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">3</td>
+                            <td>Confirmation of choice of method</td>
+                            <td id="SD3"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">4</td>
+                            <td>Method provided as per protocols</td>
+                            <td id="SD4"></td>
+                        </tr>
+                        <tr>
+                            <td data-type="number">5</td>
+                            <td>Instruction for follow-up given</td>
+                            <td id="SD5"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                                        </tr>
-                                        <tr>
-
-                                            <td id="NOV3">4</td>
-                                            <td id="PWDS3">Dy.DPWO/Medical Officer/Demographer</td>
-                                            <td id="NOVN3"> </td>
-                                        </tr>
-                                        <tr>
-
-                                            <td id="NOV4">5</td>
-                                            <td id="PWDS4">TPWO</td>
-                                            <td id="NOVN4"> </td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="row" style="text-align:center;margin-top:10px;left:10px">
-                                <div class="col-md-7">
-
-
-                                    <form style="text-align:left">
-
-                                        @*<label for="supervisory-visits"> <u id="NoOfSup"></u>&nbsp;&nbsp; No. of supervisory visits of RHS As conducted during month by Medical Officer:</label><br />*@
-                                        @*<label for="dcit-meetings"><u id="DCIT"></u>No. of DCIT meetings attended by Medical Officer in last 6 months:</label><br/>*@
-                                        @*<label style="margin-top:2px" for="hmc-meeting">Meeting with Hospital Management Committee:&nbsp;&nbsp;<u id="HospitalManagement"></u></label><br />*@
-                                        @*<label style="margin-top:2px" id="LastThreeMonth">No. of visits paid during last three months by:</label><br />*@
-                                        @*<ul>
-            <li> <label for="provincial-team">Provincial Team:&nbsp;&nbsp;<u id="Last6Field1">  &nbsp;&nbsp;</u></label> </li>
-            <li> <label for="regional-director">Regional Director:&nbsp;&nbsp;<u id="Last6Field2">&nbsp;&nbsp;</u></label>  </li>
-            <li> <label for="regional-director">DPWO:&nbsp;&nbsp;<u id="Last6Field3"></u></label>  </li>
-            <li> <label for="regional-director">Dy.DPWO/Medical Officer/Demographer:&nbsp;&nbsp;<u id="Last6Field4"></u></label>  </li>
-            <li> <label for="regional-director">TPWO:&nbsp;&nbsp;<u id="Last6Field5"></u></label>  </li>
-        </ul>*@
-                                        <br />
-                                        <br />
-                                        <label for="remarks">Remarks of Monitoring Officer:&nbsp;&nbsp;<u id="RemarksofMonitoringOfficer"></u></label> <br />
-
-                                        <br />
-                                        <br />
-                                        <label> Name and Designation of Monitoring Officer :&nbsp;&nbsp;<u for="signature" id="signature"></u></label>
-                                        <br>
-
-                                    </form>
-                                </div>
+            <div class="report-section">
+                <h3 class="section-title">No. of visits paid during last three months by: Monitoring Officer, from PWDS</h3>
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>No.of Visits</th>
+                            <th>PWDS officer from</th>
+                            <th>Name of visiting Officer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="NOV0" data-type="number">1</td>
+                            <td id="PWDS0">Provincial Team</td>
+                            <td id="NOVN0">  </td>
+                        </tr>
+                        <tr>
+                            <td id="NOV1" data-type="number">2</td>
+                            <td id="PWDS1">Regional Director</td>
+                            <td id="NOVN1"> </td>
+                        </tr>
+                        <tr>
+                            <td id="NOV2" data-type="number">3</td>
+                            <td id="PWDS2">DPWO</td>
+                            <td id="NOVN2"> </td>
+                        </tr>
+                        <tr>
+                            <td id="NOV3" data-type="number">4</td>
+                            <td id="PWDS3">Dy.DPWO/Medical Officer/Demographer</td>
+                            <td id="NOVN3"> </td>
+                        </tr>
+                        <tr>
+                            <td id="NOV4" data-type="number">5</td>
+                            <td id="PWDS4">TPWO</td>
+                            <td id="NOVN4"> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row" style="text-align:center;margin-top:10px;left:10px">
+                <div class="col-md-7">
 
 
-                                <div class="col-md-0">
+                    <form style="text-align:left">
 
-                                </div>
-                            </div>
+                        @*<label for="supervisory-visits"> <u id="NoOfSup"></u>&nbsp;&nbsp; No. of supervisory visits of RHS As conducted during month by Medical Officer:</label><br />*@
+                        @*<label for="dcit-meetings"><u id="DCIT"></u>No. of DCIT meetings attended by Medical Officer in last 6 months:</label><br/>*@
+                        @*<label style="margin-top:2px" for="hmc-meeting">Meeting with Hospital Management Committee:&nbsp;&nbsp;<u id="HospitalManagement"></u></label><br />*@
+                        @*<label style="margin-top:2px" id="LastThreeMonth">No. of visits paid during last three months by:</label><br />*@
+                        @*<ul>
+                                <li> <label for="provincial-team">Provincial Team:&nbsp;&nbsp;<u id="Last6Field1">  &nbsp;&nbsp;</u></label> </li>
+                                <li> <label for="regional-director">Regional Director:&nbsp;&nbsp;<u id="Last6Field2">&nbsp;&nbsp;</u></label>  </li>
+                                <li> <label for="regional-director">DPWO:&nbsp;&nbsp;<u id="Last6Field3"></u></label>  </li>
+                                <li> <label for="regional-director">Dy.DPWO/Medical Officer/Demographer:&nbsp;&nbsp;<u id="Last6Field4"></u></label>  </li>
+                                <li> <label for="regional-director">TPWO:&nbsp;&nbsp;<u id="Last6Field5"></u></label>  </li>
+                            </ul>*@
+                        <br />
+                        <br />
+                        <label for="remarks">Remarks of Monitoring Officer:&nbsp;&nbsp;<u id="RemarksofMonitoringOfficer"></u></label> <br />
 
+                        <br />
+                        <br />
+                        <label> Name and Designation of Monitoring Officer :&nbsp;&nbsp;<u for="signature" id="signature"></u></label>
+                        <br>
 
-
-
-                        </div>
-
-                    </div>
+                    </form>
                 </div>
 
 
+                <div class="col-md-0">
+
+                </div>
             </div>
+
+
+
+
         </div>
+
     </div>
 </div>
+
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
@@ -1331,14 +1318,14 @@
                 );
 
                 if (item) {
-                    console.log(item.FieldValue);  
+                    console.log(item.FieldValue);
                     $("#signature").text(item.FieldValue);
                 } else {
                     console.log("Title not found.");
                 }
 
 
-             
+
                 try {
                     $('#Coordinate').text(data.RawData[0].Latitude + "," + data.RawData[0].Longitude);
                 } catch (ex) {
@@ -1528,22 +1515,21 @@
                     $('.FWCEqiptment').hide();
                 }
 
-                else
-                {
+                else {
                     $('.FWCEqiptment').show();
-                   
+
                 }
 
                 var FunPos = data.Field.FurniturePositionCondition.split(',');
 
-                $("#FunPos1").text(FunPos[0] == "1" ? "N/A" : FunPos[0] == "2" ? "Good" : FunPos[0] == "3" ? "Satisfactory" :FunPos[0] == undefined ? "" : FunPos[0] == "N/A" ? "" :  "Poor");
-                $("#FunPos2").text(FunPos[1] == "1" ? "N/A" : FunPos[1] == "2" ? "Good" : FunPos[1] == "3" ? "Satisfactory" :FunPos[1] == undefined ? "" : FunPos[1] == "N/A" ? "" :  "Poor");
-                $("#FunPos3").text(FunPos[2] == "1" ? "N/A" : FunPos[2] == "2" ? "Good" : FunPos[2] == "3" ? "Satisfactory" :FunPos[2] == undefined ? "" : FunPos[2] == "N/A" ? "" :  "Poor");
-                $("#FunPos4").text(FunPos[3] == "1" ? "N/A" : FunPos[3] == "2" ? "Good" : FunPos[3] == "3" ? "Satisfactory" :FunPos[3] == undefined ? "" : FunPos[3] == "N/A" ? "" :  "Poor");
-                $("#FunPos5").text(FunPos[4] == "1" ? "N/A" : FunPos[4] == "2" ? "Good" : FunPos[4] == "3" ? "Satisfactory" :FunPos[4] == undefined ? "" : FunPos[4] == "N/A" ? "" :  "Poor");
-                $("#FunPos6").text(FunPos[5] == "1" ? "N/A" : FunPos[5] == "2" ? "Good" : FunPos[5] == "3" ? "Satisfactory" :FunPos[5] == undefined ? "" : FunPos[5] == "N/A" ? "" :  "Poor");
-                $("#FunPos7").text(FunPos[6] == "1" ? "N/A" : FunPos[6] == "2" ? "Good" : FunPos[6] == "3" ? "Satisfactory" :FunPos[6] == undefined ? "" : FunPos[6] == "N/A" ? "" :  "Poor");
-                $("#FunPos8").text(FunPos[7] == "1" ? "N/A" : FunPos[7] == "2" ? "Good" : FunPos[7] == "3" ? "Satisfactory" :FunPos[7] == undefined ? "" : FunPos[7] == "N/A" ? "" :  "Poor");
+                $("#FunPos1").text(FunPos[0] == "1" ? "N/A" : FunPos[0] == "2" ? "Good" : FunPos[0] == "3" ? "Satisfactory" : FunPos[0] == undefined ? "" : FunPos[0] == "N/A" ? "" : "Poor");
+                $("#FunPos2").text(FunPos[1] == "1" ? "N/A" : FunPos[1] == "2" ? "Good" : FunPos[1] == "3" ? "Satisfactory" : FunPos[1] == undefined ? "" : FunPos[1] == "N/A" ? "" : "Poor");
+                $("#FunPos3").text(FunPos[2] == "1" ? "N/A" : FunPos[2] == "2" ? "Good" : FunPos[2] == "3" ? "Satisfactory" : FunPos[2] == undefined ? "" : FunPos[2] == "N/A" ? "" : "Poor");
+                $("#FunPos4").text(FunPos[3] == "1" ? "N/A" : FunPos[3] == "2" ? "Good" : FunPos[3] == "3" ? "Satisfactory" : FunPos[3] == undefined ? "" : FunPos[3] == "N/A" ? "" : "Poor");
+                $("#FunPos5").text(FunPos[4] == "1" ? "N/A" : FunPos[4] == "2" ? "Good" : FunPos[4] == "3" ? "Satisfactory" : FunPos[4] == undefined ? "" : FunPos[4] == "N/A" ? "" : "Poor");
+                $("#FunPos6").text(FunPos[5] == "1" ? "N/A" : FunPos[5] == "2" ? "Good" : FunPos[5] == "3" ? "Satisfactory" : FunPos[5] == undefined ? "" : FunPos[5] == "N/A" ? "" : "Poor");
+                $("#FunPos7").text(FunPos[6] == "1" ? "N/A" : FunPos[6] == "2" ? "Good" : FunPos[6] == "3" ? "Satisfactory" : FunPos[6] == undefined ? "" : FunPos[6] == "N/A" ? "" : "Poor");
+                $("#FunPos8").text(FunPos[7] == "1" ? "N/A" : FunPos[7] == "2" ? "Good" : FunPos[7] == "3" ? "Satisfactory" : FunPos[7] == undefined ? "" : FunPos[7] == "N/A" ? "" : "Poor");
 
 
 
@@ -1666,7 +1652,7 @@
 
                 try {
 
-                  
+
 
                 }
                 catch (ex) {
@@ -1723,19 +1709,25 @@
                 catch (ex) {
                 }
 
+                // Hide loader after all data is loaded and processed
+                setTimeout(function () {
+                    addStatusBadges();
+                    $('#loader').fadeOut(500);
+                }, 500);
 
-
+            },
+            error: function (xhr, status, error) {
+                console.error('Error loading report data:', error);
+                // Hide loader even on error
+                $('#loader').fadeOut(500);
             }
-
-
-
         });
     }
 
     // Function to add status badges
     function addStatusBadges() {
         // Add badges to Yes/No statuses
-        $('td').each(function() {
+        $('td').each(function () {
             var text = $(this).text().trim();
             if (text === 'Yes') {
                 $(this).html('<span class="status-badge status-yes">Yes</span>');
@@ -1762,28 +1754,20 @@
     // Enhanced print function
     $('#downloadPDFBtn').click(function () {
         $('#downloadPDFBtn').hide();
-        
+
         // Add status badges before printing
         addStatusBadges();
-        
+
         // Small delay to ensure badges are rendered
-        setTimeout(function() {
+        setTimeout(function () {
             window.print();
             $('#downloadPDFBtn').show();
         }, 100);
     });
 
-    // Add status badges when data is loaded
-    $(document).ready(function() {
-        // Show loader initially
+    // Show loader initially when page loads
+    $(document).ready(function () {
         $('#loader').show();
-        
-        // Add badges after a short delay to ensure data is loaded
-        setTimeout(function() {
-            addStatusBadges();
-            // Hide loader after data is processed
-            $('#loader').fadeOut(500);
-        }, 1000);
     });
 
 
