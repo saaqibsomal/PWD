@@ -14,1051 +14,1153 @@
 </head>
 
 <style>
+    /* ===== MODERN MSU REPORT STYLING ===== */
+    
+    /* Base Styles */
+    * {
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        line-height: 1.6;
+        color: #333;
+    }
+
+    /* Report Container */
+    .report-container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 30px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .report-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #007bff, #0056b3, #004085);
+    }
+
+    /* Header Styles */
+    .report-header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .report-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0 0 10px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .report-subtitle {
+        font-size: 1.1rem;
+        color: #6c757d;
+        margin: 0;
+    }
+
+    /* Section Styles */
+    .report-section {
+        margin: 30px 0;
+        padding: 25px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        border-left: 5px solid #007bff;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .report-section:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #dee2e6;
+        display: flex;
+        align-items: center;
+    }
+
+    .section-title::before {
+        content: '📋';
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+
+    /* Table Styles */
+    .modern-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        font-size: 0.95rem;
+    }
+
+    .modern-table thead {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    }
+
+    .modern-table th {
+        color: #ffffff;
+        font-weight: 600;
+        text-align: center;
+        padding: 15px 12px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: none;
+    }
+
+    .modern-table td {
+        padding: 12px;
+        border-bottom: 1px solid #e9ecef;
+        border-right: 1px solid #e9ecef;
+        transition: background-color 0.3s ease;
+    }
+
+    .modern-table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    .modern-table tbody tr:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.01);
+    }
+
+    .modern-table tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    .modern-table tbody tr:nth-child(even):hover {
+        background-color: #e9ecef;
+    }
+
+    /* Table Alignment */
+    .modern-table td:first-child,
+    .modern-table th:first-child {
+        text-align: left;
+        font-weight: 500;
+    }
+
+    .modern-table td:not(:first-child) {
+        text-align: center;
+    }
+
+    /* Numeric columns - right align */
+    .modern-table td[data-type="number"] {
+        text-align: right;
+        font-family: 'Courier New', monospace;
+        font-weight: 500;
+    }
+
+    /* Status Badges */
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-good {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .status-satisfactory {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+    }
+
+    .status-poor {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .status-present {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+
+    .status-absent {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .status-yes {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .status-no {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    /* Criteria Section */
+    .criteria-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+
+    .criteria-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background: #ffffff;
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+
+    .criteria-item:hover {
+        border-color: #007bff;
+        box-shadow: 0 3px 10px rgba(0, 123, 255, 0.1);
+    }
+
+    .criteria-label {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .criteria-value {
+        font-weight: 500;
+    }
+
+    /* Print Button */
+    .print-button {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        border: none;
+        padding: 15px 25px;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
+
+    .print-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
+    }
+
+    .print-button:active {
+        transform: translateY(0);
+    }
+
+    /* Form Styles */
+    .form-section {
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 10px;
+        margin: 20px 0;
+        border: 1px solid #dee2e6;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .report-container {
+            margin: 10px;
+            padding: 20px;
+        }
+        
+        .report-title {
+            font-size: 2rem;
+        }
+        
+        .modern-table {
+            font-size: 0.85rem;
+        }
+        
+        .modern-table th,
+        .modern-table td {
+            padding: 8px 6px;
+        }
+        
+        .criteria-container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Print Styles */
+    @@media print {
+        body {
+            background: white;
+        }
+        
+        .report-container {
+            box-shadow: none;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .print-button {
+            display: none;
+        }
+        
+        .report-section {
+            break-inside: avoid;
+            margin: 15px 0;
+            box-shadow: none;
+            border: 1px solid #dee2e6;
+        }
+        
+        .modern-table {
+            box-shadow: none;
+        }
+        
+        .modern-table tbody tr:hover {
+            transform: none;
+        }
+    }
+
+    /* Legacy Support */
     .optionsRadios {
         padding-right: 15px;
         padding-left: 15px;
     }
-
-    table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    td, th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-    }
-
-    tr:nth-child(even) {
-        background-color: #dddddd;
-    }
-</style>
-<style>
-    /* Style for the table */
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    /* Style for table headers */
-    th {
-        background-color: #007bff; /* Blue header color */
-        color: #fff; /* Text color */
-        font-weight: bold;
-        text-align: left;
-    }
-    /* Style for table cells */
-    td {
-        border: 1px solid #dddddd; /* Border color for cells */
-        padding: 8px;
-    }
-    /* Alternate row color */
-    tr:nth-child(even) {
-        background-color: #f2f2f2; /* Light gray */
-    }
-</style>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-    }
-
-    .container {
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    ul {
-        list-style-type: none;
-        padding-left: 0;
-    }
-
-    li {
-        margin-bottom: 20px;
-    }
-
-    .criteria {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-    }
-
-        .criteria label {
-            font-weight: bold;
-        }
-
-        .criteria select {
-            padding: 5px;
-            width: 180px;
-        }
-
-        .criteria .sufficient {
-            color: green;
-        }
-
-        .criteria .quite-sufficient {
-            color: orange;
-        }
-
-        .criteria .poor {
-            color: red;
-        }
 </style>
 
-<div class="row desktop">
-    <div class="col-xs-12">
-        <div class="box">
-            <div class="box-header">
-
-                <div class="model" id="pdfModel">
-                    <div class="model-content">
-                        <button id="downloadPDFBtn" class="fa-2x fa fa-print">  Print</button>
-                        <div id="PdfReportDiv">
-                            <h3 style="text-align:center;" id="Heading"></h3>
-
-                            <!-- RHS-A Section -->
-                            @*<h3 id="SubHeading"></h3>*@
-                        <table>
-                            <tr>
-                                <td>Name of District:</td>
-                                <td id="NameOfDistrict"> </td>
-                                <td>Name Of Center:</td>
-                                <td id="NameOfCenter"> </td>
-                            </tr>
-                            <tr>
-                                <td>Date of visit:</td>
-                                <td id="DateOfVisit"> </td>
-                                <td>Time:</td>
-                                <td id="TimeOfVisit"> </td>
-                            </tr>
-                            <tr>
-                                <td>Status:</td>
-                                <td id="OpenCloseStatus">
-                                    N/A
-                                </td>
-                                <td>Coordinate:</td>
-                                <td id="Coordinate">
-                                    N/A
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Name of visiting officer</td>
-                                <td id="NOVO"> </td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-
-                        </table>
-
-                            <div id="OtherStaffPosition" >
-
-                                <!-- Staff Position For Other-->
-                                <h3 style="margin-top:30px;margin-bottom:5px">Staff Position</h3>
-
-                                <table>
-
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Designation</th>
-                                            <th>Name</th>
-                                            <th>Present/Absent/Leave</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Women Medical Officer</td>
-                                            <td id="FWCPName1"></td>
-                                            <td id="FWCStaffPos1"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>FTO</td>
-                                            <td id="FWCPName2"></td>
-                                            <td id="FWCStaffPos2"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Family Welfare Councilor</td>
-                                            <td id="FWCPName3"></td>
-                                            <td id="FWCStaffPos3"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Family Welfare Workern</td>
-                                            <td id="FWCPName4"></td>
-                                            <td id="FWCStaffPos4"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>Driver</td>
-                                            <td id="FWCPName5"></td>
-                                            <td id="FWCStaffPos5"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>Helper</td>
-                                            <td id="FWCPName6"></td>
-                                            <td id="FWCStaffPos6"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Sweeper</td>
-                                            <td id="FWCPName7"></td>
-                                            <td id="FWCStaffPos7"></td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-                            <div id="FWCStaffPosition" hidden>
-
-                                <!-- Staff Position For FWC-->
-                                <h3 style="margin-top:30px;margin-bottom:5px">Staff Position</h3>
-
-                                <table>
-
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Designation</th>
-                                            <th>Name</th>
-                                            <th>Present/Absent/Leave</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Field Technical Officer (FTO)</td>
-                                            <td id="FWCPName1"></td>
-                                            <td id="FWCStaffPos1"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Family Welfare Councilor</td>
-                                            <td id="FWCPName2"></td>
-                                            <td id="FWCStaffPos2"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Family Welfare Worker</td>
-                                            <td id="FWCPName3"></td>
-                                            <td id="FWCStaffPos3"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Family Welfare Assistant (M)</td>
-                                            <td id="FWCPName4"></td>
-                                            <td id="FWCStaffPos4"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>Family Welfare Assistant (F)r</td>
-                                            <td id="FWCPName5"></td>
-                                            <td id="FWCStaffPos5"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>Social Mobilizer</td>
-                                            <td id="FWCPName6"></td>
-                                            <td id="FWCStaffPos6"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Helper</td>
-                                            <td id="FWCPName7"></td>
-                                            <td id="FWCStaffPos7"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>8</td>
-                                            <td>Chowkidar</td>
-                                            <td id="FWCPName8"></td>
-                                            <td id="FWCStaffPos8"></td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-
-
-
-                            <div>
-                                <h3 style="margin-top:30px;margin-bottom:5px">Indication/Sign Board</h3>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Yes / No</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-
-                                            <td>Installed</td>
-                                            <td id="ISB0"></td>
-                                        </tr>
-                                        <tr hidden>
-                                            <td>Proper</td>
-                                            <td id="ISB1"></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>Maintained</td>
-                                            <td id="ISB2"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div>
-
-
-
-                                <ul>
-
-
-                                    <li>
-                                        <div class="criteria col-6">
-                                            <div>Cleanliness:</div>
-                                            <label id="Cleanliness">N/A</label>
-                                        </div>
-                                        <div class="criteria col-6">
-                                            <div>Stock of Medicines:</div>
-                                            <label id="StockofMedicines">N/A</label>
-                                        </div>
-                                        <div class="criteria col-6">
-                                            <div>Stock of Contraceptives:</div>
-                                            <label id="StockofContraceptives">N/A</label>
-                                        </div>
-                                    </li>
-
-                                </ul>
-                            </div>
-
-
-
-                            <div>
-                                <h3 style="margin-top:30px;margin-bottom:5px">Status of Building</h3>
-
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Availible / Not Availible</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr>
-
-                                            <td>Electricity</td>
-                                            <td id="SOB0">  </td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td>Gas</td>
-                                            <td id="SOB1">  </td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td>Water</td>
-                                            <td id="SOB2"> </td>
-
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-
-                            </div>
-
-                            <div>
-
-
-                                <h3 style="margin-top:30px;margin-bottom:5px">Stock and Expiry Date of Medicines:(mention those items which are expiring within six months)</h3>
-
-                                <table id="TNOM">
-                                    <thead>
-                                        <tr>
-
-                                            <th> Name of Medicine  </th>
-                                            <th>Stock</th>
-                                            <th>Expiry date</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbodyNOM">
-                                    </tbody>
-                                </table>
-                            </div>
-                            <h3 style="margin-top:30px;margin-bottom:5px">Contraceptives Stock and Performance</h3>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>S.No.</th>
-                                        <th>Contraceptives</th>
-                                        <th>Stock</th>
-                                        <th>Expiry Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Condoms</td>
-                                        <td id="CSPS0"></td>
-                                        <td id="CSPE0"> </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>POP</td>
-                                        <td id="CSPS2"></td>
-                                        <td id="CSPE2"></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>COC</td>
-                                        <td id="CSPS1"></td>
-                                        <td id="CSPE1"> </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>4</td>
-                                        <td>ECP</td>
-                                        <td id="CSPS3"> </td>
-                                        <td id="CSPE3"> </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>5</td>
-                                        <td>3 Months Inj (Depo)</td>
-                                        <td id="CSPS4"> </td>
-                                        <td id="CSPE4">  </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>6</td>
-                                        <td>3 Month Inj (Syana Press)</td>
-                                        <td id="CSPS5"> </td>
-                                        <td id="CSPE5">  </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>7</td>
-                                        <td>IUCD (CT-380-A)	</td>
-                                        <td id="CSPS6"> </td>
-                                        <td id="CSPE6">   </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>8</td>
-                                        <td>Jadelle</td>
-                                        <td id="CSPS7"> </td>
-                                        <td id="CSPE7">   </td>
-
-                                    </tr>
-
-
-                                    <!-- Add more rows for other contraceptives -->
-                                </tbody>
-                            </table>
+<div class="report-container">
+    <div class="report-header">
+        <h1 class="report-title" id="Heading">MSU Monitoring Report</h1>
+        <p class="report-subtitle">Comprehensive Assessment Report</p>
+    </div>
+
+    <button id="downloadPDFBtn" class="print-button">
+        <i class="fa fa-print"></i> Print Report
+    </button>
+
+    <div id="PdfReportDiv">
+
+        <div class="report-section">
+            <h3 class="section-title">Visit Information</h3>
+            <table class="modern-table">
+                <tr>
+                    <td>Name of District:</td>
+                    <td id="NameOfDistrict"> </td>
+                    <td>Name Of Center:</td>
+                    <td id="NameOfCenter"> </td>
+                </tr>
+                <tr>
+                    <td>Date of visit:</td>
+                    <td id="DateOfVisit"> </td>
+                    <td>Time:</td>
+                    <td id="TimeOfVisit"> </td>
+                </tr>
+                <tr>
+                    <td>Status:</td>
+                    <td id="OpenCloseStatus">
+                        N/A
+                    </td>
+                    <td>Coordinate:</td>
+                    <td id="Coordinate">
+                        N/A
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name of visiting officer</td>
+                    <td id="NOVO"> </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="OtherStaffPosition" class="report-section">
+            <h3 class="section-title">Staff Position</h3>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Designation</th>
+                        <th>Name</th>
+                        <th>Present/Absent/Leave</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Women Medical Officer</td>
+                        <td id="FWCPName1"></td>
+                        <td id="FWCStaffPos1"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>FTO</td>
+                        <td id="FWCPName2"></td>
+                        <td id="FWCStaffPos2"></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Family Welfare Councilor</td>
+                        <td id="FWCPName3"></td>
+                        <td id="FWCStaffPos3"></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Family Welfare Worker</td>
+                        <td id="FWCPName4"></td>
+                        <td id="FWCStaffPos4"></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Driver</td>
+                        <td id="FWCPName5"></td>
+                        <td id="FWCStaffPos5"></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Helper</td>
+                        <td id="FWCPName6"></td>
+                        <td id="FWCStaffPos6"></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Sweeper</td>
+                        <td id="FWCPName7"></td>
+                        <td id="FWCStaffPos7"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div id="FWCStaffPosition" class="report-section" hidden>
+            <h3 class="section-title">Staff Position (FWC)</h3>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Designation</th>
+                        <th>Name</th>
+                        <th>Present/Absent/Leave</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Field Technical Officer (FTO)</td>
+                        <td id="FWCPName1"></td>
+                        <td id="FWCStaffPos1"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Family Welfare Councilor</td>
+                        <td id="FWCPName2"></td>
+                        <td id="FWCStaffPos2"></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Family Welfare Worker</td>
+                        <td id="FWCPName3"></td>
+                        <td id="FWCStaffPos3"></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Family Welfare Assistant (M)</td>
+                        <td id="FWCPName4"></td>
+                        <td id="FWCStaffPos4"></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Family Welfare Assistant (F)</td>
+                        <td id="FWCPName5"></td>
+                        <td id="FWCStaffPos5"></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Social Mobilizer</td>
+                        <td id="FWCPName6"></td>
+                        <td id="FWCStaffPos6"></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Helper</td>
+                        <td id="FWCPName7"></td>
+                        <td id="FWCStaffPos7"></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Chowkidar</td>
+                        <td id="FWCPName8"></td>
+                        <td id="FWCStaffPos8"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+        <div class="report-section">
+            <h3 class="section-title">Indication/Sign Board</h3>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Yes / No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Installed</td>
+                        <td id="ISB0"></td>
+                    </tr>
+                    <tr hidden>
+                        <td>Proper</td>
+                        <td id="ISB1"></td>
+                    </tr>
+                    <tr>
+                        <td>Maintained</td>
+                        <td id="ISB2"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-section">
+            <h3 class="section-title">Assessment Criteria</h3>
+            <div class="criteria-container">
+                <div class="criteria-item">
+                    <div class="criteria-label">Cleanliness:</div>
+                    <div class="criteria-value" id="Cleanliness">N/A</div>
+                </div>
+                <div class="criteria-item">
+                    <div class="criteria-label">Stock of Medicines:</div>
+                    <div class="criteria-value" id="StockofMedicines">N/A</div>
+                </div>
+                <div class="criteria-item">
+                    <div class="criteria-label">Stock of Contraceptives:</div>
+                    <div class="criteria-value" id="StockofContraceptives">N/A</div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="report-section">
+            <h3 class="section-title">Status of Building</h3>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Available / Not Available</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Electricity</td>
+                        <td id="SOB0">  </td>
+                    </tr>
+                    <tr>
+                        <td>Gas</td>
+                        <td id="SOB1">  </td>
+                    </tr>
+                    <tr>
+                        <td>Water</td>
+                        <td id="SOB2"> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-section">
+            <h3 class="section-title">Stock and Expiry Date of Medicines</h3>
+            <p style="color: #6c757d; margin-bottom: 20px;">(mention those items which are expiring within six months)</p>
+            <table id="TNOM" class="modern-table">
+                <thead>
+                    <tr>
+                        <th>Name of Medicine</th>
+                        <th>Stock</th>
+                        <th>Expiry Date</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyNOM">
+                </tbody>
+            </table>
+        </div>
+        <div class="report-section">
+            <h3 class="section-title">Contraceptives Stock and Performance</h3>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Contraceptives</th>
+                        <th>Stock</th>
+                        <th>Expiry Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Condoms</td>
+                        <td id="CSPS0" data-type="number"></td>
+                        <td id="CSPE0"> </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>POP</td>
+                        <td id="CSPS2" data-type="number"></td>
+                        <td id="CSPE2"></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>COC</td>
+                        <td id="CSPS1" data-type="number"></td>
+                        <td id="CSPE1"> </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>ECP</td>
+                        <td id="CSPS3" data-type="number"> </td>
+                        <td id="CSPE3"> </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>3 Months Inj (Depo)</td>
+                        <td id="CSPS4" data-type="number"> </td>
+                        <td id="CSPE4">  </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>3 Month Inj (Syana Press)</td>
+                        <td id="CSPS5" data-type="number"> </td>
+                        <td id="CSPE5">  </td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>IUCD (CT-380-A)</td>
+                        <td id="CSPS6" data-type="number"> </td>
+                        <td id="CSPE6">   </td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Jadelle</td>
+                        <td id="CSPS7" data-type="number"> </td>
+                        <td id="CSPE7">   </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
 
                            
 
-                            <div>
-
-                                <h3 style="margin-top:30px;margin-bottom:5px">Performance of Service outlet during last 6 working days:</h3>
-                                <table>
-                                    <thead>
-                                        <tr>
-
-                                            <th>Title</th>
-                                            <th>New</th>
-                                            <th>Old</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr>
-
-                                            <td>General Clients</td>
-                                            <td id="posn1">  </td>
-                                            <td id="poso1">   </td>
-                                        </tr>
-                                        <tr>
-
-                                            <td>F.P clients</td>
-                                            <td id="posn2">  </td>
-                                            <td id="poso2">     </td>
-                                        </tr>
-                                        <tr>
-
-                                            <td>MCH/RH </td>
-                                            <td id="posn3">  </td>
-                                            <td id="poso3">     </td>
-                                        </tr>
-                                        <tr>
-
-                                            <td>C.S cases: </td>
-                                            <td id="posn4">  </td>
-                                            <td id="poso4">     </td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div>
-
-                                <h3 style="margin-top:30px;margin-bottom:5px">Clients found present at the time of visit:</h3>
-                                <table>
-                                    <thead>
-                                        <tr>
-
-                                            <th>Title</th>
-                                            <th>No</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr>
-
-                                            <td>General Clients</td>
-                                            <td id="CP1">  </td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td>F.P clients</td>
-                                            <td id="CP2">  </td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td>MCH/RH </td>
-                                            <td id="CP3">  </td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td>C.S cases: </td>
-                                            <td id="CP4">  </td>
-
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="row">
-                                <div>
-
-                                    <h3 style="margin-top:30px;margin-bottom:5px">IEC Material </h3>
-
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Title</th>
-                                                <th> Yes / No </th>
-                                            </tr>
-                                        </thead>
-
-
-                                        <tbody>
-                                            <tr>
-                                                <td>Availability at facility  </td>
-                                                <td id="IecMat1"></td>
-                                            </tr>
-
-                                            <tr hidden>
-                                                <td>Available Quantity </td>
-                                                <td id="IecMat2"></td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>Display at facility</td>
-                                                <td id="IecMat3"> </td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <div>
-
-                                    <h3 style="margin-top:30px;margin-bottom:5px"> MEC Wheel </h3>
-
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Title</th>
-                                                <th> Yes/ No </th>
-                                            </tr>
-                                        </thead>
-
-
-                                        <tbody>
-                                            <tr>
-                                                <td>Availability at facility  </td>
-                                                <td id="MecWheel1"></td>
-                                            </tr>
-
-                                            <tr hidden>
-                                                <td>Available Quantity </td>
-                                                <td id="MecWheel2"></td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>Display at facility</td>
-                                                <td id="MecWheel3"> </td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-
-
-                            </div>
-
-
-                            <h3 style="margin-top:30px;margin-bottom:5px">Record Keeping</h3>
-                            <table>
-                                <tr>
-                                    <th>Register</th>
-                                    <th>Available (Y/N)</th>
-                                    <th>Maintained (Y/N)</th>
-                                   
-                                </tr>
-                                <tr>
-                                    <td>Daily Client Register/ECR</td>
-                                    <td id="DCR1"></td>
-                                    <td id="DCR2"></td>
-                                   
-                                </tr>
-                                @*<tr>
-                                    <td>Daily/Monthly Break-up</td>
-                                    <td id="DMB1"></td>
-                                    <td id="DMB2"></td>
-                                
-                                </tr>*@
-                                <tr>
-                                    <td>Medicine Stock Register</td>
-                                    <td id="MSR1"></td>
-                                    <td id="MSR2"></td>
-                                  
-                                </tr>
-                                <tr>
-                                    <td>Contraceptive Stock Register</td>
-                                    <td id="CSR1"></td>
-                                    <td id="CSR2"></td>
-                                
-                                </tr>
-                                @*<tr>
-                                    <td>Log Book</td>
-                                    <td id="LB1"></td>
-                                    <td id="LB2"></td>
-                               
-                                </tr>
-                                <tr>
-                                    <td>Dead Stock Register</td>
-                                    <td id="DSR1"></td>
-                                    <td id="DSR2"></td>
-                                   
-                                </tr>*@
-                            </table>
-
-
-                            <div>
-
-
-                                <h3 style="margin-top:30px;margin-bottom:5px">Equipment Position</h3>
-                                <table>
-                                    <tr>
-                                        <th>S.No.</th>
-                                        <th>Equipment</th>
-                                        <th>Quantity Available</th>
-                                        <th>Good / Satisfactory / Poor</th>
-
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>IUD Kits</td>
-                                        <td id="Quantity1"></td>
-                                        <td id="FuniGB1"></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>B.P. Apparatus</td>
-                                        <td id="Quantity2"></td>
-                                        <td id="FuniGB2"></td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Stethoscope</td>
-                                        <td id="Quantity3"></td>
-                                        <td id="FuniGB3"></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Thermometer </td>
-                                        <td id="Quantity4"></td>
-                                        <td id="FuniGB4"></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Weighting Machine</td>
-                                        <td id="Quantity5"></td>
-                                        <td id="FuniGB5"></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Stove </td>
-                                        <td id="Quantity6"></td>
-                                        <td id="FuniGB6"></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>7</td>
-                                        <td>OT Lights  </td>
-                                        <td id="Quantity7"></td>
-                                        <td id="FuniGB7"></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>8</td>
-                                        <td>Autoclave</td>
-                                        <td id="Quantity8"></td>
-                                        <td id="FuniGB8"></td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>9</td>
-                                        <td>Screen</td>
-                                        <td id="Quantity9"></td>
-                                        <td id="FuniGB9"></td>
-
-                                    </tr>
-                        
-                                    
-                                </table>
-                            </div>
-
-                            <h3 style="margin-top:30px;margin-bottom:5px">Furniture Position</h3>
-                            <table>
-                                <tr>
-                                    <th>S.No.</th>
-                                    <th>Equipment</th>
-                                    <th>Quantity Available</th>
-                                    <th>Good / Satisfactory /Poor </th>
-
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Office Table</td>
-                                    <td id="FPQuantity1"></td>
-                                    <td id="FunPos1"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Office Chairs</td>
-                                    <td id="FPQuantity2"></td>
-                                    <td id="FunPos2"></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Benches</td>
-                                    <td id="FPQuantity3"></td>
-                                    <td id="FunPos3"></td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Examination Table</td>
-                                    <td id="FPQuantity4"></td>
-                                    <td id="FunPos4"></td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>Revolving Stool</td>
-                                    <td id="FPQuantity5"></td>
-                                    <td id="FunPos5"></td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td>Insertion Table</td>
-                                    <td id="FPQuantity6"></td>
-                                    <td id="FunPos6"></td>
-                                </tr>
-                                <tr>
-                                    <td>7</td>
-                                    <td>Medicine Cabinet</td>
-                                    <td id="FPQuantity7"></td>
-                                    <td id="FunPos7"></td>
-                                </tr>
-
-                                <tr>
-                                    <td>8</td>
-                                    <td>Stretcher</td>
-                                    <td id="FPQuantity8"></td>
-                                    <td id="FunPos8"></td>
-                                </tr>
-
-                            </table>
-                            <h3 style="margin-top:30px;margin-bottom:5px">Technical Monitoring Checklist</h3>
-                            <table>
-                                <tr>
-                                    <th>S.No.</th>
-                                    <th>Checklist for Infection Prevention</th>
-                                    <th>Yes/No</th>
-
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Hand Washing Protocols followed</td>
-                                    <td id="TMC1"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Decontamination Protocols followed</td>
-                                    <td id="TMC2"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Cleaning (Instruments) is properly being done</td>
-                                    <td id="TMC3"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>High level disinfection is properly being done</td>
-                                    <td id="TMC4"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>Waste disposal properly done</td>
-                                    <td id="TMC5"> </td>
-
-                                </tr>
-                            </table>
-
-
-                            <h3 style="margin-top:30px;margin-bottom:5px">COUNSELING</h3>
-                            <table>
-                                <tr>
-                                    <th>S.No.</th>
-                                    <th>Checklist for Infection Prevention</th>
-                                    <th>Yes/No</th>
-
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Privacy maintained</td>
-                                    <td id="cons1"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Is professional: Greets the woman/client politely, maintains/ensures confidentiality, speaks politely to the woman</td>
-                                    <td id="cons2"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Is the method selected/provided by clients’ will/choice</td>
-                                    <td id="cons3"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Complete history of client taken</td>
-                                    <td id="cons4"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>Has the client been offered and described all methods</td>
-                                    <td id="cons5"></td>
-
-                                </tr>
-                            </table>
-
-
-                            <table>
-                                <tr>
-                                    <th>S.No.</th>
-                                    <th>Service Delivery</th>
-                                    <th>Yes/No</th>
-
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Screening of client</td>
-                                    <td id="SD1"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Instrument Tray is prepared with proper sterilization</td>
-                                    <td id="SD2"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Confirmation of choice of method</td>
-                                    <td id="SD3"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Method provided as per protocols</td>
-                                    <td id="SD4"></td>
-
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>Instruction for follow-up given</td>
-                                    <td id="SD5"></td>
-
-                                </tr>
-                            </table>
-
-                            <div style="text-align:center;margin-top:10px;left:10px">
-
-                                <h3 style="margin-top:30px;margin-bottom:5px">No. of visits paid during last three months by: Monitoring Officer, from PWDS</h3>
-                                @*<label style="margin-top:2px" id="LastThreeMonth">No. of visits paid during last three months by:</label><br />*@
-                                <table>
-                                    <thead>
-                                        <tr>
-
-                                            <th>No.of Visits</th>
-                                            <th>PWDS officer from</th>
-                                            <th>Name of visiting Officer</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr>
-
-                                            <td id="NOV0">1</td>
-                                            <td id="PWDS0">Provincial Team</td>
-                                            <td id="NOVN0">  </td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td id="NOV1">2</td>
-                                            <td id="PWDS1">Regional Director</td>
-                                            <td id="NOVN1"> </td>
-
-                                        </tr>
-                                        <tr>
-
-
-                                            <td id="NOV2">3</td>
-                                            <td id="PWDS2">DPWO</td>
-                                            <td id="NOVN2"> </td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td id="NOV3">4</td>
-                                            <td id="PWDS3">Dy.DPWO/Medical Officer/Demographer</td>
-                                            <td id="NOVN3"> </td>
-                                        </tr>
-                                        <tr>
-
-                                            <td id="NOV4">5</td>
-                                            <td id="PWDS4">TPWO</td>
-                                            <td id="NOVN4"> </td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="row" style="text-align:center;margin-top:10px;left:10px">
-                                <div class="col-md-7">
-
-
-                                    <form style="text-align:left">
-
-                                        @*<label for="supervisory-visits"> <u id="NoOfSup"></u>&nbsp;&nbsp; No. of supervisory visits of RHS As conducted during month by Medical Officer:</label><br />*@
-                                        @*<label for="dcit-meetings"><u id="DCIT"></u>No. of DCIT meetings attended by Medical Officer in last 6 months:</label><br/>*@
-                                        @*<label style="margin-top:2px" for="hmc-meeting">Meeting with Hospital Management Committee:&nbsp;&nbsp;<u id="HospitalManagement"></u></label><br />*@
-                                        @*<label style="margin-top:2px" id="LastThreeMonth">No. of visits paid during last three months by:</label><br />*@
-                                        @*<ul>
-            <li> <label for="provincial-team">Provincial Team:&nbsp;&nbsp;<u id="Last6Field1">  &nbsp;&nbsp;</u></label> </li>
-            <li> <label for="regional-director">Regional Director:&nbsp;&nbsp;<u id="Last6Field2">&nbsp;&nbsp;</u></label>  </li>
-            <li> <label for="regional-director">DPWO:&nbsp;&nbsp;<u id="Last6Field3"></u></label>  </li>
-            <li> <label for="regional-director">Dy.DPWO/Medical Officer/Demographer:&nbsp;&nbsp;<u id="Last6Field4"></u></label>  </li>
-            <li> <label for="regional-director">TPWO:&nbsp;&nbsp;<u id="Last6Field5"></u></label>  </li>
-        </ul>*@
-                                        <br />
-                                        <br />
-                                        <label for="remarks">Remarks of Monitoring Officer:&nbsp;&nbsp;<u id="RemarksofMonitoringOfficer"></u></label> <br />
-
-                                        <br />
-                                        <br />
-                                        <label> Name and Designation of Monitoring Officer :&nbsp;&nbsp;<u for="signature" id="signature"></u></label>
-                                      
-                                        <br>
-
-                                    </form>
-                                </div>
-
-
-                                <div class="col-md-0">
-
-                                </div>
-                            </div>
-
-
-
-
-                        </div>
-
-                    </div>
+        <div class="report-section">
+            <h3 class="section-title">Performance of Service Outlet</h3>
+            <p style="color: #6c757d; margin-bottom: 20px;">(during last 6 working days)</p>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>New</th>
+                        <th>Old</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>General Clients</td>
+                        <td id="posn1" data-type="number">  </td>
+                        <td id="poso1" data-type="number">   </td>
+                    </tr>
+                    <tr>
+                        <td>F.P clients</td>
+                        <td id="posn2" data-type="number">  </td>
+                        <td id="poso2" data-type="number">     </td>
+                    </tr>
+                    <tr>
+                        <td>MCH/RH</td>
+                        <td id="posn3" data-type="number">  </td>
+                        <td id="poso3" data-type="number">     </td>
+                    </tr>
+                    <tr>
+                        <td>C.S cases</td>
+                        <td id="posn4" data-type="number">  </td>
+                        <td id="poso4" data-type="number">     </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-section">
+            <h3 class="section-title">Clients Present</h3>
+            <p style="color: #6c757d; margin-bottom: 20px;">(found present at the time of visit)</p>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>General Clients</td>
+                        <td id="CP1" data-type="number">  </td>
+                    </tr>
+                    <tr>
+                        <td>F.P clients</td>
+                        <td id="CP2" data-type="number">  </td>
+                    </tr>
+                    <tr>
+                        <td>MCH/RH</td>
+                        <td id="CP3" data-type="number">  </td>
+                    </tr>
+                    <tr>
+                        <td>C.S cases</td>
+                        <td id="CP4" data-type="number">  </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-section">
+            <h3 class="section-title">IEC Material & MEC Wheel</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div>
+                    <h4 style="color: #495057; margin-bottom: 15px;">IEC Material</h4>
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Yes / No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Availability at facility</td>
+                                <td id="IecMat1"></td>
+                            </tr>
+                            <tr hidden>
+                                <td>Available Quantity</td>
+                                <td id="IecMat2"></td>
+                            </tr>
+                            <tr>
+                                <td>Display at facility</td>
+                                <td id="IecMat3"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-
+                <div>
+                    <h4 style="color: #495057; margin-bottom: 15px;">MEC Wheel</h4>
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Yes / No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Availability at facility</td>
+                                <td id="MecWheel1"></td>
+                            </tr>
+                            <tr hidden>
+                                <td>Available Quantity</td>
+                                <td id="MecWheel2"></td>
+                            </tr>
+                            <tr>
+                                <td>Display at facility</td>
+                                <td id="MecWheel3"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+
+
+        <div class="report-section">
+            <h3 class="section-title">Record Keeping</h3>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>Register</th>
+                        <th>Available (Y/N)</th>
+                        <th>Maintained (Y/N)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Daily Client Register/ECR</td>
+                        <td id="DCR1"></td>
+                        <td id="DCR2"></td>
+                    </tr>
+                    <tr>
+                        <td>Medicine Stock Register</td>
+                        <td id="MSR1"></td>
+                        <td id="MSR2"></td>
+                    </tr>
+                    <tr>
+                        <td>Contraceptive Stock Register</td>
+                        <td id="CSR1"></td>
+                        <td id="CSR2"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="report-section">
+            <h3 class="section-title">Equipment Position</h3>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Equipment</th>
+                        <th>Quantity Available</th>
+                        <th>Good / Satisfactory / Poor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>IUD Kits</td>
+                        <td id="Quantity1" data-type="number"></td>
+                        <td id="FuniGB1"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>B.P. Apparatus</td>
+                        <td id="Quantity2" data-type="number"></td>
+                        <td id="FuniGB2"></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Stethoscope</td>
+                        <td id="Quantity3" data-type="number"></td>
+                        <td id="FuniGB3"></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Thermometer</td>
+                        <td id="Quantity4" data-type="number"></td>
+                        <td id="FuniGB4"></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Weighting Machine</td>
+                        <td id="Quantity5" data-type="number"></td>
+                        <td id="FuniGB5"></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Stove</td>
+                        <td id="Quantity6" data-type="number"></td>
+                        <td id="FuniGB6"></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>OT Lights</td>
+                        <td id="Quantity7" data-type="number"></td>
+                        <td id="FuniGB7"></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Autoclave</td>
+                        <td id="Quantity8" data-type="number"></td>
+                        <td id="FuniGB8"></td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>Screen</td>
+                        <td id="Quantity9" data-type="number"></td>
+                        <td id="FuniGB9"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-section">
+            <h3 class="section-title">Furniture Position</h3>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Equipment</th>
+                        <th>Quantity Available</th>
+                        <th>Good / Satisfactory / Poor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Office Table</td>
+                        <td id="FPQuantity1" data-type="number"></td>
+                        <td id="FunPos1"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Office Chairs</td>
+                        <td id="FPQuantity2" data-type="number"></td>
+                        <td id="FunPos2"></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Benches</td>
+                        <td id="FPQuantity3" data-type="number"></td>
+                        <td id="FunPos3"></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Examination Table</td>
+                        <td id="FPQuantity4" data-type="number"></td>
+                        <td id="FunPos4"></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Revolving Stool</td>
+                        <td id="FPQuantity5" data-type="number"></td>
+                        <td id="FunPos5"></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Insertion Table</td>
+                        <td id="FPQuantity6" data-type="number"></td>
+                        <td id="FunPos6"></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Medicine Cabinet</td>
+                        <td id="FPQuantity7" data-type="number"></td>
+                        <td id="FunPos7"></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Stretcher</td>
+                        <td id="FPQuantity8" data-type="number"></td>
+                        <td id="FunPos8"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="report-section">
+            <h3 class="section-title">Technical Monitoring Checklist</h3>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Checklist for Infection Prevention</th>
+                        <th>Yes/No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Hand Washing Protocols followed</td>
+                        <td id="TMC1"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Decontamination Protocols followed</td>
+                        <td id="TMC2"></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Cleaning (Instruments) is properly being done</td>
+                        <td id="TMC3"></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>High level disinfection is properly being done</td>
+                        <td id="TMC4"></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Waste disposal properly done</td>
+                        <td id="TMC5"> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="report-section">
+            <h3 class="section-title">Counseling</h3>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Checklist for Counseling</th>
+                        <th>Yes/No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Privacy maintained</td>
+                        <td id="cons1"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Is professional: Greets the woman/client politely, maintains/ensures confidentiality, speaks politely to the woman</td>
+                        <td id="cons2"></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Is the method selected/provided by clients' will/choice</td>
+                        <td id="cons3"></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Complete history of client taken</td>
+                        <td id="cons4"></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Has the client been offered and described all methods</td>
+                        <td id="cons5"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="report-section">
+            <h3 class="section-title">Service Delivery</h3>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Service Delivery</th>
+                        <th>Yes/No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Screening of client</td>
+                        <td id="SD1"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Instrument Tray is prepared with proper sterilization</td>
+                        <td id="SD2"></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Confirmation of choice of method</td>
+                        <td id="SD3"></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Method provided as per protocols</td>
+                        <td id="SD4"></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Instruction for follow-up given</td>
+                        <td id="SD5"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-section">
+            <h3 class="section-title">No. of Visits Paid</h3>
+            <p style="color: #6c757d; margin-bottom: 20px;">(during last three months by Monitoring Officer, from PWDS)</p>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>No. of Visits</th>
+                        <th>PWDS Officer From</th>
+                        <th>Name of Visiting Officer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="NOV0" data-type="number">1</td>
+                        <td id="PWDS0">Provincial Team</td>
+                        <td id="NOVN0">  </td>
+                    </tr>
+                    <tr>
+                        <td id="NOV1" data-type="number">2</td>
+                        <td id="PWDS1">Regional Director</td>
+                        <td id="NOVN1"> </td>
+                    </tr>
+                    <tr>
+                        <td id="NOV2" data-type="number">3</td>
+                        <td id="PWDS2">DPWO</td>
+                        <td id="NOVN2"> </td>
+                    </tr>
+                    <tr>
+                        <td id="NOV3" data-type="number">4</td>
+                        <td id="PWDS3">Dy.DPWO/Medical Officer/Demographer</td>
+                        <td id="NOVN3"> </td>
+                    </tr>
+                    <tr>
+                        <td id="NOV4" data-type="number">5</td>
+                        <td id="PWDS4">TPWO</td>
+                        <td id="NOVN4"> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-section">
+            <h3 class="section-title">Final Remarks</h3>
+            <div class="form-group">
+                <label class="form-label" for="remarks">Remarks of Monitoring Officer:</label>
+                <div id="RemarksofMonitoringOfficer" style="padding: 10px; background: #f8f9fa; border-radius: 5px; min-height: 50px; border: 1px solid #dee2e6;"></div>
+            </div>
+            <div class="form-group" style="margin-top: 20px;">
+                <label class="form-label">Name and Designation of Monitoring Officer:</label>
+                <div id="signature" style="padding: 10px; background: #f8f9fa; border-radius: 5px; min-height: 30px; border: 1px solid #dee2e6;"></div>
+            </div>
+        </div>
+
+
+
+
     </div>
 </div>
 
@@ -1498,17 +1600,51 @@
         });
     }
 
+    // Function to add status badges
+    function addStatusBadges() {
+        // Add badges to Yes/No statuses
+        $('td').each(function() {
+            var text = $(this).text().trim();
+            if (text === 'Yes') {
+                $(this).html('<span class="status-badge status-yes">Yes</span>');
+            } else if (text === 'No') {
+                $(this).html('<span class="status-badge status-no">No</span>');
+            } else if (text === 'Present') {
+                $(this).html('<span class="status-badge status-present">Present</span>');
+            } else if (text === 'Absent') {
+                $(this).html('<span class="status-badge status-absent">Absent</span>');
+            } else if (text === 'Good') {
+                $(this).html('<span class="status-badge status-good">Good</span>');
+            } else if (text === 'Satisfactory') {
+                $(this).html('<span class="status-badge status-satisfactory">Satisfactory</span>');
+            } else if (text === 'Poor') {
+                $(this).html('<span class="status-badge status-poor">Poor</span>');
+            } else if (text === 'Available') {
+                $(this).html('<span class="status-badge status-yes">Available</span>');
+            } else if (text === 'Not Available') {
+                $(this).html('<span class="status-badge status-no">Not Available</span>');
+            }
+        });
+    }
+
+    // Enhanced print function
     $('#downloadPDFBtn').click(function () {
-
         $('#downloadPDFBtn').hide();
-        window.print();
-        // Show the button for 5 seconds
-        $('#downloadPDFBtn').show(); // Show the button
-        setTimeout(function () {
-            $('#downloadPDFBtn').show(); // Hide the button after 5 seconds
-        }, 5000); // 5000 milliseconds = 5 seconds
 
+        // Add status badges before printing
+        addStatusBadges();
 
+        // Small delay to ensure badges are rendered
+        setTimeout(function() {
+            window.print();
+            $('#downloadPDFBtn').show();
+        }, 100);
+    });
+
+    // Add status badges when data is loaded
+    $(document).ready(function() {
+        // Add badges after a short delay to ensure data is loaded
+        setTimeout(addStatusBadges, 1000);
     });
 
 
