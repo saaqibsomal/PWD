@@ -216,7 +216,17 @@
         color: #721c24;
         border: 1px solid #f5c6cb;
     }
+    .status-Leave {
+        background-color: #f8f7d7;
+        color: #d4ca11;
+        border: 1px solid #eff5c6;
+    }
 
+    .status-Vacant {
+        background-color: #f0efe9;
+        color: #403f3e;
+        border: 1px solid #f7f7f5;
+    }
     .status-yes {
         background-color: #d4edda;
         color: #155724;
@@ -1756,6 +1766,12 @@
                 $(this).html('<span class="status-badge status-yes">Available</span>');
             } else if (text === 'Not Available') {
                 $(this).html('<span class="status-badge status-no">Not Available</span>');
+            }
+            else if (text === 'Leave') {
+                $(this).html('<span class="status-badge status-Leave">Leave</span>');
+            }
+            else if (text === 'Vacant') {
+                $(this).html('<span class="status-badge status-Vacant">Vacant</span>');
             }
         });
     }
