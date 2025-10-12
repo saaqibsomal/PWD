@@ -1251,7 +1251,6 @@
                 $("#StockofContraceptives").text(data.Field.StockofContraceptives);
 
 
-                //  $("#StatusofBuilding").text();
                 var SOB = data.Field.StatusofBuilding.split(',');
                 if (SOB != "N/A") {
                     $("#SOB0").text(SOB[0] == "1" ? "Available" : "Not Available ");
@@ -1265,12 +1264,7 @@
                     $("#DCR2").text(DCR[1] == "Available" ? "Yes" : (DCR[1] == undefined ? "" : "No"));
                     $("#DCR3").text(DCR[2] == "Available" ? "Yes" : (DCR[2] == undefined ? "" : "No"));
                 }
-                //var DMB = data.Field.MonthlyBreakup.split(',');
-                //if (DMB[0] != "N/A") {
-                //    $("#DMB1").text(DMB[0] == "Available" ? "Yes" : (DMB[0] == undefined ? "" : "No"));
-                //    $("#DMB2").text(DMB[1] == "Available" ? "Yes" : (DMB[1] == undefined ? "" : "No"));
-                //    $("#DMB3").text(DMB[2] == "Available" ? "Yes" : (DMB[2] == undefined ? "" : "No"));
-                //}
+
                 var MSR = data.Field.MedicineStockRegister.split(',');
                 if (MSR[0] != "N/A") {
                     $("#MSR1").text(MSR[0] == "Available" ? "Yes" : (MSR[0] == undefined ? "" : "No"));
@@ -1286,19 +1280,6 @@
                     $("#CSR3").text(CSR[2] == "Available" ? "Yes" : (CSR[2] == undefined ? "" : "No"));
                 }
 
-                //var LB = data.Field.LogBook.split(',');
-                //if (LB[0] != "N/A") {
-                //    $("#LB1").text(LB[0] == "Maintained" ? "No" : (CSR[0] == undefined ? "" : "Yes"));
-                //    $("#LB2").text(LB[1] == "Maintained" ? "No" : (CSR[1] == undefined ? "" : "Yes"));
-                //    $("#LB3").text(LB[2] == "Maintained" ? "No" : (CSR[2] == undefined ? "" : "Yes"));
-                //}
-
-                //var DSR = data.Field.DeadStockRegister.split(',');
-                //if (DSR[0] != "N/A") {
-                //    $("#DSR1").text(DSR[0] == "Maintained" ? "No" : (DSR[0] == undefined ? "" : "Yes"));
-                //    $("#DSR2").text(DSR[1] == "Maintained" ? "No" : (DSR[1] == undefined ? "" : "Yes"));
-                //    $("#DSR3").text(DSR[2] == "Maintained" ? "No" : (DSR[2] == undefined ? "" : "Yes"));
-                //}
 
                 var IEC = data.Field.IECMaterial.split(',');
                 if (IEC != "N/A") {
@@ -1362,11 +1343,11 @@
 
                 var TMC = data.Field.TechnicalMonitoringChecklist.split(',');
                 if (TMC != "N/A") {
-                    $("#TMC1").text(TMC[0] == "No" ? "No" : "Yes");
-                    $("#TMC2").text(TMC[1] == "No" ? "No" : "Yes");
-                    $("#TMC3").text(TMC[2] == "No" ? "No" : "Yes");
-                    $("#TMC4").text(TMC[3] == "No" ? "No" : "Yes");
-                    $("#TMC5").text(TMC[4] == "No" ? "No" : "Yes");
+                    $("#TMC1").text(TMC[0] == "Yes" ? "Yes" : "No");
+                    $("#TMC2").text(TMC[1] == "Yes" ? "Yes" : "No");
+                    $("#TMC3").text(TMC[2] == "Yes" ? "Yes" : "No");
+                    $("#TMC4").text(TMC[3] == "Yes" ? "Yes" : "No");
+                    $("#TMC5").text(TMC[4] == "Yes" ? "Yes" : "No");
                 }
 
                 var cons = data.Field.COUNSELING.split(',');
@@ -1402,21 +1383,6 @@
                 $("#FuniGB8").text(FuniGB[7] == "1" ? "N/A" : FuniGB[7] == "2" ? "Good" : FuniGB[7] == "3" ? "Satisfactory" : "Poor");
                 $("#FuniGB9").text(FuniGB[8] == "1" ? "N/A" : FuniGB[8] == "2" ? "Good" : FuniGB[8] == "3" ? "Satisfactory" : "Poor");
 
-                //if (Heading.includes('FWC')) {
-                //    $("#FuniGB10").text(FuniGB[9] == "1" ? "N/A" : FuniGB[9] == "2" ? "Good" : FuniGB[9] == "3" ? "Satisfactory" : "Poor");
-                //    $("#FuniGB11").text(FuniGB[10] == "1" ? "N/A" : FuniGB[10] == "2" ? "Good" : FuniGB[10] == "3" ? "Satisfactory" : "Poor");
-                //    $("#FuniGB12").text(FuniGB[11] == "1" ? "N/A" : FuniGB[11] == "2" ? "Good" : FuniGB[11] == "3" ? "Satisfactory" : "Poor");
-                //    $("#FuniGB13").text(FuniGB[12] == "1" ? "N/A" : FuniGB[12] == "2" ? "Good" : FuniGB[12] == "3" ? "Satisfactory" : "Poor");
-                //    $("#FuniGB14").text(FuniGB[13] == "1" ? "N/A" : FuniGB[13] == "2" ? "Good" : FuniGB[13] == "3" ? "Satisfactory" : "Poor");
-                //    $("#FuniGB15").text(FuniGB[14] == "1" ? "N/A" : FuniGB[14] == "2" ? "Good" : FuniGB[14] == "3" ? "Satisfactory" : "Poor");
-                //    $("#FuniGB16").text(FuniGB[15] == "1" ? "N/A" : FuniGB[15] == "2" ? "Good" : FuniGB[15] == "3" ? "Satisfactory" : "Poor");
-                //    $('.FWCEqiptment').hide();
-                //}
-
-                //else {
-                //    $('.FWCEqiptment').show();
-
-                //}
 
                 var FunPos = data.Field.FurniturePositionCondition.split(',');
 
@@ -1467,22 +1433,6 @@
 
                 }
 
-                //var NoV = data.Field.NoVisitor.split('|');
-
-                //$("#NOV0").text(NoV[0].split(',')[0].split('-')[1]);
-                //$("#NOVN0").text(NoV[0].split(',')[1]);
-
-                //$("#NOV1").text(NoV[1].split(',')[0].split('-')[1]);
-                //$("#NOVN1").text(NoV[1].split(',')[1]);
-
-                //$("#NOV2").text(NoV[2].split(',')[0].split('-')[1]);
-                //$("#NOVN2").text(NoV[2].split(',')[1]);
-
-                //$("#NOV3").text(NoV[3].split(',')[0].split('-')[1]);
-                //$("#NOVN3").text(NoV[3].split(',')[1]);
-
-                //$("#NOV4").text(NoV[4].split(',')[0].split('-')[1]);
-                //$("#NOVN4").text(NoV[4].split(',')[1]);
 
                 try {
 

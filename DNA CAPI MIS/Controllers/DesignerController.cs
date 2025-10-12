@@ -3163,6 +3163,7 @@ ORDER BY
                         isNumeric1 = int.TryParse(i, out result1);
                         if (isNumeric1)
                         {
+
                             IntToString += titles.Where(x => x.Code == i && x.FieldID == item.FieldId).Select(x => x.Title).FirstOrDefault() + ",";
                         }
                         else

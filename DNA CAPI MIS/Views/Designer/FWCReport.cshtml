@@ -1475,11 +1475,11 @@
 
                 var TMC = data.Field.TechnicalMonitoringChecklist.split(',');
                 if (TMC != "N/A") {
-                    $("#TMC1").text(TMC[0] == "No" ? "No" : "Yes");
-                    $("#TMC2").text(TMC[1] == "No" ? "No" : "Yes");
-                    $("#TMC3").text(TMC[2] == "No" ? "No" : "Yes");
-                    $("#TMC4").text(TMC[3] == "No" ? "No" : "Yes");
-                    $("#TMC5").text(TMC[4] == "No" ? "No" : "Yes");
+                    $("#TMC1").text(TMC[0] == "Yes" ? "Yes" : "No");
+                    $("#TMC2").text(TMC[1] == "Yes" ? "Yes" : "No");
+                    $("#TMC3").text(TMC[2] == "Yes" ? "Yes" : "No");
+                    $("#TMC4").text(TMC[3] == "Yes" ? "Yes" : "No");
+                    $("#TMC5").text(TMC[4] == "Yes" ? "Yes" : "No");
                 }
 
                 var cons = data.Field.COUNSELING.split(',');
