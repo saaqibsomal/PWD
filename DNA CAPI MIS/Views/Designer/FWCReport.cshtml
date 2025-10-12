@@ -1367,10 +1367,11 @@
 
                 //  $("#StatusofBuilding").text();
                 var SOB = data.Field.StatusofBuilding.split(',');
-                $("#SOB0").text(SOB[0] == "1" ? "Available" : "Not Available ");
-                $("#SOB1").text(SOB[1] == "1" ? "Available" : "Not Available ");
-                $("#SOB2").text(SOB[2] == "1" ? "Available" : "Not Available ");
-
+                if (SOB != "N/A") {
+                    $("#SOB0").text(SOB[0] == "1" ? "Available" : "Not Available ");
+                    $("#SOB1").text(SOB[1] == "1" ? "Available" : "Not Available ");
+                    $("#SOB2").text(SOB[2] == "1" ? "Available" : "Not Available ");
+                }
                 var DCR = data.Field.DailyClientRegister.split(',');
                 if (DCR[0] != "N/A") {
                     $("#DCR1").text(DCR[0] == "Available" ? "Yes" : (DCR[0] == undefined ? "" : "No"));
@@ -1413,34 +1414,36 @@
                 //}
 
                 var IEC = data.Field.IECMaterial.split(',');
-                if (IEC.length == 3) {
-                    $("#IecMat1").text(IEC[0].trim() == "Availability" ? "Yes" : "No");
-                    $("#IecMat2").text(IEC[1].trim() == "Availability" ? "Yes" : "No");
-                    $("#IecMat3").text(IEC[2].trim() == "Availability" ? "Yes" : "No");
+                if (IEC != "N/A") {
+                    if (IEC.length == 3) {
+                        $("#IecMat1").text(IEC[0].trim() == "Availability" ? "Yes" : "No");
+                        $("#IecMat2").text(IEC[1].trim() == "Availability" ? "Yes" : "No");
+                        $("#IecMat3").text(IEC[2].trim() == "Availability" ? "Yes" : "No");
+                    }
+                    else if (IEC.length == 2) {
+                        $("#IecMat1").text(IEC[0].trim() == "Availability" ? "Yes" : "No");
+                        $("#IecMat3").text(IEC[1].trim() == "Availability" ? "Yes" : "No");
+                    }
+                    else {
+                        $("#IecMat1").text(IEC[0].trim() == "Availability" ? "Yes" : "No");
+                    }
                 }
-                else if (IEC.length == 2) {
-                    $("#IecMat1").text(IEC[0].trim() == "Availability" ? "Yes" : "No");
-                    $("#IecMat3").text(IEC[1].trim() == "Availability" ? "Yes" : "No");
-                }
-                else {
-                    $("#IecMat1").text(IEC[0].trim() == "Availability" ? "Yes" : "No");
-                }
-
 
                 var MEC = data.Field.MECWheel.split(',');
-                if (MEC.length == 3) {
-                    $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
-                    $("#MecWheel2").text(MEC[1] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
-                    $("#MecWheel3").text(MEC[2] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
+                if (MEC != "N/A") {
+                    if (MEC.length == 3) {
+                        $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[0] == undefined ? "" : "No"));
+                        $("#MecWheel2").text(MEC[1] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
+                        $("#MecWheel3").text(MEC[2] == "Availability" ? "Yes" : (MEC[2] == undefined ? "" : "No"));
+                    }
+                    else if (MEC.length == 2) {
+                        $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[0] == undefined ? "" : "No"));
+                        $("#MecWheel3").text(MEC[1] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
+                    }
+                    else {
+                        $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[0] == undefined ? "" : "No"));
+                    }
                 }
-                else if (MEC.length == 2) {
-                    $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
-                    $("#MecWheel3").text(MEC[1] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
-                }
-                else {
-                    $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
-                }
-
 
                 var EP = data.Field.EquipmentPosition.split(',');
                 $("#Quantity1").text(EP[0]);
@@ -1468,29 +1471,35 @@
                 $("#FPQuantity5").text(FP[4]);
                 $("#FPQuantity6").text(FP[5]);
                 $("#FPQuantity7").text(FP[6]);
+                $("#FPQuantity8").text(FP[7]);
 
                 var TMC = data.Field.TechnicalMonitoringChecklist.split(',');
-                $("#TMC1").text(TMC[0] == "No" ? "No" : "Yes");
-                $("#TMC2").text(TMC[1] == "No" ? "No" : "Yes");
-                $("#TMC3").text(TMC[2] == "No" ? "No" : "Yes");
-                $("#TMC4").text(TMC[3] == "No" ? "No" : "Yes");
-                $("#TMC5").text(TMC[4] == "No" ? "No" : "Yes");
-
+                if (TMC != "N/A") {
+                    $("#TMC1").text(TMC[0] == "No" ? "No" : "Yes");
+                    $("#TMC2").text(TMC[1] == "No" ? "No" : "Yes");
+                    $("#TMC3").text(TMC[2] == "No" ? "No" : "Yes");
+                    $("#TMC4").text(TMC[3] == "No" ? "No" : "Yes");
+                    $("#TMC5").text(TMC[4] == "No" ? "No" : "Yes");
+                }
 
                 var cons = data.Field.COUNSELING.split(',');
-                $("#cons1").text(cons[0] == "1" ? "Yes" : "No");
-                $("#cons2").text(cons[1] == "1" ? "Yes" : "No");
-                $("#cons3").text(cons[2] == "1" ? "Yes" : "No");
-                $("#cons4").text(cons[3] == "1" ? "Yes" : "No");
-                $("#cons5").text(cons[4] == "1" ? "Yes" : "No");
+                if (cons != "N/A") {
+                    $("#cons1").text(cons[0] == "1" ? "Yes" : "No");
+                    $("#cons2").text(cons[1] == "1" ? "Yes" : "No");
+                    $("#cons3").text(cons[2] == "1" ? "Yes" : "No");
+                    $("#cons4").text(cons[3] == "1" ? "Yes" : "No");
+                    $("#cons5").text(cons[4] == "1" ? "Yes" : "No");
+                }
+
 
                 var SD = data.Field.SERVICEDELIVERY.split(',');
-                $("#SD1").text(SD[0] == "1" ? "Yes" : "No");
-                $("#SD2").text(SD[1] == "1" ? "Yes" : "No");
-                $("#SD3").text(SD[2] == "1" ? "Yes" : "No");
-                $("#SD4").text(SD[3] == "1" ? "Yes" : "No");
-                $("#SD5").text(SD[4] == "1" ? "Yes" : "No");
-
+                if (SD != "N/A") {
+                    $("#SD1").text(SD[0] == "1" ? "Yes" : "No");
+                    $("#SD2").text(SD[1] == "1" ? "Yes" : "No");
+                    $("#SD3").text(SD[2] == "1" ? "Yes" : "No");
+                    $("#SD4").text(SD[3] == "1" ? "Yes" : "No");
+                    $("#SD5").text(SD[4] == "1" ? "Yes" : "No");
+                }
                 var FuniGB = data.Field.EquipmentCondition.split(',');
 
 

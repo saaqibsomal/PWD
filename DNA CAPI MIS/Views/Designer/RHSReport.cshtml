@@ -430,10 +430,10 @@
 </style>
 
 <!-- Loading Indicator -->
-<div id="loader" class="loader-container">
-    <div class="loader-content">
+<div id="loader" class="loader-container" style="text-align:center">
+    <div class="loader-content" >
         <div class="loader"></div>
-        <div class="loader-text">Loading RHS Report Data...</div>
+        <div class="loader-text" >Loading RHS Report Data...</div>
     </div>
 </div>
 
@@ -1316,78 +1316,61 @@
 
                 //  $("#StatusofBuilding").text();
                 var SOB = data.Field.StatusofBuilding.split(',');
-                $("#SOB0").text(SOB[0] == "1" ? "Available" : "Not Available ");
-                $("#SOB1").text(SOB[1] == "1" ? "Available" : "Not Available ");
-                $("#SOB2").text(SOB[2] == "1" ? "Available" : "Not Available ");
+                $("#SOB0").text(SOB[0] == "1" ? "Available" : SOB[0] == "NA" ? "" : "Not Available");
+                $("#SOB1").text(SOB[1] == "1" ? "Available" : SOB[1] == "NA" ? "" : "Not Available");
+                $("#SOB2").text(SOB[2] == "1" ? "Available" : SOB[2] == "NA" ? "" : "Not Available");
 
                 var DCR = data.Field.DailyClientRegister.split(',');
                 if (DCR[0] != "N/A") {
-                    $("#DCR1").text(DCR[0] == "Available" ? "Yes" : (DCR[0] == undefined ? "" : "No"));
-                    $("#DCR2").text(DCR[1] == "Available" ? "Yes" : (DCR[1] == undefined ? "" : "No"));
-                    $("#DCR3").text(DCR[2] == "Available" ? "Yes" : (DCR[2] == undefined ? "" : "No"));
+                    $("#DCR1").text(DCR[0] == "Available" ? "Yes" : (DCR[0] == undefined ? "" : DCR[0] == "NA" ? "" : "No"));
+                    $("#DCR2").text(DCR[1] == "Available" ? "Yes" : (DCR[1] == undefined ? "" : DCR[1] == "NA" ? "" : "No"));
+                    $("#DCR3").text(DCR[2] == "Available" ? "Yes" : (DCR[2] == undefined ? "" : DCR[2] == "NA" ? "" : "No"));
                 }
-                //var DMB = data.Field.MonthlyBreakup.split(',');
-                //if (DMB[0] != "N/A") {
-                //    $("#DMB1").text(DMB[0] == "Available" ? "Yes" : (DMB[0] == undefined ? "" : "No"));
-                //    $("#DMB2").text(DMB[1] == "Available" ? "Yes" : (DMB[1] == undefined ? "" : "No"));
-                //    $("#DMB3").text(DMB[2] == "Available" ? "Yes" : (DMB[2] == undefined ? "" : "No"));
+
                 //}
                 var MSR = data.Field.MedicineStockRegister.split(',');
                 if (MSR[0] != "N/A") {
-                    $("#MSR1").text(MSR[0] == "Available" ? "Yes" : (MSR[0] == undefined ? "" : "No"));
-                    $("#MSR2").text(MSR[1] == "Available" ? "Yes" : (MSR[1] == undefined ? "" : "No"));
-                    $("#MSR3").text(MSR[2] == "Available" ? "Yes" : (MSR[2] == undefined ? "" : "No"));
+                    $("#MSR1").text(MSR[0] == "Available" ? "Yes" : (MSR[0] == undefined ? "" : MSR[0] == "NA" ? "" : "No"));
+                    $("#MSR2").text(MSR[1] == "Available" ? "Yes" : (MSR[1] == undefined ? "" : MSR[1] == "NA" ? "" : "No"));
+                    $("#MSR3").text(MSR[2] == "Available" ? "Yes" : (MSR[2] == undefined ? "" : MSR[2] == "NA" ? "" : "No"));
                 }
 
                 var CSR = data.Field.ContraceptiveStockRegister.split(',');
 
                 if (CSR[0] != "N/A") {
-                    $("#CSR1").text(CSR[0] == "Available" ? "Yes" : (CSR[0] == undefined ? "" : "No"));
-                    $("#CSR2").text(CSR[1] == "Available" ? "Yes" : (CSR[1] == undefined ? "" : "No"));
-                    $("#CSR3").text(CSR[2] == "Available" ? "Yes" : (CSR[2] == undefined ? "" : "No"));
+                    $("#CSR1").text(CSR[0] == "Available" ? "Yes" : (CSR[0] == undefined ? "" : CSR[0] == "NA" ? "" : "No"));
+                    $("#CSR2").text(CSR[1] == "Available" ? "Yes" : (CSR[1] == undefined ? "" : CSR[1] == "NA" ? "" : "No"));
+                    $("#CSR3").text(CSR[2] == "Available" ? "Yes" : (CSR[2] == undefined ? "" : CSR[2] == "NA" ? "" : "No"));
                 }
 
-                //var LB = data.Field.LogBook.split(',');
-                //if (LB[0] != "N/A") {
-                //    $("#LB1").text(LB[0] == "Maintained" ? "No" : (CSR[0] == undefined ? "" : "Yes"));
-                //    $("#LB2").text(LB[1] == "Maintained" ? "No" : (CSR[1] == undefined ? "" : "Yes"));
-                //    $("#LB3").text(LB[2] == "Maintained" ? "No" : (CSR[2] == undefined ? "" : "Yes"));
-                //}
-
-                //var DSR = data.Field.DeadStockRegister.split(',');
-                //if (DSR[0] != "N/A") {
-                //    $("#DSR1").text(DSR[0] == "Maintained" ? "No" : (DSR[0] == undefined ? "" : "Yes"));
-                //    $("#DSR2").text(DSR[1] == "Maintained" ? "No" : (DSR[1] == undefined ? "" : "Yes"));
-                //    $("#DSR3").text(DSR[2] == "Maintained" ? "No" : (DSR[2] == undefined ? "" : "Yes"));
-                //}
 
                 var IEC = data.Field.IECMaterial.split(',');
                 if (IEC.length == 3) {
-                    $("#IecMat1").text(IEC[0].trim() == "Availability" ? "Yes" : "No");
-                    $("#IecMat2").text(IEC[1].trim() == "Availability" ? "Yes" : "No");
-                    $("#IecMat3").text(IEC[2].trim() == "Availability" ? "Yes" : "No");
+                    $("#IecMat1").text(IEC[0].trim() == "Availability" ? "Yes" : IEC[0].trim() == "N/A" ? "" : "No");
+                    $("#IecMat2").text(IEC[1].trim() == "Availability" ? "Yes" : IEC[1].trim() == "N/A" ? "" : "No");
+                    $("#IecMat3").text(IEC[2].trim() == "Availability" ? "Yes" : IEC[2].trim() == "N/A" ? "" : "No");
                 }
                 else if (IEC.length == 2) {
-                    $("#IecMat1").text(IEC[0].trim() == "Availability" ? "Yes" : "No");
-                    $("#IecMat3").text(IEC[1].trim() == "Availability" ? "Yes" : "No");
+                    $("#IecMat1").text(IEC[0].trim() == "Availability" ? "Yes" : IEC[0].trim() == "N/A" ? "" : "No");
+                    $("#IecMat3").text(IEC[1].trim() == "Availability" ? "Yes" : IEC[1].trim() == "N/A" ? "" : "No");
                 }
                 else {
-                    $("#IecMat1").text(IEC[0].trim() == "Availability" ? "Yes" : "No");
+                    $("#IecMat1").text(IEC[0].trim() == "Availability" ? "Yes" : IEC[0].trim() =="N/A" ? "" : "No");
                 }
 
 
                 var MEC = data.Field.MECWheel.split(',');
                 if (MEC.length == 3) {
-                    $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
-                    $("#MecWheel2").text(MEC[1] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
-                    $("#MecWheel3").text(MEC[2] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
+                    $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[0] == undefined ? "" : MEC[0] == "NA" ? "" : "No"));
+                    $("#MecWheel2").text(MEC[1] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : MEC[1] == "NA" ? "" : "No"));
+                    $("#MecWheel3").text(MEC[2] == "Availability" ? "Yes" : (MEC[2] == undefined ? "" : MEC[2] == "NA" ? "" : "No"));
                 }
                 else if (MEC.length == 2) {
-                    $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
-                    $("#MecWheel3").text(MEC[1] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
+                    $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[0] == undefined ? "" : MEC[0] == "NA" ? "" : "No"));
+                    $("#MecWheel3").text(MEC[1] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : MEC[1] == "NA" ? "" : "No"));
                 }
                 else {
-                    $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
+                    $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[0] == undefined ? "" : MEC[0] == "NA" ? "" : "No"));
                 }
 
 
@@ -1419,6 +1402,7 @@
                 $("#FPQuantity5").text(FP[4]);
                 $("#FPQuantity6").text(FP[5]);
                 $("#FPQuantity7").text(FP[6]);
+                $("#FPQuantity8").text(FP[7]);
 
                 var TMC = data.Field.TechnicalMonitoringChecklist.split(',');
                 $("#TMC1").text(TMC[0]);
@@ -1509,6 +1493,49 @@
                     $("#poso2").text(PService[1].split(',')[1]);
                     $("#poso3").text(PService[2].split(',')[1]);
                     $("#poso4").text(PService[3].split(',')[1]);
+                }
+                catch (ex) {
+
+                }
+
+
+                try {
+                    var CSP = data.Field.StockOfCon.split('|');
+
+                    function isValidDate(d) {
+                        const parsed = Date.parse(d);
+                        if (isNaN(parsed)) return false;
+
+                        // Check if the date string starts with 1900 (e.g., 1900-01-01)
+                        if (d.startsWith("1900")) return false;
+
+                        return true;
+                    }
+
+                    for (var i = 0; i < CSP.length; i++) {
+                        var splitParts = CSP[i].split(',');
+
+                        if (splitParts.length !== 2) {
+                            $('#CSPS' + i).text('');
+                            $('#CSPE' + i).text('');
+                            continue;
+                        }
+
+                        // Extract values
+                        var leftPart = splitParts[0].substring(splitParts[0].indexOf('-') + 1).trim();
+                        var rightPart = splitParts[1].trim();
+
+                        if (isValidDate(leftPart) && !isNaN(rightPart)) {
+                            $('#CSPS' + i).text(rightPart);    // stock
+                            $('#CSPE' + i).text(leftPart);     // expiry
+                        } else if (!isNaN(leftPart) && isValidDate(rightPart)) {
+                            $('#CSPS' + i).text(leftPart);     // stock
+                            $('#CSPE' + i).text(rightPart);    // expiry
+                        } else {
+                            $('#CSPS' + i).text('');
+                            $('#CSPE' + i).text('');
+                        }
+                    }
                 }
                 catch (ex) {
 
