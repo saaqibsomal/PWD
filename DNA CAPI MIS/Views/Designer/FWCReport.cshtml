@@ -216,6 +216,7 @@
         color: #721c24;
         border: 1px solid #f5c6cb;
     }
+
     .status-Leave {
         background-color: #f8f7d7;
         color: #d4ca11;
@@ -227,6 +228,7 @@
         color: #403f3e;
         border: 1px solid #f7f7f5;
     }
+
     .status-yes {
         background-color: #d4edda;
         color: #155724;
@@ -1361,7 +1363,7 @@
                 }
                 else if (Indication.length == 2) {
                     $("#ISB0").text(Indication[0] == "1" ? "Yes" : "No");
-                    $("#ISB2").text(Indication[2] == "1" ? "Yes" : "No");
+                    $("#ISB2").text(Indication[1] == "1" ? "Yes" : "No");
                 }
                 else {
                     $("#ISB0").text(Indication[0] == "1" ? "Yes" : "No");
@@ -1396,9 +1398,9 @@
                 //}
                 var MSR = data.Field.MedicineStockRegister.split(',');
                 if (MSR[0] != "N/A") {
-                    $("#MSR1").text(MSR[0] == "Available" ? "Yes" : (MSR[0] == undefined ? "" : "No"));
-                    $("#MSR2").text(MSR[1] == "Available" ? "Yes" : (MSR[1] == undefined ? "" : "No"));
-                    $("#MSR3").text(MSR[2] == "Available" ? "Yes" : (MSR[2] == undefined ? "" : "No"));
+                    $("#MSR1").text((MSR[0] == "Available" || MSR[0] == "Yes") ? "Yes" : (MSR[0] == undefined ? "" : "No"));
+                    $("#MSR2").text((MSR[1] == "Available" || MSR[1] == "Yes") ? "Yes" : (MSR[1] == undefined ? "" : "No"));
+                    $("#MSR3").text((MSR[2] == "Available" || MSR[2] == "Yes") ? "Yes" : (MSR[2] == undefined ? "" : "No"));
                 }
 
                 var CSR = data.Field.ContraceptiveStockRegister.split(',');
