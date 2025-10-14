@@ -398,16 +398,37 @@
         // Create worksheet
         var ws = XLSX.utils.json_to_sheet(excelData);
 
-        // Style headers: bold, blue background, center alignment
+        // Set column widths for full text visibility
+        ws['!cols'] = [
+            {wch: 5},  // SN#
+            {wch: 25}, // Monitoring List
+            {wch: 20}, // District Name
+            {wch: 20}, // Center Name
+            {wch: 25}, // Monitoring DateTime
+            {wch: 20}, // Officer Name
+            {wch: 20}  // Coordinate
+        ];
+
+        // Style headers: bold, light blue background, center alignment
         var range = XLSX.utils.decode_range(ws['!ref']);
         for (var C = range.s.c; C <= range.e.c; ++C) {
             var address = XLSX.utils.encode_col(C) + "1"; // First row
             if (!ws[address]) continue;
             ws[address].s = {
                 font: { bold: true },
-                fill: { fgColor: { rgb: "007BFF" } }, // Blue background
-                alignment: { horizontal: "center" }
+                fill: { fgColor: { rgb: "ADD8E6" }, patternType: "solid" }, // Light blue background
+                alignment: { horizontal: "center", wrapText: true }
             };
+        }
+
+        // Style body cells: wrap text for full visibility
+        for (var R = range.s.r + 1; R <= range.e.r; ++R) {
+            for (var C = range.s.c; C <= range.e.c; ++C) {
+                var address = XLSX.utils.encode_cell({r: R, c: C});
+                if (!ws[address]) continue;
+                if (!ws[address].s) ws[address].s = {};
+                ws[address].s.alignment = { wrapText: true };
+            }
         }
 
         // Create workbook
