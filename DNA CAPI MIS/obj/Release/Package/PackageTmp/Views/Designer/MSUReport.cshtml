@@ -1312,16 +1312,16 @@
                 var MEC = data.Field.MECWheel.split(',');
                 if (MEC != "N/A") {
                     if (MEC.length == 3) {
-                        $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
+                        $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[0] == undefined ? "" : "No"));
                         $("#MecWheel2").text(MEC[1] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
-                        $("#MecWheel3").text(MEC[2] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
+                        $("#MecWheel3").text(MEC[2] == "Availability" ? "Yes" : (MEC[2] == undefined ? "" : "No"));
                     }
                     else if (MEC.length == 2) {
-                        $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
+                        $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[0] == undefined ? "" : "No"));
                         $("#MecWheel3").text(MEC[1] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
                     }
                     else {
-                        $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[1] == undefined ? "" : "No"));
+                        $("#MecWheel1").text(MEC[0] == "Availability" ? "Yes" : (MEC[0] == undefined ? "" : "No"));
                     }
                 }
 

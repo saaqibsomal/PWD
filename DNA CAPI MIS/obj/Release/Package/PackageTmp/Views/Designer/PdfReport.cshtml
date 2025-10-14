@@ -24,9 +24,12 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
 
     <!-- Include DataTables JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 </head>
 <style>
+
+
     .model {
         display: none;
         position: fixed;
@@ -160,9 +163,33 @@
             color: orange;
         }
 
-        .criteria .poor {
+    .criteria .poor {
             color: red;
         }
+
+    /* Stylish dropdown styling */
+    .stylish-select {
+        border: 2px solid #007bff;
+        border-radius: 8px;
+        padding: 10px 15px;
+        font-size: 16px;
+        background-color: #f8f9fa;
+        color: #495057;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .stylish-select:focus {
+        border-color: #0056b3;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        outline: none;
+    }
+
+    .stylish-select:hover {
+        border-color: #0056b3;
+        background-color: #e9ecef;
+    }
 </style>
 
 <div class="row desktop">
@@ -172,16 +199,49 @@
                 <h3 class="box-title" style="width:100%">Report</h3>
                 <h2>Monitoring Visits Report</h2>
 
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-10">
-                            <div class="col-md-4 col-sm-12" style="padding-left: 18px">
-                                @Html.DropDownList("Checklist", ViewBag.Checklist as List<SelectListItem>, "Monitoring Checklist For All", htmlAttributes: new { @class = "form-control", id = "Checklist" })
 
-                            </div>
-                        </div>
-                    </div>
+                <div class="table mb-3">
+                    <table class=" " style="max-width: 600px;">
+                        <tbody>
+                            <tr>
+                                <td style="width: 100%;">
+                                    <label for="Checklist" class="form-label fw-bold">Monitoring Checklist</label>
+                                </td>
+                                <td>
+                                    @Html.DropDownList("Checklist", ViewBag.Checklist as List<SelectListItem>,
+                                        "Monitoring Checklist For All",
+                                        htmlAttributes: new { @class = "form-select stylish-select", id = "Checklist" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="fromDate" class="form-label fw-bold">From Date</label>
+                                </td>
+                                <td>
+                                    <input type="date" id="fromDate" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="toDate" class="form-label fw-bold">To Date</label>
+                                </td>
+                                <td>
+                                    <input type="date" id="toDate" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button id="downloadExcel" class="btn btn-success">Download Excel</button>
+                                    <div class="col-md-2"></div>
+                                    <button id="filterBtn" class="btn btn-primary me-2">Filter Records</button>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+
 
 
 
@@ -213,6 +273,8 @@
 
 <script src="https://cdn.datatables.net/2.0.5/js/dataTables.min.js"></script>
 <script>
+    var currentData = [];
+
     $(document).ready(function () {
         $("#PdfGen").click(function () {
             $("#pdfModel").css("display", "block");
@@ -228,100 +290,168 @@
             }
         });
 
-    });
+        // Initial load
+        loadData(0, '', '');
 
-    $(document).ready(function () {
-
-
-        $.ajax({
-            type: 'POST',
-            url: "/Designer/CreatePDFBySurvey/" + 0,
-            data: {},
-            success: function (data) {
-
-                $('#tbody').empty();
-                var tbody = $('#tbody');
-                $.each(data, function (index, item) {
-                    var row = $('<tr></tr>');
-                    row.append('<td>' + parseInt(index+1)  + '</td>');
-                    row.append('<td>' + item.Project + '</td>');
-                    row.append('<td>' + item.DistrictName + '</td>');
-                    row.append('<td>' + item.CenterName + '</td>');
-                    row.append('<td>' + item.Created + '</td>');
-                    row.append('<td>' + item.SurveyorName + '</td>');
-                    row.append('<td>' + item.Latitude + "," +   item.Longitude + '</td>');
-                    row.append('<td><a href="#"   > View </a></td>');
-
-                    row.click(function () {
-                        // Call your function here, passing the subject number as a parameter
-                        OpenReport(item.sbjnum, item.CenterName);
-                    });
-
-                    tbody.append(row);
-                });
-                let table = new DataTable('#dataTable');
-              //  $('.dt-layout-row').css('text-align', 'right');
-                $('.dt-length').hide();
-                $('.dt-input').addClass('form-control');
-                $('.dt-search').addClass('col-md-4');
-                $('.dt-search').css('padding-left', '3px');
-                $('.dt-search').css('padding-bottom', '3px');
-
-
- 
+        // Checklist change event
+        $('#Checklist').change(function () {
+            var id = $("#Checklist").find('option:selected').val();
+            if (id == "") {
+                id = 0;
             }
+            loadData(id, $('#fromDate').val(), $('#toDate').val());
         });
 
+        // Filter button click event
+        $('#filterBtn').click(function () {
+            var id = $("#Checklist").val() || 0;
+            loadData(id, $('#fromDate').val(), $('#toDate').val());
+        });
 
+        // Download Excel button click event
+        $('#downloadExcel').click(function () {
+            downloadExcel();
+        });
 
     });
 
-
-
-
-
-
-    $('#Checklist').change(function () {
-        var id = $("#Checklist").find('option:selected').val();
-        if (id == "") {
-            id = 0;
-        }
+    function loadData(id, fromDate, toDate) {
         $.ajax({
             type: 'POST',
             url: "/Designer/CreatePDFBySurvey/" + id,
             data: {},
             success: function (data) {
-
-                $('#tbody').empty();
-                var tbody = $('#tbody');
-                $.each(data, function (index, item) {
-                    var row = $('<tr></tr>');
-                    row.append('<td>' + parseInt(index + 1) + '</td>');
-                    row.append('<td>' + item.Project + '</td>');
-                    row.append('<td>' + item.DistrictName + '</td>');
-                    row.append('<td>' + item.CenterName + '</td>');
-                    row.append('<td>' + item.Created + '</td>');
-                    row.append('<td>' + item.SurveyorName + '</td>');
-                    row.append('<td>' + item.Longitude + "," + item.Latitude + '</td>');
-                    row.append('<td><a href="#" onclick= > View </a></td>');
-                    row.click(function () {
-                        // Call your function here, passing the subject number as a parameter
-                        OpenReport(item.sbjnum, item.Project);
-                    });
-
-                    tbody.append(row);
-                });
-                let table = new DataTable('#dataTable');
-                $('.t-search').css('padding-left', '3px');
-  
-                $('.dt-length').hide();
-                $('.dt-input').addClass('form-control');
-                $('.dt-search').addClass('col-md-4');
-                $('.dt-search').css('padding-bottom', '3px');
+                populateTable(data, fromDate, toDate);
             }
         });
+    }
 
-    });
+    function populateTable(data, fromDate, toDate) {
+        $('#tbody').empty();
+        var tbody = $('#tbody');
+        var filteredData = data;
+
+        // Normalize date to remove time part
+        function normalizeDate(dateStr) {
+            let d = new Date(dateStr);
+            return new Date(d.getFullYear(), d.getMonth(), d.getDate()); // Set time to 00:00:00
+        }
+
+        // Filter data based on fromDate and toDate
+        if (fromDate || toDate) {
+            filteredData = data.filter(function (item) {
+                var itemDate = normalizeDate(item.Created.split(' ')[0]); // 'YYYY-MM-DD'
+                var from = fromDate ? normalizeDate(fromDate) : null;
+                var to = toDate ? normalizeDate(toDate) : null;
+
+                if (from && itemDate < from) return false;
+                if (to && itemDate > to) return false;
+                return true;
+            });
+        }
+
+        // Store current filtered data for Excel export
+        currentData = filteredData;
+
+        $.each(filteredData, function (index, item) {
+            var row = $('<tr></tr>');
+            row.append('<td>' + parseInt(index + 1) + '</td>');
+            row.append('<td>' + item.Project + '</td>');
+            row.append('<td>' + item.DistrictName + '</td>');
+            row.append('<td>' + item.CenterName + '</td>');
+            row.append('<td>' + item.Created + '</td>');
+            row.append('<td>' + item.SurveyorName + '</td>');
+            row.append('<td>' + item.Latitude + "," + item.Longitude + '</td>');
+            row.append('<td><a href="#" > View </a></td>');
+            row.click(function () {
+                OpenReport(item.sbjnum, item.Project);
+            });
+            tbody.append(row);
+        });
+
+        let table = new DataTable('#dataTable');
+        $('.dt-length').hide();
+        $('.dt-input').addClass('form-control');
+        $('.dt-search').addClass('col-md-4');
+        $('.dt-search').css('padding-left', '3px');
+        $('.dt-search').css('padding-bottom', '3px');
+    }
+
+
+    function downloadExcel() {
+        if (currentData.length === 0) {
+            alert('No data to export.');
+            return;
+        }
+
+        // Prepare data for Excel: exclude 'View' column and adjust headers
+        var excelData = currentData.map(function (item, index) {
+            return {
+                'SN#': index + 1,
+                'Monitoring List': item.Project,
+                'District Name': item.DistrictName,
+                'Center Name': item.CenterName,
+                'Monitoring DateTime': item.Created,
+                'Officer Name': item.SurveyorName,
+                'Coordinate': item.Latitude + "," + item.Longitude
+            };
+        });
+
+        // Create worksheet
+        var ws = XLSX.utils.json_to_sheet(excelData);
+
+        // Set column widths for full text visibility
+        ws['!cols'] = [
+            {wch: 5},  // SN#
+            {wch: 25}, // Monitoring List
+            {wch: 20}, // District Name
+            {wch: 20}, // Center Name
+            {wch: 25}, // Monitoring DateTime
+            {wch: 20}, // Officer Name
+            {wch: 20}  // Coordinate
+        ];
+
+        // Style headers: bold, light blue background, center alignment
+        var range = XLSX.utils.decode_range(ws['!ref']);
+        for (var C = range.s.c; C <= range.e.c; ++C) {
+            var address = XLSX.utils.encode_col(C) + "1"; // First row
+            if (!ws[address]) continue;
+            ws[address].s = {
+                font: { bold: true },
+                fill: { fgColor: { rgb: "ADD8E6" }, patternType: "solid" }, // Light blue background
+                alignment: { horizontal: "center", wrapText: true }
+            };
+        }
+
+        // Style body cells: wrap text for full visibility
+        for (var R = range.s.r + 1; R <= range.e.r; ++R) {
+            for (var C = range.s.c; C <= range.e.c; ++C) {
+                var address = XLSX.utils.encode_cell({r: R, c: C});
+                if (!ws[address]) continue;
+                if (!ws[address].s) ws[address].s = {};
+                ws[address].s.alignment = { wrapText: true };
+            }
+        }
+
+        // Create workbook
+        var wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Monitoring Visits Report");
+
+        // Generate filename with selected dates
+        var fromDate = $('#fromDate').val();
+        var toDate = $('#toDate').val();
+        var filename = "Monitoring_Visits_Report";
+        if (fromDate || toDate) {
+            filename += "_";
+            if (fromDate) filename += fromDate;
+            if (fromDate && toDate) filename += "_to_";
+            if (toDate) filename += toDate;
+        }
+        filename += ".xlsx";
+
+        // Download file
+        XLSX.writeFile(wb, filename);
+    }
 
     function OpenReport(sbjnum, Project) {
         var Pro;
