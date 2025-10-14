@@ -163,9 +163,33 @@
             color: orange;
         }
 
-        .criteria .poor {
+    .criteria .poor {
             color: red;
         }
+
+    /* Stylish dropdown styling */
+    .stylish-select {
+        border: 2px solid #007bff;
+        border-radius: 8px;
+        padding: 10px 15px;
+        font-size: 16px;
+        background-color: #f8f9fa;
+        color: #495057;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .stylish-select:focus {
+        border-color: #0056b3;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        outline: none;
+    }
+
+    .stylish-select:hover {
+        border-color: #0056b3;
+        background-color: #e9ecef;
+    }
 </style>
 
 <div class="row desktop">
@@ -186,7 +210,7 @@
                                 <td>
                                     @Html.DropDownList("Checklist", ViewBag.Checklist as List<SelectListItem>,
                                         "Monitoring Checklist For All",
-                                        htmlAttributes: new { @class = "form-select", id = "Checklist" })
+                                        htmlAttributes: new { @class = "form-select stylish-select", id = "Checklist" })
                                 </td>
                             </tr>
                             <tr>
