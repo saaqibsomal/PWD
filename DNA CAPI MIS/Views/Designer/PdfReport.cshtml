@@ -175,9 +175,17 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-10">
-                            <div class="col-md-4 col-sm-12" style="padding-left: 18px">
+                            <div class="col-md-3 col-sm-12" style="padding-left: 18px">
                                 @Html.DropDownList("Checklist", ViewBag.Checklist as List<SelectListItem>, "Monitoring Checklist For All", htmlAttributes: new { @class = "form-control", id = "Checklist" })
-
+                            </div>
+                            <div class="col-md-2 col-sm-12" style="padding-left: 18px">
+                                <input type="date" id="fromDate" class="form-control" placeholder="From Date" />
+                            </div>
+                            <div class="col-md-2 col-sm-12" style="padding-left: 18px">
+                                <input type="date" id="toDate" class="form-control" placeholder="To Date" />
+                            </div>
+                            <div class="col-md-2 col-sm-12" style="padding-left: 18px; padding-top: 5px;">
+                                <button id="filterBtn" class="btn btn-primary">Filter</button>
                             </div>
                         </div>
                     </div>
@@ -228,100 +236,85 @@
             }
         });
 
-    });
+        // Initial load
+        loadData(0, '', '');
 
-    $(document).ready(function () {
-
-
-        $.ajax({
-            type: 'POST',
-            url: "/Designer/CreatePDFBySurvey/" + 0,
-            data: {},
-            success: function (data) {
-
-                $('#tbody').empty();
-                var tbody = $('#tbody');
-                $.each(data, function (index, item) {
-                    var row = $('<tr></tr>');
-                    row.append('<td>' + parseInt(index+1)  + '</td>');
-                    row.append('<td>' + item.Project + '</td>');
-                    row.append('<td>' + item.DistrictName + '</td>');
-                    row.append('<td>' + item.CenterName + '</td>');
-                    row.append('<td>' + item.Created + '</td>');
-                    row.append('<td>' + item.SurveyorName + '</td>');
-                    row.append('<td>' + item.Latitude + "," +   item.Longitude + '</td>');
-                    row.append('<td><a href="#"   > View </a></td>');
-
-                    row.click(function () {
-                        // Call your function here, passing the subject number as a parameter
-                        OpenReport(item.sbjnum, item.CenterName);
-                    });
-
-                    tbody.append(row);
-                });
-                let table = new DataTable('#dataTable');
-              //  $('.dt-layout-row').css('text-align', 'right');
-                $('.dt-length').hide();
-                $('.dt-input').addClass('form-control');
-                $('.dt-search').addClass('col-md-4');
-                $('.dt-search').css('padding-left', '3px');
-                $('.dt-search').css('padding-bottom', '3px');
-
-
- 
+        // Checklist change event
+        $('#Checklist').change(function () {
+            var id = $("#Checklist").find('option:selected').val();
+            if (id == "") {
+                id = 0;
             }
+            loadData(id, $('#fromDate').val(), $('#toDate').val());
         });
 
-
+        // Filter button click event
+        $('#filterBtn').click(function () {
+            var id = $("#Checklist").val() || 0;
+            loadData(id, $('#fromDate').val(), $('#toDate').val());
+        });
 
     });
 
-
-
-
-
-
-    $('#Checklist').change(function () {
-        var id = $("#Checklist").find('option:selected').val();
-        if (id == "") {
-            id = 0;
-        }
+    function loadData(id, fromDate, toDate) {
         $.ajax({
             type: 'POST',
             url: "/Designer/CreatePDFBySurvey/" + id,
             data: {},
             success: function (data) {
-
-                $('#tbody').empty();
-                var tbody = $('#tbody');
-                $.each(data, function (index, item) {
-                    var row = $('<tr></tr>');
-                    row.append('<td>' + parseInt(index + 1) + '</td>');
-                    row.append('<td>' + item.Project + '</td>');
-                    row.append('<td>' + item.DistrictName + '</td>');
-                    row.append('<td>' + item.CenterName + '</td>');
-                    row.append('<td>' + item.Created + '</td>');
-                    row.append('<td>' + item.SurveyorName + '</td>');
-                    row.append('<td>' + item.Longitude + "," + item.Latitude + '</td>');
-                    row.append('<td><a href="#" onclick= > View </a></td>');
-                    row.click(function () {
-                        // Call your function here, passing the subject number as a parameter
-                        OpenReport(item.sbjnum, item.Project);
-                    });
-
-                    tbody.append(row);
-                });
-                let table = new DataTable('#dataTable');
-                $('.t-search').css('padding-left', '3px');
-  
-                $('.dt-length').hide();
-                $('.dt-input').addClass('form-control');
-                $('.dt-search').addClass('col-md-4');
-                $('.dt-search').css('padding-bottom', '3px');
+                populateTable(data, fromDate, toDate);
             }
         });
+    }
 
-    });
+    function populateTable(data, fromDate, toDate) {
+        $('#tbody').empty();
+        var tbody = $('#tbody');
+        var filteredData = data;
+
+        // Normalize date to remove time part
+        function normalizeDate(dateStr) {
+            let d = new Date(dateStr);
+            return new Date(d.getFullYear(), d.getMonth(), d.getDate()); // Set time to 00:00:00
+        }
+
+        // Filter data based on fromDate and toDate
+        if (fromDate || toDate) {
+            filteredData = data.filter(function (item) {
+                var itemDate = normalizeDate(item.Created.split(' ')[0]); // 'YYYY-MM-DD'
+                var from = fromDate ? normalizeDate(fromDate) : null;
+                var to = toDate ? normalizeDate(toDate) : null;
+
+                if (from && itemDate < from) return false;
+                if (to && itemDate > to) return false;
+                return true;
+            });
+        }
+
+        $.each(filteredData, function (index, item) {
+            var row = $('<tr></tr>');
+            row.append('<td>' + parseInt(index + 1) + '</td>');
+            row.append('<td>' + item.Project + '</td>');
+            row.append('<td>' + item.DistrictName + '</td>');
+            row.append('<td>' + item.CenterName + '</td>');
+            row.append('<td>' + item.Created + '</td>');
+            row.append('<td>' + item.SurveyorName + '</td>');
+            row.append('<td>' + item.Latitude + "," + item.Longitude + '</td>');
+            row.append('<td><a href="#" > View </a></td>');
+            row.click(function () {
+                OpenReport(item.sbjnum, item.Project);
+            });
+            tbody.append(row);
+        });
+
+        let table = new DataTable('#dataTable');
+        $('.dt-length').hide();
+        $('.dt-input').addClass('form-control');
+        $('.dt-search').addClass('col-md-4');
+        $('.dt-search').css('padding-left', '3px');
+        $('.dt-search').css('padding-bottom', '3px');
+    }
+
 
     function OpenReport(sbjnum, Project) {
         var Pro;
