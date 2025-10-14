@@ -28,6 +28,8 @@
 
 </head>
 <style>
+
+
     .model {
         display: none;
         position: fixed;
@@ -173,27 +175,47 @@
                 <h3 class="box-title" style="width:100%">Report</h3>
                 <h2>Monitoring Visits Report</h2>
 
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-10">
-                            <div class="col-md-3 col-sm-12" style="padding-left: 18px">
-                                @Html.DropDownList("Checklist", ViewBag.Checklist as List<SelectListItem>, "Monitoring Checklist For All", htmlAttributes: new { @class = "form-control", id = "Checklist" })
-                            </div>
-                            <div class="col-md-2 col-sm-12" style="padding-left: 18px">
-                                <input type="date" id="fromDate" class="form-control" placeholder="From Date" />
-                            </div>
-                            <div class="col-md-2 col-sm-12" style="padding-left: 18px">
-                                <input type="date" id="toDate" class="form-control" placeholder="To Date" />
-                            </div>
-                            <div class="col-md-2 col-sm-12" style="padding-left: 18px; padding-top: 5px;">
-                                <button id="filterBtn" class="btn btn-primary">Filter</button>
-                            </div>
-                            <div class="col-md-2 col-sm-12" style="padding-left: 18px; padding-top: 5px;">
-                                <button id="downloadExcel" class="btn btn-success">Download Excel</button>
-                            </div>
-                        </div>
-                    </div>
+
+                <div class="table mb-3">
+                    <table class=" " style="max-width: 600px;">
+                        <tbody>
+                            <tr>
+                                <td style="width: 200px;">
+                                    <label for="Checklist" class="form-label fw-bold">Monitoring Checklist</label>
+                                </td>
+                                <td>
+                                    @Html.DropDownList("Checklist", ViewBag.Checklist as List<SelectListItem>,
+                                        "Monitoring Checklist For All",
+                                        htmlAttributes: new { @class = "form-select", id = "Checklist" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="fromDate" class="form-label fw-bold">From Date</label>
+                                </td>
+                                <td>
+                                    <input type="date" id="fromDate" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="toDate" class="form-label fw-bold">To Date</label>
+                                </td>
+                                <td>
+                                    <input type="date" id="toDate" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button id="filterBtn" class="btn btn-primary me-2">Filter</button>
+                                    <button id="downloadExcel" class="btn btn-success">Download Excel</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+
 
 
 
