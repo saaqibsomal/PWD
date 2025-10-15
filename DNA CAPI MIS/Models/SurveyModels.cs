@@ -273,6 +273,7 @@ namespace DNA_CAPI_MIS.Models
         public string DistrictFieldID { get; set; }
         public string CenterFieldId { get; set; }
         public string Project { get; set; }
+        public string DeviceTimestamp { get; set; }
     }
 
 }

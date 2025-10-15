@@ -1,5 +1,6 @@
 ﻿using DNA_CAPI_MIS.Models;
 using DNA_CAPI_MIS.Service;
+using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace DNA_CAPI_MIS.Controllers
             List<SDPsStatus> sdpStatus = new List<SDPsStatus>();
             try
             {
-                sdpStatus  = service.SDPStatus(req);
+                sdpStatus = service.SDPStatus(req);
             }
             catch (Exception ex)
             {
@@ -29,16 +30,16 @@ namespace DNA_CAPI_MIS.Controllers
             }
             return Json(sdpStatus, JsonRequestBehavior.AllowGet);
         }
-        
-        
-        
+
+
+
         [HttpPost]
         public JsonResult StaffPosition(DashboardRequest req)
         {
             List<StuffPosition> sdpStatus = new List<StuffPosition>();
             try
             {
-                sdpStatus  = service.StuffDetailReportData(req);
+                sdpStatus = service.StuffDetailReportData(req);
             }
             catch (Exception ex)
             {
@@ -52,7 +53,7 @@ namespace DNA_CAPI_MIS.Controllers
             ContraceptiveStockPositionModel sdpStatus = new ContraceptiveStockPositionModel();
             try
             {
-                sdpStatus  = service.ContraceptiveStockPosition(req);
+                sdpStatus = service.ContraceptiveStockPosition(req);
             }
             catch (Exception ex)
             {
@@ -71,6 +72,22 @@ namespace DNA_CAPI_MIS.Controllers
                 var name = User.Identity.Name;
                 var users = User;
                 report = service.MonitoringVisitsReport(req, name, users);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Json(report, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult Report(string sbjnum, string Heading)
+        {
+            string report = string.Empty;
+            try
+            {
+                string baseUrl = HttpContext?.Request?.Url?.GetLeftPart(UriPartial.Authority);
+                report = service.GetReport(sbjnum, Heading, baseUrl);
             }
             catch (Exception ex)
             {

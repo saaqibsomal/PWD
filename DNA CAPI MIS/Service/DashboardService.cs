@@ -671,5 +671,25 @@ where s.projectID in ({req.ProjectId}) order by s.sbjnum desc
 
 
         }
+
+        public string GetReport(string sbjnum,string Heading,string BaseUrl)
+        {
+    
+
+            string url = string.Empty;
+            if(Heading == "FWC")
+            {
+                url = $@"{BaseUrl}/Designer/FWCReport?id={sbjnum}&Heading=FWC";
+            }
+            else if (Heading == "RHS-S")
+            {
+                url = $@"{BaseUrl}/Designer/RHSReport?id={sbjnum}&Heading=RHS-S";
+            }
+            else
+            {
+                url = $@"{BaseUrl}/Designer/MSUReport?id={sbjnum}&Heading=UMS";
+            }
+            return url;
+        }
     }
 }
