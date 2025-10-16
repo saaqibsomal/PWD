@@ -345,7 +345,7 @@
         // Filter data based on fromDate and toDate
         if (fromDate || toDate) {
             filteredData = data.filter(function (item) {
-                var itemDate = normalizeDate(item.Created.split(' ')[0]); // 'YYYY-MM-DD'
+                var itemDate = normalizeDate(item.DeviceTimestamp.split(' ')[0]); // 'YYYY-MM-DD'
                 var from = fromDate ? normalizeDate(fromDate) : null;
                 var to = toDate ? normalizeDate(toDate) : null;
 

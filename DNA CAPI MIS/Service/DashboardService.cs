@@ -668,20 +668,16 @@ where s.projectID in ({req.ProjectId}) order by s.sbjnum desc
                 var DistrictWise = GetSurvey.Where(x => x.DistrictName.ToUpper().Contains(req.DistrictName) && x.CenterName.Contains(req.CenterName)).ToList();
                 return DistrictWise.ToList();
             }
-
-
         }
 
         public string GetReport(string sbjnum,string Heading,string BaseUrl)
         {
-    
-
             string url = string.Empty;
-            if(Heading == "FWC")
+            if(Heading.ToUpper() == "FWC")
             {
                 url = $@"{BaseUrl}/Designer/FWCReport?id={sbjnum}&Heading=FWC";
             }
-            else if (Heading == "RHS-S")
+            else if (Heading.ToUpper().Contains("RHS"))
             {
                 url = $@"{BaseUrl}/Designer/RHSReport?id={sbjnum}&Heading=RHS-S";
             }
