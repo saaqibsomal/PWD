@@ -3417,21 +3417,21 @@ where s.projectID in ({Ids}) order by s.sbjnum desc
 
         }
 
-        [Authorize]
+ 
         [HttpGet]
         public ActionResult FWCReport(int id = 0)
         {
             return View();
         }
 
-        [Authorize]
+  
         [HttpGet]
         public ActionResult RHSReport(int id = 0)
         {
             return View();
         }
 
-        [Authorize]
+ 
         [HttpGet]
         public ActionResult MSUReport(int id = 0)
         {
