@@ -49,10 +49,10 @@ namespace DNA_CAPI_MIS.Service
         }
         private void NumberOfVisitor(DashboardRequest req, DashboardResponse response)
         {
-            var All = $@"SELECT SurveyorName, COUNT(*) AS SurveyCount FROM Survey WHERE ProjectID in( 7120,7121,7122) and Convert(datetime, Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY SurveyorName ORDER BY COUNT(*) DESC";
-            var RHS = $@"SELECT SurveyorName, COUNT(*) AS SurveyCount FROM Survey WHERE ProjectID = 7120 and Convert(datetime, Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY SurveyorName ORDER BY COUNT(*) DESC";
-            var MSU = $@"SELECT SurveyorName, COUNT(*) AS SurveyCount FROM Survey WHERE ProjectID = 7121 and Convert(datetime, Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY SurveyorName ORDER BY COUNT(*) DESC";
-            var FWC = $@"SELECT SurveyorName, COUNT(*) AS SurveyCount FROM Survey WHERE ProjectID = 7122 and Convert(datetime, Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY SurveyorName ORDER BY COUNT(*) DESC";
+            var All = $@"SELECT SurveyorName, COUNT(*) AS SurveyCount FROM Survey WHERE ProjectID in( 7120,7121,7122) and Convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY SurveyorName ORDER BY COUNT(*) DESC";
+            var RHS = $@"SELECT SurveyorName, COUNT(*) AS SurveyCount FROM Survey WHERE ProjectID = 7120 and Convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY SurveyorName ORDER BY COUNT(*) DESC";
+            var MSU = $@"SELECT SurveyorName, COUNT(*) AS SurveyCount FROM Survey WHERE ProjectID = 7121 and Convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY SurveyorName ORDER BY COUNT(*) DESC";
+            var FWC = $@"SELECT SurveyorName, COUNT(*) AS SurveyCount FROM Survey WHERE ProjectID = 7122 and Convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY SurveyorName ORDER BY COUNT(*) DESC";
 
             var RHS_MSU_FWC = dbContext.Database.SqlQuery<SurveyorStats>(All);
             var queryRHS = dbContext.Database.SqlQuery<SurveyorStats>(RHS);
@@ -90,18 +90,18 @@ namespace DNA_CAPI_MIS.Service
     SELECT 
         s.ProjectID,
         s.sbjnum,
-        s.Created,
+        s.DeviceTimestamp,
         sd2.FieldId AS FieldId2, sd2.FieldValue AS FieldValue2,
         sd3.FieldId AS FieldId3, sd3.FieldValue AS FieldValue3,
         sd5.FieldId AS FieldId5, sd5.FieldValue AS FieldValue5,
         sd6.FieldId AS FieldId6, sd6.FieldValue AS FieldValue6,
         sd7.FieldId AS FieldId7, sd7.FieldValue AS FieldValue7,
-        DATENAME(MONTH, s.Created) AS MonthName,
-        MONTH(s.Created) AS MonthNum,
-        YEAR(s.Created) AS YearNum,
+        DATENAME(MONTH, s.DeviceTimestamp) AS MonthName,
+        MONTH(s.DeviceTimestamp) AS MonthNum,
+        YEAR(s.DeviceTimestamp) AS YearNum,
         ROW_NUMBER() OVER (
-            PARTITION BY sd3.FieldValue, YEAR(s.Created), MONTH(s.Created)   -- per center per month
-            ORDER BY s.Created ASC                                           -- first inserted record
+            PARTITION BY sd3.FieldValue, YEAR(s.DeviceTimestamp), MONTH(s.DeviceTimestamp)   -- per center per month
+            ORDER BY s.DeviceTimestamp ASC                                           -- first inserted record
         ) AS RowNum
     FROM Survey s
     INNER JOIN SurveyData sd2 ON s.sbjnum = sd2.sbjnum AND sd2.FieldId IN (50435, 50484, 55587) -- District
@@ -122,7 +122,7 @@ SELECT
         WHEN FieldValue7 = '2' THEN 'Not Satisfactory'
         ELSE ''
     END AS Cleanliness,
-    CONVERT(VARCHAR, cte.Created, 101) AS [asDate],
+    CONVERT(VARCHAR, cte.DeviceTimestamp, 101) AS [asDate],
     cte.MonthName,
     cte.YearNum,
     cte.sbjnum,
@@ -135,7 +135,7 @@ LEFT JOIN ProjectFieldSample fs5 ON cte.FieldId5 = fs5.FieldID AND fs5.Code IN (
 LEFT JOIN ProjectFieldSample fs6 ON cte.FieldId6 = fs6.FieldID AND fs6.Code IN (cte.FieldValue6)
 LEFT JOIN ProjectFieldSample fs7 ON cte.FieldId7 = fs7.FieldID AND fs7.Code IN (cte.FieldValue7)
 WHERE RowNum = 1
-  AND CONVERT(DATETIME, cte.Created, 101) 
+  AND CONVERT(DATETIME, cte.DeviceTimestamp, 101) 
       BETWEEN '{req.StartDate} 00:00:01' AND '{req.EndDate} 23:59:59';
 
 SELECT * FROM #Graph ORDER BY YearNum, MonthNum, Center;
@@ -183,7 +183,7 @@ WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
         MAX(CASE WHEN sd.FieldId = 50482 THEN sd.[FieldValue] END) AS IsOpen,
         MAX(CASE WHEN sd.FieldId in( 50484) THEN sd.[FieldValue] END) AS District,
         MAX(CASE WHEN sd.FieldId = 50486 THEN sd.[FieldValue] END) AS Center
-    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and Convert(datetime, s.Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY s.ProjectID, sd.sbjnum),
+    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and Convert(datetime, s.DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY s.ProjectID, sd.sbjnum),
 cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
   INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 50484 
     INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  50486),
@@ -218,7 +218,7 @@ WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
         MAX(CASE WHEN sd.FieldId = 55585 THEN sd.[FieldValue] END) AS IsOpen,
         MAX(CASE WHEN sd.FieldId in( 55587) THEN sd.[FieldValue] END) AS District,
         MAX(CASE WHEN sd.FieldId = 55588 THEN sd.[FieldValue] END) AS Center
-    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and convert(datetime, s.Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY s.ProjectID, sd.sbjnum),
+    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and convert(datetime, s.DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY s.ProjectID, sd.sbjnum),
 cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
   INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 55587 
     INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  55588),
@@ -251,7 +251,7 @@ WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
         MAX(CASE WHEN sd.FieldId = 55570 THEN sd.[FieldValue] END) AS IsOpen,
         MAX(CASE WHEN sd.FieldId in( 50435) THEN sd.[FieldValue] END) AS District,
         MAX(CASE WHEN sd.FieldId = 50446 THEN sd.[FieldValue] END) AS Center
-    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and convert(datetime, s.Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY s.ProjectID, sd.sbjnum),
+    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and convert(datetime, s.DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY s.ProjectID, sd.sbjnum),
 cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
   INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 50435 
     INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  50446),
@@ -287,7 +287,7 @@ BEGIN
 END
 
 ;with cte as (
-	  select s.ProjectID,  s.sbjnum, s.Created, 
+	  select s.ProjectID,  s.sbjnum, s.DeviceTimestamp, 
        
 		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
 		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
@@ -295,7 +295,7 @@ END
 		sd5.fieldId as FieldId5, sd5.fieldValue as FieldValue5,
 		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
 		sd7.fieldId as FieldId7, sd7.fieldValue as FieldValue7,
-	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue order by s.created desc) as RowNum
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue order by s.DeviceTimestamp desc) as RowNum
 	from survey s
 		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
 		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
@@ -307,14 +307,14 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
  FieldValue5 
  as Premises,
 case when FieldValue6 =1 then 'Open' else 'Close' end as OpenClose,
- FieldValue7 as Status, convert(varchar, Created,101) asDate
+ FieldValue7 as Status, convert(varchar, DeviceTimestamp,101) asDate
     into #Graph from cte
 	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
 	inner join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
 	inner join ProjectFieldSample fs7 on cte.FieldId7 = fs7.FieldID and fs7.Code IN (cte.FieldValue7)
-    where RowNum = 1 and convert(datetime, Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select * from #Graph";
+    where RowNum = 1 and convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select * from #Graph";
 
 
             if (string.IsNullOrEmpty(req.DistrictName))
@@ -340,21 +340,21 @@ BEGIN
 END
 
 ;with cte as (
-	select  s.sbjnum, s.Created, s.ProjectID,
+	select  s.sbjnum, s.DeviceTimestamp, s.ProjectID,
        
 		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
 		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
 	   
 		sd5.fieldId as FieldId5, sd5.fieldValue as FieldValue5,
 	
-	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue order by s.created desc) as RowNum
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue order by s.DeviceTimestamp desc) as RowNum
 	from survey s
 		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
 		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
 		Inner join SurveyData sd5 on s.sbjnum = sd5.sbjnum and sd5.FieldId in (55592,50496,50635) {Where})
          	
 
-select  convert(varchar, Created,101) asDate,  fs2.Title as District ,fs3.Title as Center, 
+select  convert(varchar, DeviceTimestamp,101) asDate,  fs2.Title as District ,fs3.Title as Center, 
  FieldValue5 
  as Remarks
     into #Graph from cte
@@ -362,7 +362,7 @@ select  convert(varchar, Created,101) asDate,  fs2.Title as District ,fs3.Title 
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
 	Left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 
-    where RowNum = 1 and len(FieldValue5)  between 1 and 19 and  convert(datetime,  Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select * from #Graph
+    where RowNum = 1 and len(FieldValue5)  between 1 and 19 and  convert(datetime,  DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select * from #Graph
 
  
 ";
@@ -390,7 +390,7 @@ END;
     SELECT 
         s.ProjectID,  
         s.sbjnum, 
-        s.Created, 
+        s.DeviceTimestamp, 
         sd2.fieldId AS FieldId2, 
         sd2.fieldValue AS FieldValue2,
         sd3.fieldId AS FieldId3, 
@@ -399,7 +399,7 @@ END;
         sd5.fieldValue AS FieldValue5,
         ROW_NUMBER() OVER (
             PARTITION BY sd2.fieldId, sd2.fieldValue, sd3.fieldId, sd3.fieldValue, sd5.fieldId, sd5.fieldValue 
-            ORDER BY s.Created DESC
+            ORDER BY s.DeviceTimestamp DESC
         ) AS RowNum
     FROM survey s
     INNER JOIN SurveyData sd2 
@@ -415,8 +415,8 @@ END;
         fs2.Title AS District,
         fs3.Title AS Center, 
         ISNULL(FieldValue5,'') AS ConStockPosition,
-        Created,
-        CONVERT(VARCHAR, Created, 101) AS asDate,
+        DeviceTimestamp,
+        CONVERT(VARCHAR, DeviceTimestamp, 101) AS asDate,
         sbjnum
     FROM cte
     INNER JOIN ProjectFieldSample fs2 
@@ -426,12 +426,12 @@ END;
     LEFT JOIN ProjectFieldSample fs5 
         ON cte.FieldId5 = fs5.FieldID AND fs5.Code IN (cte.FieldValue5)
     WHERE  RowNum = 1 AND LEN(FieldValue5) > 20 
-      AND Convert(datetime, Created,101) BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59'
+      AND Convert(datetime, DeviceTimestamp,101) BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59'
 ), filtered AS (
     SELECT *,
         ROW_NUMBER() OVER (
-            PARTITION BY Center, YEAR(Created), MONTH(Created)
-            ORDER BY Created ASC
+            PARTITION BY Center, YEAR(DeviceTimestamp), MONTH(DeviceTimestamp)
+            ORDER BY DeviceTimestamp ASC
         ) AS rn
     FROM base
 )
@@ -561,14 +561,14 @@ BEGIN
 END
 
 ;with cte as (
-	  select s.ProjectID,  s.sbjnum, s.Created, 
+	  select s.ProjectID,  s.sbjnum, s.DeviceTimestamp, 
        
 		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
 		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
 		sd5.fieldId as FieldId5, sd5.fieldValue as FieldValue5,
 	    sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
 
-	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue order by s.created desc) as RowNum
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue order by s.DeviceTimestamp desc) as RowNum
 	from survey s
 		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
 		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
@@ -581,7 +581,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
   FieldValue6 as FPQ,
  cte.FieldId5,
 
-  convert(varchar, Created,101) asDate,
+  convert(varchar, DeviceTimestamp,101) asDate,
  sbjnum
     into #Graph from cte
 	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
@@ -589,7 +589,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 	inner join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID 
 	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID 
 	
-    where RowNum = 1 and len(FieldValue6) > 5 and created  BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select distinct * from #Graph   
+    where RowNum = 1 and len(FieldValue6) > 5 and DeviceTimestamp  BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select distinct * from #Graph   
 
  
 ";
@@ -642,11 +642,11 @@ Convert(varchar,isnull((select top 1  sd.FieldId from SurveyData sd where sd.Fie
 , case when s.projectID = 7120 then 'RHS-S' when  s.projectID = 7121 then 'MSU' when s.projectID = 7122 then 'FWC' else '' end as Project
 into #SurveyReport
 from Survey  s 
-where s.projectID in ({req.ProjectId}) and s.created  BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' order by s.sbjnum desc
+where s.projectID in ({req.ProjectId}) and s.DeviceTimestamp  BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' order by s.sbjnum desc
  select sp.*,isnull(pfD.Title,'') DistrictName, isnull(pfC.Title,'') CenterName  from #SurveyReport sp 
  Left join   ProjectFieldSample pfC on sp.Center = pfC.Code and sp.CenterFieldId = pfC.FieldID
  Left join ProjectFieldSample pfD on sp.District = pfD.Code and sp.DistrictFieldID = pfD.FieldID 
- order by Created desc
+ order by DeviceTimestamp desc
 "; 
             
             if (string.IsNullOrEmpty(req.DistrictName))
