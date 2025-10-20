@@ -642,7 +642,7 @@ Convert(varchar,isnull((select top 1  sd.FieldId from SurveyData sd where sd.Fie
 , case when s.projectID = 7120 then 'RHS-S' when  s.projectID = 7121 then 'MSU' when s.projectID = 7122 then 'FWC' else '' end as Project
 into #SurveyReport
 from Survey  s 
-where s.projectID in ({req.ProjectId}) order by s.sbjnum desc
+where s.projectID in ({req.ProjectId}) and s.created  BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' order by s.sbjnum desc
  select sp.*,isnull(pfD.Title,'') DistrictName, isnull(pfC.Title,'') CenterName  from #SurveyReport sp 
  Left join   ProjectFieldSample pfC on sp.Center = pfC.Code and sp.CenterFieldId = pfC.FieldID
  Left join ProjectFieldSample pfD on sp.District = pfD.Code and sp.DistrictFieldID = pfD.FieldID 
