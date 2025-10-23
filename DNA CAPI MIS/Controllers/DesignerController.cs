@@ -3343,7 +3343,7 @@ else 0 end Id , Name,id as RoleId      FROM Project WHERE id in (7120,7121,7122)
 
         [Authorize]
         [HttpPost]
-        public ActionResult CreatePDFBySurvey(int id)
+        public ActionResult CreatePDFBySurvey(string id)
         {
 
             var name = User.Identity.Name;
@@ -3372,16 +3372,28 @@ else 0 end Id , Name,id as RoleId      FROM Project WHERE id in (7120,7121,7122)
             }
 
 
+            var data = id.Split('|');
+            int ProjectId = Convert.ToInt32(data[0]);
+            string fromDate = data[1];
+            string toDate = data[2];
 
+            if(string.IsNullOrEmpty(fromDate))
+            {
+                fromDate = "01/01/1950";
+            }
+            if (string.IsNullOrEmpty(toDate))
+            {
+                toDate = "01/01/2099";
+            }
             string Ids = "";
-            if (id == 0)
+            if (ProjectId == 0)
             {
                 Ids = "'7120','7121','7122'";
             }
 
             else
             {
-                Ids = id.ToString();
+                Ids = ProjectId.ToString();
             }
 
 
@@ -3397,24 +3409,34 @@ Convert(varchar,isnull((select top 1  sd.FieldId from SurveyData sd where sd.Fie
 , case when s.projectID = 7120 then 'RHS-S' when  s.projectID = 7121 then 'MSU' when s.projectID = 7122 then 'FWC' else '' end as Project
 into #SurveyReport
 from Survey  s 
-where s.projectID in ({Ids}) order by s.sbjnum desc
+where s.projectID in ({Ids}) and created  between '{fromDate} 00:00:01' and '{toDate} 11:59:59' order by s.sbjnum desc
  select sp.*,isnull(pfD.Title,'') DistrictName, isnull(pfC.Title,'') CenterName  from #SurveyReport sp 
  Left join   ProjectFieldSample pfC on sp.Center = pfC.Code and sp.CenterFieldId = pfC.FieldID
  Left join ProjectFieldSample pfD on sp.District = pfD.Code and sp.DistrictFieldID = pfD.FieldID 
  order by sbjnum desc,DeviceTimestamp desc
 ";
             var GetSurvey = db.Database.SqlQuery<PdfDetailReport>(Query);
+
+            var DistinctSurvey = GetSurvey
+    .GroupBy(x => new { x.Center, Date = Convert.ToDateTime(x.DeviceTimestamp).Date })
+    .Select(g => g.First()) // keep first record per center per day
+    .ToList();
+
+
+
             if (isAdmin)
             {
-                return Json(GetSurvey);
+                return Json(DistinctSurvey);
             }
             else
             {
-                var DistrictWise = GetSurvey.Where(x => x.DistrictName.ToUpper() == District.ToUpper()).ToList();
+                if(string.IsNullOrEmpty(District))
+                {
+                    District = "";
+                }
+                var DistrictWise = DistinctSurvey.Where(x => x.DistrictName.ToUpper() == District.ToUpper()).ToList();
                 return Json(DistrictWise);
             }
-
-
         }
 
  

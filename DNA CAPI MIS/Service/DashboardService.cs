@@ -609,28 +609,30 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 
         public List<PdfDetailReport> MonitoringVisitsReport(DashboardRequest req, string name, IPrincipal User)
         {
-            var District = string.Empty;
-            bool isAdmin = false;
-            if (User.IsInRole("Admin"))
+            try
             {
-                var GetDistrict = name.Split('_');
-                var removeAtRat = GetDistrict[1].Split('@');
-                District = removeAtRat[0];
-                isAdmin = true;
-            }
-            else
-            {
-                if (name.Contains("_"))
+                var District = string.Empty;
+                bool isAdmin = false;
+                if (User.IsInRole("Admin"))
                 {
-                    isAdmin = false;
+                    var GetDistrict = name.Split('_');
+                    var removeAtRat = GetDistrict[1].Split('@');
+                    District = removeAtRat[0];
+                    isAdmin = true;
                 }
                 else
                 {
-                    District = "";
+                    if (name.Contains("_"))
+                    {
+                        isAdmin = false;
+                    }
+                    else
+                    {
+                        District = "";
+                    }
                 }
-            }
 
-            string Query = $@"
+                string Query = $@"
 IF OBJECT_ID('tempdb..#SurveyReport') IS NOT NULL
     DROP TABLE #SurveyReport
 
@@ -647,26 +649,31 @@ where s.projectID in ({req.ProjectId}) and s.DeviceTimestamp  BETWEEN '{req.Star
  Left join   ProjectFieldSample pfC on sp.Center = pfC.Code and sp.CenterFieldId = pfC.FieldID
  Left join ProjectFieldSample pfD on sp.District = pfD.Code and sp.DistrictFieldID = pfD.FieldID 
  order by DeviceTimestamp desc
-"; 
-            
-            if (string.IsNullOrEmpty(req.DistrictName))
-            {
-                req.DistrictName = string.Empty;
-            }
+";
 
-            if (string.IsNullOrEmpty(req.CenterName))
-            {
-                req.CenterName = string.Empty;
+                if (string.IsNullOrEmpty(req.DistrictName))
+                {
+                    req.DistrictName = string.Empty;
+                }
+
+                if (string.IsNullOrEmpty(req.CenterName))
+                {
+                    req.CenterName = string.Empty;
+                }
+                var GetSurvey = dbContext.Database.SqlQuery<PdfDetailReport>(Query);
+                if (isAdmin)
+                {
+                    return GetSurvey.ToList();
+                }
+                else
+                {
+                    var DistrictWise = GetSurvey.Where(x => x.DistrictName.ToUpper().Contains(req.DistrictName) && x.CenterName.Contains(req.CenterName)).ToList();
+                    return DistrictWise.ToList();
+                }
             }
-            var GetSurvey = dbContext.Database.SqlQuery<PdfDetailReport>(Query);
-            if (isAdmin)
+            catch(Exception)
             {
-                return GetSurvey.ToList();
-            }
-            else
-            {
-                var DistrictWise = GetSurvey.Where(x => x.DistrictName.ToUpper().Contains(req.DistrictName) && x.CenterName.Contains(req.CenterName)).ToList();
-                return DistrictWise.ToList();
+                throw;
             }
         }
 

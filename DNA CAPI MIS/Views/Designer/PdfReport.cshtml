@@ -281,6 +281,24 @@
     var currentData = [];
 
     $(document).ready(function () {
+
+
+        // Get today's date
+        const today = new Date();
+
+        // Create a date object for one month ago
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(today.getMonth() - 1);
+
+        // Format dates as YYYY-MM-DD (required by <input type="date">)
+        const formattedToday = today.toISOString().split("T")[0];
+        const formattedOneMonthAgo = oneMonthAgo.toISOString().split("T")[0];
+
+        // Set default values
+        document.getElementById("toDate").value = formattedToday;       // current date
+        document.getElementById("fromDate").value = formattedOneMonthAgo; // one month ago
+
+
         $("#PdfGen").click(function () {
             $("#pdfModel").css("display", "block");
         });
@@ -323,7 +341,7 @@
     function loadData(id, fromDate, toDate) {
         $.ajax({
             type: 'POST',
-            url: "/Designer/CreatePDFBySurvey/" + id,
+            url: "/Designer/CreatePDFBySurvey/" + id + "|" + fromDate + "|" + toDate,
             data: {},
             success: function (data) {
                 populateTable(data, fromDate, toDate);
@@ -409,6 +427,7 @@
                 'Monitoring List': item.Project,
                 'District Name': item.DistrictName,
                 'Center Name': item.CenterName,
+                'Date of Visit': item.DeviceTimestamp,
                 'Monitoring DateTime': item.Created,
                 'Officer Name': item.SurveyorName,
                 'Coordinate': item.Latitude + "," + item.Longitude
@@ -424,7 +443,8 @@
             {wch: 25}, // Monitoring List
             {wch: 20}, // District Name
             {wch: 20}, // Center Name
-            {wch: 25}, // Monitoring DateTime
+            {wch: 20}, // DeviceTimestamp
+            {wch: 20}, // Monitoring DateTime
             {wch: 20}, // Officer Name
             {wch: 20}  // Coordinate
         ];
