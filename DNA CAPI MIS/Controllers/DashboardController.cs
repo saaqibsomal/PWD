@@ -95,5 +95,22 @@ namespace DNA_CAPI_MIS.Controllers
             }
             return Json(report, JsonRequestBehavior.AllowGet);
         }
+
+
+        [HttpGet]
+        public JsonResult OfficerVisitReport()
+        {
+            List<SurveyReportViewModel> report = new List<SurveyReportViewModel>();
+            try
+            {
+
+                report = service.OfficerVisitReport();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Json(report, JsonRequestBehavior.AllowGet);
+        }
     }
 }

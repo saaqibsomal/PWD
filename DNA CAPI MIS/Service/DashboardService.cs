@@ -694,5 +694,116 @@ where s.projectID in ({req.ProjectId}) and s.DeviceTimestamp  BETWEEN '{req.Star
             }
             return url;
         }
+
+        public List<SurveyReportViewModel> OfficerVisitReport()
+        {
+            try
+            {
+
+                string EndDate = DateTime.Now.ToString("MM/dd/yyyy");
+                string  StartDateDat = DateTime.Now.AddDays(-7).ToString("MM/dd/yyyy");
+              
+
+                string Query = $@"
+IF OBJECT_ID('tempdb..#SurveyReport') IS NOT NULL
+    DROP TABLE #SurveyReport;
+
+SELECT 
+    CONVERT(VARCHAR, ISNULL(
+        (SELECT TOP 1 sd.FieldValue FROM SurveyData sd WHERE sd.FieldId IN (50435,50484,55587) AND sd.sbjnum = s.sbjnum), 0)) AS District,
+    s.SurveyorName AS OfficerName, 
+    s.SurveyorName AS DesignationName,
+    s.DeviceTimestamp,
+    CONVERT(VARCHAR, ISNULL(
+        (SELECT TOP 1 sd.FieldValue FROM SurveyData sd WHERE sd.FieldId IN (50446,50486,55588) AND sd.sbjnum = s.sbjnum), 0)) AS Center,
+    CONVERT(VARCHAR, ISNULL(
+        (SELECT TOP 1 sd.FieldId FROM SurveyData sd WHERE sd.FieldId IN (50435,50484,55587) AND sd.sbjnum = s.sbjnum), 0)) AS DistrictFieldID,
+    CONVERT(VARCHAR, ISNULL(
+        (SELECT TOP 1 sd.FieldId FROM SurveyData sd WHERE sd.FieldId IN (50446,50486,55588) AND sd.sbjnum = s.sbjnum), 0)) AS CenterFieldId,
+    CASE 
+        WHEN s.projectID = 7120 THEN 'RHS-S' 
+        WHEN s.projectID = 7121 THEN 'MSU' 
+        WHEN s.projectID = 7122 THEN 'FWC' 
+        ELSE '' 
+    END AS Project
+INTO #SurveyReport
+FROM Survey s 
+WHERE s.projectID IN (7120,7121,7122) 
+    AND s.DeviceTimestamp BETWEEN '2025-10-16 00:00:01' AND '2025-10-23 12:59:59'
+ORDER BY s.sbjnum DESC;
+
+WITH DistinctVisits AS (
+    SELECT 
+        ISNULL(pfD.Title, '') AS District,
+        sp.OfficerName,
+        sp.DesignationName,
+        sp.Project,
+        CONVERT(DATE, sp.DeviceTimestamp) AS VisitDate, -- date only
+        sp.Center
+    FROM #SurveyReport sp
+    LEFT JOIN ProjectFieldSample pfD ON sp.District = pfD.Code AND sp.DistrictFieldID = pfD.FieldID
+)
+
+SELECT 
+    District,
+    OfficerName,
+    DesignationName,
+
+    -- RHS-S total centers / visited centers
+    CAST(
+        (SELECT COUNT(*) FROM ProjectFieldSample WHERE Title LIKE '%' + District + '%' AND Title LIKE '%RHS%')
+        AS VARCHAR(10)) + '/' +
+    CAST(
+        COUNT(DISTINCT CASE WHEN Project = 'RHS-S' THEN CAST(Center AS VARCHAR) + '|' + CAST(VisitDate AS VARCHAR) END)
+        AS VARCHAR(10)) AS [RHSCountVisited],
+
+    -- FWC total centers / visited centers
+    CAST(
+        (SELECT COUNT(*) FROM ProjectFieldSample WHERE Title LIKE '%' + District + '%' AND Title LIKE '%FWC%')
+        AS VARCHAR(10)) + '/' +
+    CAST(
+        COUNT(DISTINCT CASE WHEN Project = 'FWC' THEN CAST(Center AS VARCHAR) + '|' + CAST(VisitDate AS VARCHAR) END)
+        AS VARCHAR(10)) AS [FWCCountVisited],
+
+    -- MSU total centers / visited centers
+    CAST(
+        (SELECT COUNT(*) FROM ProjectFieldSample WHERE Title LIKE '%' + District + '%' AND Title LIKE '%MSU%')
+        AS VARCHAR(10)) + '/' +
+    CAST(
+        COUNT(DISTINCT CASE WHEN Project = 'MSU' THEN CAST(Center AS VARCHAR) + '|' + CAST(VisitDate AS VARCHAR) END)
+        AS VARCHAR(10)) AS [MSUCountVisited],
+
+    -- Total distinct centers visited overall (any project)
+
+	  CAST(
+    (SELECT COUNT(*) FROM ProjectFieldSample WHERE Title LIKE '%' + District + '%'     AND (Title LIKE '%FWC%' or   Title LIKE '%RHS%' or   Title LIKE '%MSU%' )) 
+    AS VARCHAR(10)
+) + '/' + 
+CAST(
+    COUNT(DISTINCT CAST(Center AS VARCHAR) + '|' + CAST(VisitDate AS VARCHAR))
+    AS VARCHAR(10)
+) AS TotalDistinctCentersVisited
+
+
+FROM DistinctVisits
+GROUP BY 
+    District,
+    OfficerName,
+    DesignationName
+ORDER BY
+    District;
+
+";
+
+               
+                var GetSurvey = dbContext.Database.SqlQuery<SurveyReportViewModel>(Query);
+                return GetSurvey.ToList();
+ 
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

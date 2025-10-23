@@ -19,9 +19,13 @@
     <title>HTML to PDF</title>
     <!-- Include jsPDF library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
     <!-- Include DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
     <!-- Add this in your HTML <head> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -34,6 +38,7 @@
     .center-icon {
         text-align: center;
     }
+
     .model {
         display: none;
         position: fixed;
@@ -167,7 +172,7 @@
             color: orange;
         }
 
-    .criteria .poor {
+        .criteria .poor {
             color: red;
         }
 
@@ -183,17 +188,17 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    .stylish-select:focus {
-        border-color: #0056b3;
-        background-color: #ffffff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        outline: none;
-    }
+        .stylish-select:focus {
+            border-color: #0056b3;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
 
-    .stylish-select:hover {
-        border-color: #0056b3;
-        background-color: #e9ecef;
-    }
+        .stylish-select:hover {
+            border-color: #0056b3;
+            background-color: #e9ecef;
+        }
 </style>
 
 <div class="row desktop">
@@ -276,7 +281,6 @@
 </div>
 
 
-<script src="https://cdn.datatables.net/2.0.5/js/dataTables.min.js"></script>
 <script>
     var currentData = [];
 
@@ -350,33 +354,19 @@
     }
 
     function populateTable(data, fromDate, toDate) {
-        $('#tbody').empty();
+        // Destroy existing DataTable (if already initialized)
+        //if ($('#dataTable tbody').text().length > 10) {
+        //    $('#dataTable').empty()
+        //}
+
+        // Clear old rows
         var tbody = $('#tbody');
-        var filteredData = data;
+        tbody.empty();
 
-        // Normalize date to remove time part
-        function normalizeDate(dateStr) {
-            let d = new Date(dateStr);
-            return new Date(d.getFullYear(), d.getMonth(), d.getDate()); // Set time to 00:00:00
-        }
 
-        // Filter data based on fromDate and toDate
-        if (fromDate || toDate) {
-            filteredData = data.filter(function (item) {
-                var itemDate = normalizeDate(item.DeviceTimestamp.split(' ')[0]); // 'YYYY-MM-DD'
-                var from = fromDate ? normalizeDate(fromDate) : null;
-                var to = toDate ? normalizeDate(toDate) : null;
 
-                if (from && itemDate < from) return false;
-                if (to && itemDate > to) return false;
-                return true;
-            });
-        }
-
-        // Store current filtered data for Excel export
-        currentData = filteredData;
-
-        $.each(filteredData, function (index, item) {
+        // Append rows
+        $.each(data, function (index, item) {
             var row = $('<tr></tr>');
             row.append('<td>' + parseInt(index + 1) + '</td>');
             row.append('<td>' + item.Project + '</td>');
@@ -385,33 +375,39 @@
             row.append('<td>' + item.DeviceTimestamp + '</td>');
             row.append('<td>' + item.Created + '</td>');
             row.append('<td>' + item.SurveyorName + '</td>');
+
             var mapLink = 'https://www.google.com/maps?q=' + item.Latitude + ',' + item.Longitude;
             row.append('<td class="center-icon"><a href="' + mapLink + '" target="_blank"><i class="fas fa-map-marker-alt fa-2x"></i></a></td>');
 
-
-
-
-            // Create the "View" link with click handler
+            // Create "View" link
             var viewLink = $('<a href="#">View</a>');
             viewLink.click(function (e) {
-                e.preventDefault(); // Prevent default anchor behavior
-                OpenReport(item.sbjnum, item.Project); // Call your function
-                e.stopPropagation(); // Prevent the row's click event, just in case
+                e.preventDefault();
+                OpenReport(item.sbjnum, item.Project);
+                e.stopPropagation();
             });
 
             row.append($('<td></td>').append(viewLink));
-
             tbody.append(row);
         });
 
+        // ✅ Reinitialize DataTable after filling rows
+        let table = new DataTable('#dataTable', {
+            destroy: true,          // ensure safe reinit
+            pageLength: 50,         // adjust as needed
+            lengthChange: true,     // hide page length dropdown if desired
+            paging: true,
+        });
 
-        let table = new DataTable('#dataTable');
+        // Optional styling adjustments
         $('.dt-length').hide();
         $('.dt-input').addClass('form-control');
-        $('.dt-search').addClass('col-md-4');
-        $('.dt-search').css('padding-left', '3px');
-        $('.dt-search').css('padding-bottom', '3px');
+        $('.dt-search').addClass('col-md-4').css({
+            'padding-left': '3px',
+            'padding-bottom': '3px'
+        });
     }
+
 
 
     function downloadExcel() {
@@ -439,14 +435,14 @@
 
         // Set column widths for full text visibility
         ws['!cols'] = [
-            {wch: 5},  // SN#
-            {wch: 25}, // Monitoring List
-            {wch: 20}, // District Name
-            {wch: 20}, // Center Name
-            {wch: 20}, // DeviceTimestamp
-            {wch: 20}, // Monitoring DateTime
-            {wch: 20}, // Officer Name
-            {wch: 20}  // Coordinate
+            { wch: 5 },  // SN#
+            { wch: 25 }, // Monitoring List
+            { wch: 20 }, // District Name
+            { wch: 20 }, // Center Name
+            { wch: 20 }, // DeviceTimestamp
+            { wch: 20 }, // Monitoring DateTime
+            { wch: 20 }, // Officer Name
+            { wch: 20 }  // Coordinate
         ];
 
         // Style headers: bold, light blue background, center alignment
@@ -464,7 +460,7 @@
         // Style body cells: wrap text for full visibility
         for (var R = range.s.r + 1; R <= range.e.r; ++R) {
             for (var C = range.s.c; C <= range.e.c; ++C) {
-                var address = XLSX.utils.encode_cell({r: R, c: C});
+                var address = XLSX.utils.encode_cell({ r: R, c: C });
                 if (!ws[address]) continue;
                 if (!ws[address].s) ws[address].s = {};
                 ws[address].s.alignment = { wrapText: true };

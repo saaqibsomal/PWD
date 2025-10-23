@@ -276,4 +276,17 @@ namespace DNA_CAPI_MIS.Models
         public string DeviceTimestamp { get; set; }
     }
 
+    public class SurveyReportViewModel
+    {
+        public string District { get; set; } = string.Empty;
+        public string OfficerName { get; set; } = string.Empty;
+        public string DesignationName { get; set; } = string.Empty;
+
+        public string RHSCountVisited { get; set; } = string.Empty;  // e.g. "10/5"
+        public string FWCCountVisited { get; set; } = string.Empty;  // e.g. "8/4"
+        public string MSUCountVisited { get; set; } = string.Empty;  // e.g. "7/3"
+
+        public string TotalDistinctCentersVisited { get; set; } = string.Empty;  // e.g. "25/12"
+    }
+
 }
