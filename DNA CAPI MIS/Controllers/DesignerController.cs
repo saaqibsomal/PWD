@@ -3437,6 +3437,7 @@ where s.projectID in ({Ids}) and created  between '{fromDate} 00:00:01' and '{to
                 var DistrictWise = DistinctSurvey.Where(x => x.DistrictName.ToUpper() == District.ToUpper()).ToList();
                 return Json(DistrictWise);
             }
+
         }
 
  

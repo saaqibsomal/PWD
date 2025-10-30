@@ -1,4 +1,6 @@
-﻿ 
+﻿
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,5 +42,27 @@ namespace DNA_CAPI_MIS.Models
         public string OpenClose { get; set; }
         public string Status { get; set; }
 
+    }
+    public class StockOfContraceptiveResponse
+    {
+        public string asDate { get; set; }
+        public string ProjectName { get; set; }
+        public int sbjnum { get; set; }
+        public int ProjectId { get; set; }
+        public string StockOfContraceptive { get; set; }
+
+    }
+
+    public class Comodities
+    {
+        public string Condoms { get; set; }
+        public string POP { get; set; }
+        public string COC { get; set; }
+        public string ECP { get; set; }
+        public string ThreeMonth { get; set; }
+        public string Defo { get; set; }
+        public string IUD { get; set; }
+        public string Jodelle { get; set; }
+        public string Date { get; set; }
     }
 }

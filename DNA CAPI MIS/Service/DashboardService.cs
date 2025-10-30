@@ -605,6 +605,92 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
             var con = dbContext.Database.SqlQuery<Grid14>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
             return con.ToList();
         }
+        public List<StockOfContraceptiveResponse> StockOfConteraceptives(DashboardRequest req)
+        {
+ 
+            string Sql = $@"select sd.fieldValue as StockOfContraceptive, sd.sbjnum,ProjectId,convert(varchar, DeviceTimestamp,101)   as asDate
+	                        from SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum 
+                             where sd.FieldId in(55601,50504,50559) and s.ProjectID in ({req.ProjectId}) and 
+convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' ";
+
+ 
+            var con = dbContext.Database.SqlQuery<StockOfContraceptiveResponse>(Sql).ToList();
+
+
+            List<Comodities> stock = ParseComoditiesFromResponses(con);
+
+ 
+
+            return con;
+        }
+
+
+        public static List<Comodities> ParseComoditiesFromResponses(List<StockOfContraceptiveResponse> responses)
+        {
+            var allStocks = new List<Comodities>();
+
+            foreach (var response in responses)
+            {
+                if (string.IsNullOrWhiteSpace(response.StockOfContraceptive))
+                    continue;
+
+                var parts = response.StockOfContraceptive
+                    .Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+
+                var comodity = new Comodities();
+                string commonDate = null;
+
+                foreach (var part in parts)
+                {
+                    var split = part.Split(new[] { '-' }, 2);
+                    if (split.Length < 2) continue;
+
+                    string key = split[0].Trim();
+                    string remainder = split[1].Trim();
+
+                    string qty = "";
+                    string date = "";
+
+                    if (remainder.Contains(","))
+                    {
+                        var vals = remainder.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        DateTime dummy;
+                        if (DateTime.TryParse(vals[0], out dummy))
+                        {
+                            date = vals[0];
+                            qty = vals.Length > 1 ? vals[1] : "";
+                        }
+                        else
+                        {
+                            qty = vals[0];
+                            date = vals.Length > 1 ? vals[1] : "";
+                        }
+                    }
+
+                    if (commonDate == null)
+                        commonDate = date;
+
+                    switch (key)
+                    {
+                        case "1": comodity.Condoms = qty; break;
+                        case "2": comodity.POP = qty; break;
+                        case "3": comodity.COC = qty; break;
+                        case "4": comodity.ECP = qty; break;
+                        case "5": comodity.ThreeMonth = qty; break;
+                        case "6": comodity.Defo = qty; break;
+                        case "7": comodity.IUD = qty; break;
+                        case "8": comodity.Jodelle = qty; break;
+                    }
+                }
+
+                comodity.Date = commonDate ?? response.asDate; // Make sure this property exists
+                allStocks.Add(comodity);
+            }
+
+            return allStocks;
+        }
+
 
 
         public List<PdfDetailReport> MonitoringVisitsReport(DashboardRequest req, string name, IPrincipal User)

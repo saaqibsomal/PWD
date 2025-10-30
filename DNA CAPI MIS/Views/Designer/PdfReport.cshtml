@@ -363,7 +363,29 @@
         var tbody = $('#tbody');
         tbody.empty();
 
+        var filteredData = data;
 
+        // Normalize date to remove time part
+        function normalizeDate(dateStr) {
+            let d = new Date(dateStr);
+            return new Date(d.getFullYear(), d.getMonth(), d.getDate()); // Set time to 00:00:00
+        }
+
+        // Filter data based on fromDate and toDate
+        if (fromDate || toDate) {
+            filteredData = data.filter(function (item) {
+                var itemDate = normalizeDate(item.DeviceTimestamp.split(' ')[0]); // 'YYYY-MM-DD'
+                var from = fromDate ? normalizeDate(fromDate) : null;
+                var to = toDate ? normalizeDate(toDate) : null;
+
+                if (from && itemDate < from) return false;
+                if (to && itemDate > to) return false;
+                return true;
+            });
+        }
+
+        // Store current filtered data for Excel export
+        currentData = filteredData;
 
         // Append rows
         $.each(data, function (index, item) {
@@ -392,20 +414,20 @@
         });
 
         // ✅ Reinitialize DataTable after filling rows
-        let table = new DataTable('#dataTable', {
-            destroy: true,          // ensure safe reinit
-            pageLength: 50,         // adjust as needed
-            lengthChange: true,     // hide page length dropdown if desired
-            paging: true,
-        });
+        //let table = new DataTable('#dataTable', {
+        //    destroy: true,          // ensure safe reinit
+        //    pageLength: 50,         // adjust as needed
+        //    lengthChange: true,     // hide page length dropdown if desired
+        //    paging: true,
+        //});
 
-        // Optional styling adjustments
-        $('.dt-length').hide();
-        $('.dt-input').addClass('form-control');
-        $('.dt-search').addClass('col-md-4').css({
-            'padding-left': '3px',
-            'padding-bottom': '3px'
-        });
+        //// Optional styling adjustments
+        //$('.dt-length').hide();
+        //$('.dt-input').addClass('form-control');
+        //$('.dt-search').addClass('col-md-4').css({
+        //    'padding-left': '3px',
+        //    'padding-bottom': '3px'
+        //});
     }
 
 

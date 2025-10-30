@@ -80,6 +80,23 @@ namespace DNA_CAPI_MIS.Controllers
             return Json(report, JsonRequestBehavior.AllowGet);
         }
 
+
+        [HttpPost]
+        public JsonResult StockOfContraceptive(DashboardRequest req)
+        {
+            List<StockOfContraceptiveResponse> report = new List<StockOfContraceptiveResponse>();
+            try
+            {
+
+                report = service.StockOfConteraceptives(req);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Json(report, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public JsonResult Report(string sbjnum, string Heading)
         {
