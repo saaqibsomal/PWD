@@ -3418,9 +3418,25 @@ where s.projectID in ({Ids}) and created  between '{fromDate} 00:00:01' and '{to
             var GetSurvey = db.Database.SqlQuery<PdfDetailReport>(Query);
 
             var DistinctSurvey = GetSurvey
-    .GroupBy(x => new { x.Center, Date = Convert.ToDateTime(x.DeviceTimestamp).Date })
-    .Select(g => g.First()) // keep first record per center per day
-    .ToList();
+     .GroupBy(x =>
+     {
+         DateTime dateValue;
+
+         // Try to parse DeviceTimestamp safely
+         if (!DateTime.TryParse(x.DeviceTimestamp, out dateValue))
+         {
+             // Fallback to current date if parsing fails
+             dateValue = DateTime.Now;
+         }
+
+         return new
+         {
+             x.Center,
+             Date = dateValue.Date
+         };
+     })
+     .Select(g => g.First()) // Keep first record per center per day
+     .ToList();
 
 
 
