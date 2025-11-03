@@ -289,4 +289,26 @@ namespace DNA_CAPI_MIS.Models
         public string TotalDistinctCentersVisited { get; set; } = string.Empty;  // e.g. "25/12"
     }
 
+
+
+    public class Contraceptives
+    {
+        public List<ContraceptiveStock> contraceptiveStocks { get; set; }
+    }
+    public class ContraceptiveStock
+    {
+        public string SDP { get; set; }
+        public string District { get; set; }
+        public string Center { get; set; }
+        public string Date { get; set; }
+        public string Condoms { get; set; }
+        public string POP { get; set; }
+        public string COC { get; set; }
+        public string ECP { get; set; }
+        public string ThreeMonth { get; set; }
+        public string Defo { get; set; }
+        public string IUD { get; set; }
+        public string Jadelle { get; set; }
+
+    }
 }

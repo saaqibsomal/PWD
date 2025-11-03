@@ -1,11 +1,13 @@
 ﻿using DNA_CAPI_MIS.Models;
 using DNA_CAPI_MIS.Service;
 using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Services.Description;
@@ -68,9 +70,17 @@ namespace DNA_CAPI_MIS.Controllers
             List<PdfDetailReport> report = new List<PdfDetailReport>();
             try
             {
+                var name = string.Empty;
+                IPrincipal users = null;
+                try
+                {
+                    name = User?.Identity?.Name;
+                    users = User;
+                }
+                catch (Exception ex)
+                {
 
-                var name = User.Identity.Name;
-                var users = User;
+                }
                 report = service.MonitoringVisitsReport(req, name, users);
             }
             catch (Exception ex)
@@ -89,6 +99,21 @@ namespace DNA_CAPI_MIS.Controllers
             {
 
                 report = service.StockOfConteraceptives(req);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Json(report, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult DetailStockOfContraceptive(DashboardRequest req)
+        {
+            List<ContraceptiveStock> report = new List<ContraceptiveStock>();
+            try
+            {
+                report = service.DetailOfContraceptive(req);
             }
             catch (Exception ex)
             {

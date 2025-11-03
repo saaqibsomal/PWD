@@ -607,19 +607,19 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
         }
         public List<StockOfContraceptiveResponse> StockOfConteraceptives(DashboardRequest req)
         {
- 
+
             string Sql = $@"select sd.fieldValue as StockOfContraceptive, sd.sbjnum,ProjectId,convert(varchar, DeviceTimestamp,101)   as asDate
 	                        from SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum 
                              where sd.FieldId in(55601,50504,50559) and s.ProjectID in ({req.ProjectId}) and 
 convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' ";
 
- 
+
             var con = dbContext.Database.SqlQuery<StockOfContraceptiveResponse>(Sql).ToList();
 
 
             List<Comodities> stock = ParseComoditiesFromResponses(con);
 
- 
+
 
             return con;
         }
@@ -690,33 +690,30 @@ convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{
 
             return allStocks;
         }
-
-
-
         public List<PdfDetailReport> MonitoringVisitsReport(DashboardRequest req, string name, IPrincipal User)
         {
             try
             {
-                var District = string.Empty;
-                bool isAdmin = false;
-                if (User.IsInRole("Admin"))
-                {
-                    var GetDistrict = name.Split('_');
-                    var removeAtRat = GetDistrict[1].Split('@');
-                    District = removeAtRat[0];
-                    isAdmin = true;
-                }
-                else
-                {
-                    if (name.Contains("_"))
-                    {
-                        isAdmin = false;
-                    }
-                    else
-                    {
-                        District = "";
-                    }
-                }
+                //var District = string.Empty;
+                //bool isAdmin = false;
+                //if (User.IsInRole("Admin"))
+                //{
+                //    var GetDistrict = name.Split('_');
+                //    var removeAtRat = GetDistrict[1].Split('@');
+                //    District = removeAtRat[0];
+                //    isAdmin = true;
+                //}
+                //else
+                //{
+                //    if (name.Contains("_"))
+                //    {
+                //        isAdmin = false;
+                //    }
+                //    else
+                //    {
+                //        District = "";
+                //    }
+                //}
 
                 string Query = $@"
 IF OBJECT_ID('tempdb..#SurveyReport') IS NOT NULL
@@ -747,7 +744,7 @@ where s.projectID in ({req.ProjectId}) and s.DeviceTimestamp  BETWEEN '{req.Star
                     req.CenterName = string.Empty;
                 }
                 var GetSurvey = dbContext.Database.SqlQuery<PdfDetailReport>(Query);
-                if (isAdmin)
+                if (true) // isAdmin
                 {
                     return GetSurvey.ToList();
                 }
@@ -757,16 +754,16 @@ where s.projectID in ({req.ProjectId}) and s.DeviceTimestamp  BETWEEN '{req.Star
                     return DistrictWise.ToList();
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
         }
 
-        public string GetReport(string sbjnum,string Heading,string BaseUrl)
+        public string GetReport(string sbjnum, string Heading, string BaseUrl)
         {
             string url = string.Empty;
-            if(Heading.ToUpper() == "FWC")
+            if (Heading.ToUpper() == "FWC")
             {
                 url = $@"{BaseUrl}/Designer/FWCReport?id={sbjnum}&Heading=FWC";
             }
@@ -787,8 +784,8 @@ where s.projectID in ({req.ProjectId}) and s.DeviceTimestamp  BETWEEN '{req.Star
             {
 
                 string EndDate = DateTime.Now.ToString("MM/dd/yyyy");
-                string  StartDateDat = DateTime.Now.AddDays(-7).ToString("MM/dd/yyyy");
-              
+                string StartDateDat = DateTime.Now.AddDays(-7).ToString("MM/dd/yyyy");
+
 
                 string Query = $@"
 IF OBJECT_ID('tempdb..#SurveyReport') IS NOT NULL
@@ -881,15 +878,131 @@ ORDER BY
 
 ";
 
-               
+
                 var GetSurvey = dbContext.Database.SqlQuery<SurveyReportViewModel>(Query);
                 return GetSurvey.ToList();
- 
+
             }
             catch (Exception)
             {
                 throw;
             }
+        }
+
+
+
+
+        public List<ContraceptiveStock> DetailOfContraceptive(DashboardRequest req)
+        {
+
+
+            string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
+
+;with cte as (
+	  select s.ProjectID,  s.sbjnum, s.Created, 
+       
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+	   
+		sd5.fieldId as FieldId5, sd5.fieldValue as FieldValue5,
+	
+
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue order by s.created desc) as RowNum
+	from survey s
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+		Inner join SurveyData sd5 on s.sbjnum = sd5.sbjnum and sd5.FieldId in (50559,50504,55601) -- ConStockPosition
+       where s.ProjectID in ({req.ProjectId})
+		
+		)
+select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as ProjectName, fs2.Title as District ,fs3.Title as Center, 
+ isnull(FieldValue5,'')  
+ as ConStockPosition,
+
+
+  convert(varchar, Created,101) asDate,
+ sbjnum
+    into #Graph from cte
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
+	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
+
+	
+    where RowNum = 1 and len(FieldValue5) > 20 and Convert(datetime, Created,101) between '{req.StartDate}' and '{req.EndDate}' select * from #Graph   
+
+ 
+";
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = string.Empty;
+            }
+            var Stock = dbContext.Database.SqlQuery<Grid7>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
+
+
+            List<ContraceptiveStock> StockList = new List<ContraceptiveStock>();
+
+            foreach (var item in Stock)
+            {
+                try
+                {
+
+                    var ConStockPosition = item.ConStockPosition.Split('|');
+
+                    var Condoms = ConStockPosition[0].ToString().Split('-')[1].Split(',')[0];
+                    var CondomsExpiry = ConStockPosition[0].ToString().Split(',')[1];
+
+                    var POP = ConStockPosition[1].ToString().Split('-')[1].Split(',')[0];
+                    var POPExpiry = ConStockPosition[1].ToString().Split(',')[1];
+
+                    var COC = ConStockPosition[2].ToString().Split('-')[1].Split(',')[0];
+                    var COCExpiry = ConStockPosition[2].ToString().Split(',')[1];
+
+                    var ECP = ConStockPosition[3].ToString().Split('-')[1].Split(',')[0];
+                    var ECPExpiry = ConStockPosition[3].ToString().Split(',')[1];
+
+                    var ThreeMonth = ConStockPosition[4].ToString().Split('-')[1].Split(',')[0];
+                    var ThreeMonthExpiry = ConStockPosition[4].ToString().Split(',')[1];
+
+                    var Defo = ConStockPosition[5].ToString().Split('-')[1].Split(',')[0];
+                    var DefoExpiry = ConStockPosition[5].ToString().Split(',')[1];
+
+                    var IUD = ConStockPosition[6].ToString().Split('-')[1].Split(',')[0];
+                    var IUDExpiry = ConStockPosition[6].ToString().Split(',')[1];
+
+                    var Jadelle = ConStockPosition[7].ToString().Split('-')[1].Split(',')[0];
+                    var JadelleExpiry = ConStockPosition[7].ToString().Split(',')[1];
+
+                    StockList.Add(new ContraceptiveStock
+                    {
+                        SDP = item.ProjectName,
+                        District = item.District,
+                        Center = item.Center,
+                        Date = item.asDate,
+                        Condoms = Condoms + "|" + CondomsExpiry,
+                        POP = POP + "|" + POPExpiry,
+                        COC = COC + "|" + COCExpiry,
+                        Defo = Defo + "|" + DefoExpiry,
+                        ECP = ECP + "|" + ECPExpiry,
+                        ThreeMonth = ThreeMonth + "|" + ThreeMonthExpiry,
+                        IUD = IUD + "|" + IUDExpiry,
+                        Jadelle = Jadelle + "|" + JadelleExpiry,
+                    });
+
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            return StockList;
         }
     }
 }

@@ -251,37 +251,41 @@
                             $.each(data, function (key, item) {
 
                                 var ConStockPosition = item.ConStockPosition.split('|');
-
-                                var Mon1 = ConStockPosition[0].split('-')[1].split(',')[0]
-                                var Mon2 = ConStockPosition[1].split('-')[1].split(',')[0]
-                                var Mon3 = ConStockPosition[2].split('-')[1].split(',')[0]
-                                var Mon4 = ConStockPosition[3].split('-')[1].split(',')[0]
-                                var Mon5 = ConStockPosition[4].split('-')[1].split(',')[0]
-                                var Mon6 = ConStockPosition[5].split('-')[1].split(',')[0]
-                                var Mon7 = ConStockPosition[6].split('-')[1].split(',')[0]
-                                var Mon8 = ConStockPosition[7].split('-')[1].split(',')[0]
-
-
+                                try {
+                                    var Mon1 = ConStockPosition[0].split('-')[1].split(',')[0]
+                                    var Mon2 = ConStockPosition[1].split('-')[1].split(',')[0]
+                                    var Mon3 = ConStockPosition[2].split('-')[1].split(',')[0]
+                                    var Mon4 = ConStockPosition[3].split('-')[1].split(',')[0]
+                                    var Mon5 = ConStockPosition[4].split('-')[1].split(',')[0]
+                                    var Mon6 = ConStockPosition[5].split('-')[1].split(',')[0]
+                                    var Mon7 = ConStockPosition[6].split('-')[1].split(',')[0]
+                                    var Mon8 = ConStockPosition[7].split('-')[1].split(',')[0]
 
 
 
-                                html += '<tr>';
-                                html += '<td>' + item.asDate + '</td>';
-                                html += '<td>' + item.District + '</td>';
-                                html += '<td>' + item.ProjectName + '</td>';
-                                html += '<td>' + item.Center + '</td>';
 
 
-                                html += '<td>' + Mon1 + '</td>';
-                                html += '<td>' + Mon2 + '</td>';
-                                html += '<td>' + Mon3 + '</td>';
-                                html += '<td>' + Mon4 + '</td>';
-                                html += '<td>' + Mon5 + '</td>';
-                                html += '<td>' + Mon6 + '</td>';
-                                html += '<td>' + Mon7 + '</td>';
-                                html += '<td>' + Mon8 + '</td>';
+                                    html += '<tr>';
+                                    html += '<td>' + item.asDate + '</td>';
+                                    html += '<td>' + item.District + '</td>';
+                                    html += '<td>' + item.ProjectName + '</td>';
+                                    html += '<td>' + item.Center + '</td>';
 
-                                html += '</tr>';
+
+                                    html += '<td>' + Mon1 + '</td>';
+                                    html += '<td>' + Mon2 + '</td>';
+                                    html += '<td>' + Mon3 + '</td>';
+                                    html += '<td>' + Mon4 + '</td>';
+                                    html += '<td>' + Mon5 + '</td>';
+                                    html += '<td>' + Mon6 + '</td>';
+                                    html += '<td>' + Mon7 + '</td>';
+                                    html += '<td>' + Mon8 + '</td>';
+
+                                    html += '</tr>';
+                                }
+                                catch (ex) {
+
+                                }
                             });
                             $('#grid7').html(html);
 
