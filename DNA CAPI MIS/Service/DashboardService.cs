@@ -455,30 +455,37 @@ SELECT * FROM #Graph order by asDate desc;
             List<ContraceptiveStockPositionResponse> dataTable = new List<ContraceptiveStockPositionResponse>();
             foreach (var item in con)
             {
-                var ConStockPosition = item.ConStockPosition.Split('|');
-                var Mon1 = ConStockPosition[0].Split('-')[1].Split(',')[0];
-                var Mon2 = ConStockPosition[1].Split('-')[1].Split(',')[0];
-                var Mon3 = ConStockPosition[2].Split('-')[1].Split(',')[0];
-                var Mon4 = ConStockPosition[3].Split('-')[1].Split(',')[0];
-                var Mon5 = ConStockPosition[4].Split('-')[1].Split(',')[0];
-                var Mon6 = ConStockPosition[5].Split('-')[1].Split(',')[0];
-                var Mon7 = ConStockPosition[6].Split('-')[1].Split(',')[0];
-                var Mon8 = ConStockPosition[7].Split('-')[1].Split(',')[0];
-                dataTable.Add(new ContraceptiveStockPositionResponse
+                try
                 {
-                    Date = item.asDate,
-                    SDP = item.ProjectName,
-                    District = item.District,
-                    Center = item.Center,
-                    CondomsStock = int.TryParse(Mon1, out var v1) ? v1 : 0,
-                    POP = int.TryParse(Mon2, out var v2) ? v2 : 0,
-                    COC = int.TryParse(Mon3, out var v3) ? v3 : 0,
-                    ECP = int.TryParse(Mon4, out var v4) ? v4 : 0,
-                    ThreemonthsInj = int.TryParse(Mon5, out var v5) ? v5 : 0,
-                    DefoStock = int.TryParse(Mon6, out var v6) ? v6 : 0,
-                    IUD = int.TryParse(Mon7, out var v7) ? v7 : 0,
-                    Jadelle = int.TryParse(Mon8, out var v8) ? v8 : 0,
-                });
+                    var ConStockPosition = item.ConStockPosition.Split('|');
+                    var Mon1 = ConStockPosition[0].Split('-')[1].Split(',')[0];
+                    var Mon2 = ConStockPosition[1].Split('-')[1].Split(',')[0];
+                    var Mon3 = ConStockPosition[2].Split('-')[1].Split(',')[0];
+                    var Mon4 = ConStockPosition[3].Split('-')[1].Split(',')[0];
+                    var Mon5 = ConStockPosition[4].Split('-')[1].Split(',')[0];
+                    var Mon6 = ConStockPosition[5].Split('-')[1].Split(',')[0];
+                    var Mon7 = ConStockPosition[6].Split('-')[1].Split(',')[0];
+                    var Mon8 = ConStockPosition[7].Split('-')[1].Split(',')[0];
+                    dataTable.Add(new ContraceptiveStockPositionResponse
+                    {
+                        Date = item.asDate,
+                        SDP = item.ProjectName,
+                        District = item.District,
+                        Center = item.Center,
+                        CondomsStock = int.TryParse(Mon1, out var v1) ? v1 : 0,
+                        POP = int.TryParse(Mon2, out var v2) ? v2 : 0,
+                        COC = int.TryParse(Mon3, out var v3) ? v3 : 0,
+                        ECP = int.TryParse(Mon4, out var v4) ? v4 : 0,
+                        ThreemonthsInj = int.TryParse(Mon5, out var v5) ? v5 : 0,
+                        DefoStock = int.TryParse(Mon6, out var v6) ? v6 : 0,
+                        IUD = int.TryParse(Mon7, out var v7) ? v7 : 0,
+                        Jadelle = int.TryParse(Mon8, out var v8) ? v8 : 0,
+                    });
+                }
+                catch(Exception)
+                {
+
+                }
             }
 
 
