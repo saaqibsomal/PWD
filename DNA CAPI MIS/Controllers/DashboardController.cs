@@ -1,5 +1,6 @@
 ﻿using DNA_CAPI_MIS.Models;
 using DNA_CAPI_MIS.Service;
+using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -185,6 +186,37 @@ namespace DNA_CAPI_MIS.Controllers
                 throw;
             }
             return Json(report, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
+        public JsonResult TechnicalMonitoringDetail(DashboardRequest req)
+        {
+            try
+            {
+                var report = service.TechnicalMonitoringDetail(req);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+           
+        }
+
+        [HttpGet]
+        public JsonResult TechnicalMonitoringStock(DashboardRequest req)
+        {
+            try
+            {
+                var report = service.TechnicalMonitoringStock(req);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
         }
     }
 }

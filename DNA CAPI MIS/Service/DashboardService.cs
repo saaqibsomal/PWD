@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Office2010.Ink;
 using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Org.BouncyCastle.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -630,8 +631,6 @@ convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{
 
             return con;
         }
-
-
         public static List<Comodities> ParseComoditiesFromResponses(List<StockOfContraceptiveResponse> responses)
         {
             var allStocks = new List<Comodities>();
@@ -766,7 +765,6 @@ where s.projectID in ({req.ProjectId}) and s.DeviceTimestamp  BETWEEN '{req.Star
                 throw;
             }
         }
-
         public string GetReport(string sbjnum, string Heading, string BaseUrl)
         {
             string url = string.Empty;
@@ -784,7 +782,6 @@ where s.projectID in ({req.ProjectId}) and s.DeviceTimestamp  BETWEEN '{req.Star
             }
             return url;
         }
-
         public List<SurveyReportViewModel> OfficerVisitReport()
         {
             try
@@ -895,10 +892,6 @@ ORDER BY
                 throw;
             }
         }
-
-
-
-
         public List<ContraceptiveStock> DetailOfContraceptive(DashboardRequest req)
         {
 
@@ -1011,7 +1004,6 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
             }
             return StockList;
         }
-
         public List<EquiptmentModel> EquiptmentPosition(DashboardRequest req)
         {
 
@@ -1097,7 +1089,6 @@ SELECT * FROM #Graph order by asDate desc;
             var con = dbContext.Database.SqlQuery<EquiptmentModel>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
             return con.ToList();
         }
-
         public EquiptmentPositionResponse EquiptmentPositionStock(DashboardRequest req)
         {
 
@@ -1221,6 +1212,131 @@ SELECT * FROM #Graph order by asDate desc;
 
             }
             return calculate;
+        }
+
+        public dynamic TechnicalMonitoringDetail(DashboardRequest req)
+        {
+            string Where = $"where s.ProjectID in ({req.ProjectId})";
+            string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
+
+;with cte as (
+	  select s.ProjectID,  s.sbjnum, s.Created, 
+       
+		sd1.fieldId as FieldId1, sd1.fieldValue as FieldValue1,
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+
+	
+	row_number() over (partition by  sd1.fieldId, sd1.fieldValue,sd2.fieldId,sd2.fieldValue ,sd3.fieldId,sd3.fieldValue order by s.created desc) as RowNum
+	from survey s
+		inner join SurveyData sd1 on s.sbjnum = sd1.sbjnum and sd1.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+		Inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50475,55573,55619) -- Technical
+        {Where}
+		
+		)
+select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as ProjectName, fs1.Title as District ,fs2.Title as Center, 
+ FieldValue3 
+ as Technical,
+
+
+  convert(varchar, Created,101) asDate,
+ sbjnum
+    into #Graph from cte
+	inner join ProjectFieldSample fs1 on cte.FieldId1 = fs1.FieldID and fs1.Code IN (cte.FieldValue1)
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID --and fs3.Code IN (cte.FieldValue3)  
+  and created between '{req.StartDate}' and '{req.EndDate}' select distinct * from #Graph g where len(g.Technical) > 1
+
+ 
+";
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = string.Empty;
+            }
+            var con = dbContext.Database.SqlQuery<Grid11>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
+            return con;
+        }
+
+        public dynamic TechnicalMonitoringStock(DashboardRequest req)
+        {
+            string Where = $"where s.ProjectID in ({req.ProjectId})";
+            string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
+
+;with cte as (
+	  select s.ProjectID,  s.sbjnum, s.Created, 
+       
+		sd1.fieldId as FieldId1, sd1.fieldValue as FieldValue1,
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+
+	
+	row_number() over (partition by  sd1.fieldId, sd1.fieldValue,sd2.fieldId,sd2.fieldValue ,sd3.fieldId,sd3.fieldValue order by s.created desc) as RowNum
+	from survey s
+		inner join SurveyData sd1 on s.sbjnum = sd1.sbjnum and sd1.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+		Inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50475,55573,55619) -- Technical
+        {Where}
+		
+		)
+select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as ProjectName, fs1.Title as District ,fs2.Title as Center, 
+ FieldValue3 
+ as Technical,
+
+
+  convert(varchar, Created,101) asDate,
+ sbjnum
+    into #Graph from cte
+	inner join ProjectFieldSample fs1 on cte.FieldId1 = fs1.FieldID and fs1.Code IN (cte.FieldValue1)
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID --and fs3.Code IN (cte.FieldValue3)  
+  and created between '{req.StartDate}' and '{req.EndDate}' select distinct * from #Graph g where len(g.Technical) > 1
+
+ 
+";
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = string.Empty;
+            }
+            var con = dbContext.Database.SqlQuery<Grid11>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
+
+
+            MonitoringResponse monitoringResponse = new MonitoringResponse();
+
+            foreach (var item in con)
+            {
+                var data = item.Technical.Split(',');
+                monitoringResponse.HandWashing += data[0] == "1" ? 1 : 0;
+                monitoringResponse.Decontamination += data[1] == "1" ? 1 : 0;
+                monitoringResponse.Cleaning += data[2] == "1" ? 1 : 0;
+                monitoringResponse.disinfection += data[3] == "1" ? 1 : 0;
+                monitoringResponse.Wastedisposal += data[4] == "1" ? 1 : 0;
+
+                monitoringResponse.HandWashingNo += data[0] == "2" ? 1 : 0;
+                monitoringResponse.DecontaminationNo += data[1] == "2" ? 1 : 0;
+                monitoringResponse.CleaningNo += data[2] == "2" ? 1 : 0;
+                monitoringResponse.disinfectionNo += data[3] == "2" ? 1 : 0;
+                monitoringResponse.WastedisposalNo += data[4] == "2" ? 1 : 0;
+            }
+
+
+            return monitoringResponse;
         }
     }
 }

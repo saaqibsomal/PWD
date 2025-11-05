@@ -344,4 +344,19 @@ namespace DNA_CAPI_MIS.Models
         public string EuiptmentPosition { get; set; }
  
     }
+    public class MonitoringResponse 
+    {
+        public int HandWashing { get; set; }
+        public int Decontamination { get; set; }
+        public int Cleaning { get; set; }
+        public int disinfection { get; set; }
+        public int Wastedisposal { get; set; }
+
+        public int HandWashingNo { get; set; }
+        public int DecontaminationNo { get; set; }
+        public int CleaningNo { get; set; }
+        public int disinfectionNo { get; set; }
+        public int WastedisposalNo { get; set; }
+
+    }
 }
