@@ -482,7 +482,7 @@ SELECT * FROM #Graph order by asDate desc;
                         Jadelle = int.TryParse(Mon8, out var v8) ? v8 : 0,
                     });
                 }
-                catch(Exception)
+                catch (Exception)
                 {
 
                 }
@@ -1010,6 +1010,217 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
                 }
             }
             return StockList;
+        }
+
+        public List<EquiptmentModel> EquiptmentPosition(DashboardRequest req)
+        {
+
+            string Where = $"where s.ProjectID in ({req.ProjectId})";
+            string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END;
+
+;WITH cte AS (
+    SELECT 
+        s.ProjectID,  
+        s.sbjnum, 
+        s.DeviceTimestamp, 
+        sd2.fieldId AS FieldId2, 
+        sd2.fieldValue AS FieldValue2,
+        sd3.fieldId AS FieldId3, 
+        sd3.fieldValue AS FieldValue3,
+        sd5.fieldId AS FieldId5, 
+        sd5.fieldValue AS FieldValue5,
+        ROW_NUMBER() OVER (
+            PARTITION BY sd2.fieldId, sd2.fieldValue, sd3.fieldId, sd3.fieldValue, sd5.fieldId, sd5.fieldValue 
+            ORDER BY s.DeviceTimestamp DESC
+        ) AS RowNum
+    FROM survey s
+    INNER JOIN SurveyData sd2 
+        ON s.sbjnum = sd2.sbjnum AND sd2.FieldId IN (50435, 50484, 55587) -- District
+    INNER JOIN SurveyData sd3 
+        ON s.sbjnum = sd3.sbjnum AND sd3.FieldId IN (50446, 50486, 55588) -- Center
+    INNER JOIN SurveyData sd5 
+        ON s.sbjnum = sd5.sbjnum AND sd5.FieldId IN (55613, 50510, 50471) -- EuiptmentPosition
+    {Where}
+), base AS (
+    SELECT  
+        (SELECT TOP 1 p.[Name] FROM Project p WHERE p.Id = ProjectID) AS ProjectName,
+        fs2.Title AS District,
+        fs3.Title AS Center, 
+        ISNULL(FieldValue5,'') AS EuiptmentPosition,
+        DeviceTimestamp,
+        CONVERT(VARCHAR, DeviceTimestamp, 101) AS asDate,
+        sbjnum
+    FROM cte
+    INNER JOIN ProjectFieldSample fs2 
+        ON cte.FieldId2 = fs2.FieldID AND fs2.Code IN (cte.FieldValue2)
+    INNER JOIN ProjectFieldSample fs3 
+        ON cte.FieldId3 = fs3.FieldID AND fs3.Code IN (cte.FieldValue3)
+    LEFT JOIN ProjectFieldSample fs5 
+        ON cte.FieldId5 = fs5.FieldID AND fs5.Code IN (cte.FieldValue5)
+    WHERE  RowNum = 1 AND LEN(FieldValue5) > 20 
+      AND Convert(datetime, DeviceTimestamp,101) BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59'
+), filtered AS (
+    SELECT *,
+        ROW_NUMBER() OVER (
+            PARTITION BY Center, YEAR(DeviceTimestamp), MONTH(DeviceTimestamp)
+            ORDER BY DeviceTimestamp ASC
+        ) AS rn
+    FROM base
+)
+SELECT 
+    ProjectName,
+    District,
+    Center,
+    EuiptmentPosition,
+    asDate,
+    sbjnum
+INTO #Graph
+FROM filtered
+WHERE rn = 1;
+
+-- Final result
+SELECT * FROM #Graph order by asDate desc;
+ 
+";
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = string.Empty;
+            }
+            var con = dbContext.Database.SqlQuery<EquiptmentModel>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
+            return con.ToList();
+        }
+
+        public EquiptmentPositionResponse EquiptmentPositionStock(DashboardRequest req)
+        {
+
+            string Where = $"where s.ProjectID in ({req.ProjectId})";
+            string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END;
+
+;WITH cte AS (
+    SELECT 
+        s.ProjectID,  
+        s.sbjnum, 
+        s.DeviceTimestamp, 
+        sd2.fieldId AS FieldId2, 
+        sd2.fieldValue AS FieldValue2,
+        sd3.fieldId AS FieldId3, 
+        sd3.fieldValue AS FieldValue3,
+        sd5.fieldId AS FieldId5, 
+        sd5.fieldValue AS FieldValue5,
+        ROW_NUMBER() OVER (
+            PARTITION BY sd2.fieldId, sd2.fieldValue, sd3.fieldId, sd3.fieldValue, sd5.fieldId, sd5.fieldValue 
+            ORDER BY s.DeviceTimestamp DESC
+        ) AS RowNum
+    FROM survey s
+    INNER JOIN SurveyData sd2 
+        ON s.sbjnum = sd2.sbjnum AND sd2.FieldId IN (50435, 50484, 55587) -- District
+    INNER JOIN SurveyData sd3 
+        ON s.sbjnum = sd3.sbjnum AND sd3.FieldId IN (50446, 50486, 55588) -- Center
+    INNER JOIN SurveyData sd5 
+        ON s.sbjnum = sd5.sbjnum AND sd5.FieldId IN (55613, 50510, 50471) -- EuiptmentPosition
+    {Where}
+), base AS (
+    SELECT  
+        (SELECT TOP 1 p.[Name] FROM Project p WHERE p.Id = ProjectID) AS ProjectName,
+        fs2.Title AS District,
+        fs3.Title AS Center, 
+        ISNULL(FieldValue5,'') AS EuiptmentPosition,
+        DeviceTimestamp,
+        CONVERT(VARCHAR, DeviceTimestamp, 101) AS asDate,
+        sbjnum
+    FROM cte
+    INNER JOIN ProjectFieldSample fs2 
+        ON cte.FieldId2 = fs2.FieldID AND fs2.Code IN (cte.FieldValue2)
+    INNER JOIN ProjectFieldSample fs3 
+        ON cte.FieldId3 = fs3.FieldID AND fs3.Code IN (cte.FieldValue3)
+    LEFT JOIN ProjectFieldSample fs5 
+        ON cte.FieldId5 = fs5.FieldID AND fs5.Code IN (cte.FieldValue5)
+    WHERE  RowNum = 1 AND LEN(FieldValue5) > 20 
+      AND Convert(datetime, DeviceTimestamp,101) BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59'
+), filtered AS (
+    SELECT *,
+        ROW_NUMBER() OVER (
+            PARTITION BY Center, YEAR(DeviceTimestamp), MONTH(DeviceTimestamp)
+            ORDER BY DeviceTimestamp ASC
+        ) AS rn
+    FROM base
+)
+SELECT 
+    ProjectName,
+    District,
+    Center,
+    EuiptmentPosition,
+    asDate,
+    sbjnum
+INTO #Graph
+FROM filtered
+WHERE rn = 1;
+
+-- Final result
+SELECT * FROM #Graph order by asDate desc;
+ 
+";
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = string.Empty;
+            }
+            var con = dbContext.Database.SqlQuery<EquiptmentModel>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
+
+
+            // Create the response
+            EquiptmentPositionResponse calculate = new EquiptmentPositionResponse();
+            foreach (var item in con)
+            {
+
+                var data = item.EuiptmentPosition.Split(',');
+                try
+                {
+                    // Convert all values to int, safely
+                    var numbers = data.Select(x => int.TryParse(x, out var n) ? n : 0).ToArray();
+
+         
+
+                    calculate.Minilapkits += numbers.Length > 0 ? numbers[0] : 0;
+                    calculate.Iudkits += numbers.Length > 1 ? numbers[1] : 0;
+                    calculate.BPApparatus += numbers.Length > 2 ? numbers[2] : 0;
+                    calculate.Stethoscope += numbers.Length > 3 ? numbers[3] : 0;
+                    calculate.Thermometer += numbers.Length > 4 ? numbers[4] : 0;
+                    calculate.WeightingMachine += numbers.Length > 5 ? numbers[5] : 0;
+                    calculate.Stove += numbers.Length > 6 ? numbers[6] : 0;
+                    calculate.OTLights += numbers.Length > 7 ? numbers[7] : 0;
+                    calculate.HydrolicTable += numbers.Length > 8 ? numbers[8] : 0;
+                    calculate.Autoclave += numbers.Length > 9 ? numbers[9] : 0;
+                    calculate.OxygenCylinder += numbers.Length > 10 ? numbers[10] : 0;
+                    calculate.AspiratingPumps += numbers.Length > 11 ? numbers[11] : 0;
+                    calculate.WheelChair += numbers.Length > 12 ? numbers[12] : 0;
+                    calculate.Stretcher += numbers.Length > 13 ? numbers[13] : 0;
+                    calculate.Generators += numbers.Length > 14 ? numbers[14] : 0;
+                    calculate.Screen += numbers.Length > 15 ? numbers[15] : 0;
+                }
+                catch (Exception ex)
+                {
+                    // Handle exception (logging or ignore)
+                }
+ 
+
+            }
+            return calculate;
         }
     }
 }

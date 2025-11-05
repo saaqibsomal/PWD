@@ -154,5 +154,37 @@ namespace DNA_CAPI_MIS.Controllers
             }
             return Json(report, JsonRequestBehavior.AllowGet);
         }
+
+
+        [HttpGet]
+        public JsonResult EquiptmentPositionDetail(DashboardRequest req)
+        {
+            List<EquiptmentModel> report = new List<EquiptmentModel>();
+            try
+            {
+
+                report = service.EquiptmentPosition(req);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Json(report, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult EquiptmentPositionStock(DashboardRequest req)
+        {
+            EquiptmentPositionResponse report = new EquiptmentPositionResponse();
+            try
+            {
+                report = service.EquiptmentPositionStock(req);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Json(report, JsonRequestBehavior.AllowGet);
+        }
     }
 }

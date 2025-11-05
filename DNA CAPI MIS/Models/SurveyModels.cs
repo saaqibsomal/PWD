@@ -57,7 +57,7 @@ namespace DNA_CAPI_MIS.Models
 
         //[Display(Name = "Surveyor ID")]
         //public int SurveyorId { get; set; }
-        
+
         [Display(Name = "Surveyor Username")]
         public string SurveyorName { get; set; }
 
@@ -111,7 +111,7 @@ namespace DNA_CAPI_MIS.Models
 
         [Display(Name = "Response Time")]
         public int? ResponseTime { get; set; }      //In milliseconds
-        
+
         public virtual Survey Survey { get; set; }
 
     }
@@ -185,7 +185,7 @@ namespace DNA_CAPI_MIS.Models
         public int hh { get; set; }
         public int mins { get; set; }
         public int ss { get; set; }
-    
+
         public string time_spent_for_location { get; set; }
         public string cellid { get; set; }
         public string CITY_GPS { get; set; }
@@ -245,18 +245,20 @@ namespace DNA_CAPI_MIS.Models
         public int Color_Blue { get; set; }
     }
 
-    public class Surveyorname {
-       
+    public class Surveyorname
+    {
+
         public string Name { get; set; }
         public int count { get; set; }
-    
+
     }
-    public class SurveyDetail { 
-    
-        public DateTime Created{get;set;}
-        public double Latitude{get;set;}
+    public class SurveyDetail
+    {
+
+        public DateTime Created { get; set; }
+        public double Latitude { get; set; }
         public double Longitude { get; set; }
-    
+
     }
 
     public class PdfDetailReport
@@ -310,5 +312,36 @@ namespace DNA_CAPI_MIS.Models
         public string IUD { get; set; }
         public string Jadelle { get; set; }
 
+    }
+
+    public class EquiptmentPositionResponse
+    {
+        public int Minilapkits { get; set; }
+        public int Iudkits { get; set; }
+        public int BPApparatus { get; set; }
+        public int Stethoscope { get; set; }
+        public int Thermometer { get; set; }
+        public int WeightingMachine { get; set; }
+        public int Stove { get; set; }
+        public int OTLights { get; set; }
+        public int HydrolicTable { get; set; }
+        public int Autoclave { get; set; }
+        public int OxygenCylinder { get; set; }
+        public int AspiratingPumps { get; set; }
+        public int WheelChair { get; set; }
+        public int Stretcher { get; set; }
+        public int Generators { get; set; }
+        public int Screen { get; set; }
+
+    }
+
+    public class EquiptmentModel
+    {
+        public string asDate { get; set; }
+        public string ProjectName { get; set; }
+        public string District { get; set; }
+        public string Center { get; set; }
+        public string EuiptmentPosition { get; set; }
+ 
     }
 }
