@@ -342,9 +342,9 @@ namespace DNA_CAPI_MIS.Models
         public string District { get; set; }
         public string Center { get; set; }
         public string EuiptmentPosition { get; set; }
- 
+
     }
-    public class MonitoringResponse 
+    public class MonitoringResponse
     {
         public int HandWashing { get; set; }
         public int Decontamination { get; set; }
@@ -357,6 +357,17 @@ namespace DNA_CAPI_MIS.Models
         public int CleaningNo { get; set; }
         public int disinfectionNo { get; set; }
         public int WastedisposalNo { get; set; }
+
+    }
+
+    public class IECMatrialResponse
+    {
+        public string asDate { get; set; }
+        public string ProjectName { get; set; }
+        public string District { get; set; }
+        public string Center { get; set; }
+        public string IECMatrial { get; set; }
+        public string MECWheel { get; set; }
 
     }
 }

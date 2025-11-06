@@ -157,7 +157,7 @@ namespace DNA_CAPI_MIS.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         public JsonResult EquiptmentPositionDetail(DashboardRequest req)
         {
             List<EquiptmentModel> report = new List<EquiptmentModel>();
@@ -173,7 +173,7 @@ namespace DNA_CAPI_MIS.Controllers
             return Json(report, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
+        [HttpPost]
         public JsonResult EquiptmentPositionStock(DashboardRequest req)
         {
             EquiptmentPositionResponse report = new EquiptmentPositionResponse();
@@ -189,7 +189,7 @@ namespace DNA_CAPI_MIS.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         public JsonResult TechnicalMonitoringDetail(DashboardRequest req)
         {
             try
@@ -204,7 +204,7 @@ namespace DNA_CAPI_MIS.Controllers
            
         }
 
-        [HttpGet]
+        [HttpPost]
         public JsonResult TechnicalMonitoringStock(DashboardRequest req)
         {
             try
@@ -217,6 +217,36 @@ namespace DNA_CAPI_MIS.Controllers
                 throw;
             }
 
+        }
+
+
+        [HttpPost]
+        public JsonResult IECMatrialDetail(DashboardRequest req)
+        {
+            try
+            {
+                var report = service.IECMatrialDetail(req);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+        }
+
+        [HttpPost]
+        public JsonResult IECMatrialStock(DashboardRequest req)
+        {
+            try
+            {
+                var report = service.IECMatrialStock(req);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }
