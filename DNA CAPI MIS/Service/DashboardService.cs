@@ -1463,5 +1463,74 @@ FieldValue6 as MECWheel,convert(varchar, Created,101) asDate,
             var IECMatrial = dbContext.Database.SqlQuery<Grid6>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
             return IECMatrial.ToList();
         }
+
+        public PerformaceSdpResponse PerformaceOfSdp(DashboardRequest req)
+        {
+            string Where = $"where s.ProjectID in ({req.ProjectId})";
+            string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
+
+;with cte as (
+	  select s.ProjectID,  s.sbjnum, s.Created, 
+       
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+		sd5.fieldId as FieldId5, sd5.fieldValue as FieldValue5,
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue order by s.created desc) as RowNum
+	from survey s
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+		Inner join SurveyData sd5 on s.sbjnum = sd5.sbjnum and sd5.FieldId in (50561,50612,55603) -- PerformaceOfSdp
+
+		 {Where})
+select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as ProjectName, fs2.Title as District ,fs3.Title as Center, 
+ FieldValue5 
+ as PerformaceOfSdp, convert(varchar, Created,101) asDate,
+ sbjnum
+    into #Graph from cte
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
+	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
+
+    where RowNum = 1 and  len(FieldValue5) > 4 and created between '{req.StartDate}' and '{req.EndDate}' select * from #Graph  ";
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = string.Empty;
+            }
+            var sdp = dbContext.Database.SqlQuery<PerformaceSdpResponseModel>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
+
+            PerformaceSdpResponse performaceSdpResponse = new PerformaceSdpResponse();
+
+
+            foreach (var item in sdp)
+            {
+                var data = item.PerformaceOfSdp.Split('|');
+
+                var GeneralClient = data[0].Split(',');
+                performaceSdpResponse.GeneralClientNew += GeneralClient[0] == "1" ? 1 : 0;
+                performaceSdpResponse.GeneralClientOld += GeneralClient[1] == "2" ? 1 : 0;
+
+                var FPClients = data[1].Split(',');
+                performaceSdpResponse.FPClientsNew += FPClients[0] == "1" ? 1 : 0;
+                performaceSdpResponse.FPClientsOld += FPClients[1] == "2" ? 1 : 0;
+
+                var MCH_RH = data[2].Split(',');
+                performaceSdpResponse.MCH_RH_New += MCH_RH[0] == "1" ? 1 : 0;
+                performaceSdpResponse.MCH_RH_Old += MCH_RH[1] == "2" ? 1 : 0;
+
+                var CSCases = data[3].Split(',');
+                performaceSdpResponse.CSCasesNew += CSCases[0] == "1" ? 1 : 0;
+                performaceSdpResponse.CSCasesOld += CSCases[1] == "2" ? 1 : 0;
+
+            }
+            return performaceSdpResponse;
+        }
     }
 }

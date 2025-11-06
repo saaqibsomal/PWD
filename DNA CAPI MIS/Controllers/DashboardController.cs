@@ -248,5 +248,19 @@ namespace DNA_CAPI_MIS.Controllers
                 throw;
             }
         }
+
+        [HttpPost]
+        public JsonResult PerformaceOfSdp(DashboardRequest req)
+        {
+            try
+            {
+                var report = service.PerformaceOfSdp(req);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

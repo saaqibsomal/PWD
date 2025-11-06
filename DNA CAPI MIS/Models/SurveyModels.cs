@@ -384,4 +384,24 @@ namespace DNA_CAPI_MIS.Models
         public int MECWheelYes { get; set; }
         public int MECWheelNo { get; set; }
     }
+    public class PerformaceSdpResponseModel
+    {
+        public string asDate { get; set; }
+        public string ProjectName { get; set; }
+        public string District { get; set; }
+        public string Center { get; set; }
+        public string PerformaceOfSdp { get; set; }
+ 
+    }
+    public class PerformaceSdpResponse
+    {
+        public int GeneralClientOld { get; set; }
+        public int GeneralClientNew { get; set; }
+        public int FPClientsOld { get; set; }
+        public int FPClientsNew { get; set; }
+        public int MCH_RH_Old { get; set; }
+        public int MCH_RH_New { get; set; }
+        public int CSCasesOld { get; set; }
+        public int CSCasesNew { get; set; }
+    }
 }
