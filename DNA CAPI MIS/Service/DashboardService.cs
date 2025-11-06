@@ -1187,22 +1187,40 @@ SELECT * FROM #Graph order by asDate desc;
 
          
 
-                    calculate.Minilapkits += numbers.Length > 0 ? numbers[0] : 0;
-                    calculate.Iudkits += numbers.Length > 1 ? numbers[1] : 0;
-                    calculate.BPApparatus += numbers.Length > 2 ? numbers[2] : 0;
-                    calculate.Stethoscope += numbers.Length > 3 ? numbers[3] : 0;
-                    calculate.Thermometer += numbers.Length > 4 ? numbers[4] : 0;
-                    calculate.WeightingMachine += numbers.Length > 5 ? numbers[5] : 0;
-                    calculate.Stove += numbers.Length > 6 ? numbers[6] : 0;
-                    calculate.OTLights += numbers.Length > 7 ? numbers[7] : 0;
-                    calculate.HydrolicTable += numbers.Length > 8 ? numbers[8] : 0;
-                    calculate.Autoclave += numbers.Length > 9 ? numbers[9] : 0;
-                    calculate.OxygenCylinder += numbers.Length > 10 ? numbers[10] : 0;
-                    calculate.AspiratingPumps += numbers.Length > 11 ? numbers[11] : 0;
-                    calculate.WheelChair += numbers.Length > 12 ? numbers[12] : 0;
-                    calculate.Stretcher += numbers.Length > 13 ? numbers[13] : 0;
-                    calculate.Generators += numbers.Length > 14 ? numbers[14] : 0;
-                    calculate.Screen += numbers.Length > 15 ? numbers[15] : 0;
+                    calculate.Minilapkits += numbers.Length > 0 ? (numbers[0] == 2 || numbers[0] == 3 ? 1 : 0) : 0;
+                    calculate.Iudkits += numbers.Length > 1 ? (numbers[1] == 2 || numbers[1] == 3 ? 1 : 0) : 0;
+                    calculate.BPApparatus += numbers.Length > 2 ? (numbers[2] == 2 || numbers[2] == 3 ? 1 : 0) : 0;
+                    calculate.Stethoscope += numbers.Length > 3 ? (numbers[3] == 2 || numbers[3] == 3 ? 1 : 0) : 0;
+                    calculate.Thermometer += numbers.Length > 4 ? (numbers[4] == 2 || numbers[4] == 3 ? 1 : 0) : 0;
+                    calculate.WeightingMachine += numbers.Length > 5 ? (numbers[5] == 2 || numbers[5] == 3 ? 1 : 0) : 0;
+                    calculate.Stove += numbers.Length > 6 ? (numbers[6] == 2 || numbers[6] == 3 ? 1 : 0) : 0;
+                    calculate.OTLights += numbers.Length > 7 ? (numbers[7] == 2 || numbers[7] == 3 ? 1 : 0) : 0;
+                    calculate.HydrolicTable += numbers.Length > 8 ? (numbers[8] == 2 || numbers[8] == 3 ? 1 : 0) : 0;
+                    calculate.Autoclave += numbers.Length > 9 ? (numbers[9] == 2 || numbers[9] == 3 ? 1 : 0) : 0;
+                    calculate.OxygenCylinder += numbers.Length > 10 ? (numbers[10] == 2 || numbers[10] == 3 ? 1 : 0) : 0;
+                    calculate.AspiratingPumps += numbers.Length > 11 ? (numbers[11] == 2 || numbers[11] == 3 ? 1 : 0) : 0;
+                    calculate.WheelChair += numbers.Length > 12 ? (numbers[12] == 2 || numbers[12] == 3 ? 1 : 0) : 0;
+                    calculate.Stretcher += numbers.Length > 13 ? (numbers[13] == 2 || numbers[13] == 3 ? 1 : 0) : 0;
+                    calculate.Generators += numbers.Length > 14 ? (numbers[14] == 2 || numbers[14] == 3 ? 1 : 0) : 0;
+                    calculate.Screen += numbers.Length > 15 ? (numbers[15] == 2 || numbers[15] == 3 ? 1 : 0) : 0;
+
+
+                    calculate.MinilapkitsTotal += 1;
+                    calculate.IudkitsTotal += 1;
+                    calculate.BPApparatusTotal += 1;
+                    calculate.StethoscopeTotal += 1;
+                    calculate.ThermometerTotal += 1;
+                    calculate.WeightingMachineTotal +=1;
+                    calculate.StoveTotal += 1;
+                    calculate.OTLightsTotal += 1;
+                    calculate.HydrolicTableTotal += 1;
+                    calculate.AutoclaveTotal +=1;
+                    calculate.OxygenCylinderTotal += 1;
+                    calculate.AspiratingPumpsTotal += 1;
+                    calculate.WheelChairTotal +=1;
+                    calculate.StretcherTotal += 1;
+                    calculate.GeneratorsTotal +=1;
+                    calculate.ScreenTotal += 1;
                 }
                 catch (Exception ex)
                 {

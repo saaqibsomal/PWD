@@ -333,6 +333,23 @@ namespace DNA_CAPI_MIS.Models
         public int Generators { get; set; }
         public int Screen { get; set; }
 
+        public int MinilapkitsTotal { get; set; }
+        public int IudkitsTotal { get; set; }
+        public int BPApparatusTotal { get; set; }
+        public int StethoscopeTotal { get; set; }
+        public int ThermometerTotal { get; set; }
+        public int WeightingMachineTotal { get; set; }
+        public int StoveTotal { get; set; }
+        public int OTLightsTotal { get; set; }
+        public int HydrolicTableTotal { get; set; }
+        public int AutoclaveTotal { get; set; }
+        public int OxygenCylinderTotal { get; set; }
+        public int AspiratingPumpsTotal { get; set; }
+        public int WheelChairTotal { get; set; }
+        public int StretcherTotal { get; set; }
+        public int GeneratorsTotal { get; set; }
+        public int ScreenTotal { get; set; }
+
     }
 
     public class EquiptmentModel
