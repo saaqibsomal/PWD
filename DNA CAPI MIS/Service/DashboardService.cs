@@ -1185,7 +1185,7 @@ SELECT * FROM #Graph order by asDate desc;
                     // Convert all values to int, safely
                     var numbers = data.Select(x => int.TryParse(x, out var n) ? n : 0).ToArray();
 
-         
+
 
                     calculate.Minilapkits += numbers.Length > 0 ? (numbers[0] == 2 || numbers[0] == 3 ? 1 : 0) : 0;
                     calculate.Iudkits += numbers.Length > 1 ? (numbers[1] == 2 || numbers[1] == 3 ? 1 : 0) : 0;
@@ -1210,23 +1210,23 @@ SELECT * FROM #Graph order by asDate desc;
                     calculate.BPApparatusTotal += 1;
                     calculate.StethoscopeTotal += 1;
                     calculate.ThermometerTotal += 1;
-                    calculate.WeightingMachineTotal +=1;
+                    calculate.WeightingMachineTotal += 1;
                     calculate.StoveTotal += 1;
                     calculate.OTLightsTotal += 1;
                     calculate.HydrolicTableTotal += 1;
-                    calculate.AutoclaveTotal +=1;
+                    calculate.AutoclaveTotal += 1;
                     calculate.OxygenCylinderTotal += 1;
                     calculate.AspiratingPumpsTotal += 1;
-                    calculate.WheelChairTotal +=1;
+                    calculate.WheelChairTotal += 1;
                     calculate.StretcherTotal += 1;
-                    calculate.GeneratorsTotal +=1;
+                    calculate.GeneratorsTotal += 1;
                     calculate.ScreenTotal += 1;
                 }
                 catch (Exception ex)
                 {
                     // Handle exception (logging or ignore)
                 }
- 
+
 
             }
             return calculate;
@@ -1358,10 +1358,8 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
         }
 
 
-        public List<IECMatrialResponse> IECMatrialStock(DashboardRequest req)
+        public IECMatrialResponse IECMatrialStock(DashboardRequest req)
         {
-
-
             string Where = $"where s.ProjectID in ({req.ProjectId})";
             string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
 BEGIN
@@ -1393,16 +1391,28 @@ FieldValue6 as MECWheel,convert(varchar, Created,101) asDate,
 	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	left join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
     where RowNum = 1 and  len(FieldValue5) > 4 and created between '{req.StartDate}' and '{req.EndDate}' select * from #Graph ";
-            var IECMatrial = dbContext.Database.SqlQuery<Grid6>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
-
-            List<IECMatrialResponse> iECMatrialResponse = new List<IECMatrialResponse>();
-
-            foreach (var item in IECMatrial)
+            if (string.IsNullOrEmpty(req.DistrictName))
             {
-
+                req.DistrictName = string.Empty;
             }
 
-
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = string.Empty;
+            }
+            var IECMatrial = dbContext.Database.SqlQuery<Grid6>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
+            
+            IECMatrialResponse iECMatrialResponse = new IECMatrialResponse();
+            
+            
+            foreach (var item in IECMatrial)
+            {
+                var data = item.IECMatrial.Split(',');
+                iECMatrialResponse.IECMatrialYes += data[0] == "1" ? 1 : 0;
+                iECMatrialResponse.IECMatrialNo += data[0] == "2" ? 1 : 0;
+                iECMatrialResponse.MECWheelYes += data[0] == "1" ? 1 : 0;
+                iECMatrialResponse.MECWheelNo += data[0] == "2" ? 1 : 0;
+            }
             return iECMatrialResponse;
         }
 
@@ -1441,6 +1451,15 @@ FieldValue6 as MECWheel,convert(varchar, Created,101) asDate,
 	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	left join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
     where RowNum = 1 and  len(FieldValue5) > 4 and created between '{req.StartDate}' and '{req.EndDate}' select * from #Graph ";
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = string.Empty;
+            }
             var IECMatrial = dbContext.Database.SqlQuery<Grid6>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
             return IECMatrial.ToList();
         }

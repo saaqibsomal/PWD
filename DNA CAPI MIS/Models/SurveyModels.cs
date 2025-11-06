@@ -379,12 +379,9 @@ namespace DNA_CAPI_MIS.Models
 
     public class IECMatrialResponse
     {
-        public string asDate { get; set; }
-        public string ProjectName { get; set; }
-        public string District { get; set; }
-        public string Center { get; set; }
-        public string IECMatrial { get; set; }
-        public string MECWheel { get; set; }
-
+        public int IECMatrialYes { get; set; }
+        public int IECMatrialNo { get; set; }
+        public int MECWheelYes { get; set; }
+        public int MECWheelNo { get; set; }
     }
 }
