@@ -255,80 +255,84 @@
                             var html = '';
                             $.each(data, function (key, item) {
 
+                                try {
+                                    var IEC = item.IECMatrial.split(",");
+                                    var AF = IEC[0];
+                                    var AQ = IEC[1];
+                                    var DF = IEC[2];
 
-                                var IEC = item.IECMatrial.split(",");
-                                var AF = IEC[0];
-                                var AQ = IEC[1];
-                                var DF = IEC[2];
+                                    if (AF == "1") {
+                                        AF = "Yes";
+                                    }
+                                    else {
+                                        AF = "No";
+                                    }
 
-                                if (AF == "1") {
-                                    AF = "Yes";
+                                    if (AQ == "1") {
+                                        AQ = "Yes";
+                                    }
+                                    else {
+                                        AQ = "No";
+                                    }
+
+                                    if (DF == "1") {
+                                        DF = "Yes";
+                                    }
+                                    else {
+                                        DF = "No";
+                                    }
+
+
+                                    var MEC = item.MECWheel.split(",");
+                                    var AF1 = MEC[0];
+                                    var AQ2 = MEC[1];
+                                    var DF3 = MEC[2];
+
+
+                                    if (AF1 == "1") {
+                                        AF1 = "Yes";
+                                    }
+                                    else {
+                                        AF1 = "No";
+                                    }
+
+                                    if (AQ2 == "1") {
+                                        AQ2 = "Yes";
+                                    }
+                                    else {
+                                        AQ2 = "No";
+                                    }
+
+                                    if (DF3 == "1") {
+                                        DF3 = "Yes";
+                                    }
+                                    else {
+                                        DF3 = "No";
+                                    }
+
+                                    html += '<tr>';
+                                    html += '<td>' + item.asDate + '</td>';
+                                    html += '<td>' + item.District + '</td>';
+                                    html += '<td>' + item.ProjectName + '</td>';
+                                    html += '<td>' + item.Center + '</td>';
+
+                                    html += '<td>' + AF + '</td>';
+                                    html += '<td>' + AQ + '</td>';
+                                    html += '<td>' + DF + '</td>';
+
+
+                                    html += '<td>' + AF1 + '</td>';
+                                    html += '<td>' + AQ2 + '</td>';
+                                    html += '<td>' + DF3 + '</td>';
+
+
+
+
+                                    html += '</tr>';
                                 }
-                                else {
-                                    AF = "No";
+                                catch (ex) {
+
                                 }
-
-                                if (AQ == "1") {
-                                    AQ = "Yes";
-                                }
-                                else {
-                                    AQ = "No";
-                                }
-
-                                if (DF == "1") {
-                                    DF = "Yes";
-                                }
-                                else {
-                                    DF = "No";
-                                }
-
-
-                                var MEC = item.MECWheel.split(",");
-                                var AF1 = MEC[0];
-                                var AQ2 = MEC[1];
-                                var DF3 = MEC[2];
-
-
-                                if (AF1 == "1") {
-                                    AF1 = "Yes";
-                                }
-                                else {
-                                    AF1 = "No";
-                                }
-
-                                if (AQ2 == "1") {
-                                    AQ2 = "Yes";
-                                }
-                                else {
-                                    AQ2 = "No";
-                                }
-
-                                if (DF3 == "1") {
-                                    DF3 = "Yes";
-                                }
-                                else {
-                                    DF3 = "No";
-                                }
-
-                                html += '<tr>';
-                                html += '<td>' + item.asDate + '</td>';
-                                html += '<td>' + item.District + '</td>';
-                                html += '<td>' + item.ProjectName + '</td>';
-                                html += '<td>' + item.Center + '</td>';
-
-                                html += '<td>' + AF + '</td>';
-                                html += '<td>' + AQ + '</td>';
-                                html += '<td>' + DF + '</td>';
-
-
-                                html += '<td>' + AF1 + '</td>';
-                                html += '<td>' + AQ2 + '</td>';
-                                html += '<td>' + DF3 + '</td>';
-
-
-
-
-                                html += '</tr>';
                             });
                             $('#Grid6').html(html);
 

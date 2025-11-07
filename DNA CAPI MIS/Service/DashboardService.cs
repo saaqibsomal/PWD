@@ -1390,7 +1390,7 @@ FieldValue6 as MECWheel,convert(varchar, Created,101) asDate,
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
 	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	left join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
-    where RowNum = 1 and  len(FieldValue5) > 4 and created between '{req.StartDate}' and '{req.EndDate}' select * from #Graph ";
+    where RowNum = 1 and  len(FieldValue5) > 1 and len(FieldValue5) < 4 and created between '{req.StartDate}' and '{req.EndDate}' select * from #Graph ";
             if (string.IsNullOrEmpty(req.DistrictName))
             {
                 req.DistrictName = string.Empty;
@@ -1511,23 +1511,27 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 
             foreach (var item in sdp)
             {
-                var data = item.PerformaceOfSdp.Split('|');
+                try
+                {
+                    var data = item.PerformaceOfSdp.Split('|');
 
-                var GeneralClient = data[0].Split(',');
-                performaceSdpResponse.GeneralClientNew += GeneralClient[0] == "1" ? 1 : 0;
-                performaceSdpResponse.GeneralClientOld += GeneralClient[1] == "2" ? 1 : 0;
+                    var GeneralClient = data[0].Split(',');
+                    performaceSdpResponse.GeneralClientNew += GeneralClient[0] == "1" ? 1 : 0;
+                    performaceSdpResponse.GeneralClientOld += GeneralClient[1] == "2" ? 1 : 0;
 
-                var FPClients = data[1].Split(',');
-                performaceSdpResponse.FPClientsNew += FPClients[0] == "1" ? 1 : 0;
-                performaceSdpResponse.FPClientsOld += FPClients[1] == "2" ? 1 : 0;
+                    var FPClients = data[1].Split(',');
+                    performaceSdpResponse.FPClientsNew += FPClients[0] == "1" ? 1 : 0;
+                    performaceSdpResponse.FPClientsOld += FPClients[1] == "2" ? 1 : 0;
 
-                var MCH_RH = data[2].Split(',');
-                performaceSdpResponse.MCH_RH_New += MCH_RH[0] == "1" ? 1 : 0;
-                performaceSdpResponse.MCH_RH_Old += MCH_RH[1] == "2" ? 1 : 0;
+                    var MCH_RH = data[2].Split(',');
+                    performaceSdpResponse.MCH_RH_New += MCH_RH[0] == "1" ? 1 : 0;
+                    performaceSdpResponse.MCH_RH_Old += MCH_RH[1] == "2" ? 1 : 0;
 
-                var CSCases = data[3].Split(',');
-                performaceSdpResponse.CSCasesNew += CSCases[0] == "1" ? 1 : 0;
-                performaceSdpResponse.CSCasesOld += CSCases[1] == "2" ? 1 : 0;
+                    var CSCases = data[3].Split(',');
+                    performaceSdpResponse.CSCasesNew += CSCases[0] == "1" ? 1 : 0;
+                    performaceSdpResponse.CSCasesOld += CSCases[1] == "2" ? 1 : 0;
+                }
+                catch (Exception) { }
 
             }
             return performaceSdpResponse;
