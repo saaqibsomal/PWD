@@ -343,6 +343,8 @@ public class ProjectsList
         public string IndicateSign { get; set; }
         public string StatusOfBuilding { get; set; }
         public string Cleanliness { get; set; }
+        public string Premises { get; set; }
+        public string Branded { get; set; }
 
     }
     public class Grid4

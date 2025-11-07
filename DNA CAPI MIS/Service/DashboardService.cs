@@ -97,6 +97,8 @@ namespace DNA_CAPI_MIS.Service
         sd5.FieldId AS FieldId5, sd5.FieldValue AS FieldValue5,
         sd6.FieldId AS FieldId6, sd6.FieldValue AS FieldValue6,
         sd7.FieldId AS FieldId7, sd7.FieldValue AS FieldValue7,
+		sd8.FieldId AS FieldId8, sd8.FieldValue AS FieldValue8,
+		sd9.FieldId AS FieldId9, sd9.FieldValue AS FieldValue9,
         DATENAME(MONTH, s.DeviceTimestamp) AS MonthName,
         MONTH(s.DeviceTimestamp) AS MonthNum,
         YEAR(s.DeviceTimestamp) AS YearNum,
@@ -108,9 +110,11 @@ namespace DNA_CAPI_MIS.Service
     INNER JOIN SurveyData sd2 ON s.sbjnum = sd2.sbjnum AND sd2.FieldId IN (50435, 50484, 55587) -- District
     INNER JOIN SurveyData sd3 ON s.sbjnum = sd3.sbjnum AND sd3.FieldId IN (50446, 50486, 55588) -- Center
     INNER JOIN SurveyData sd5 ON s.sbjnum = sd5.sbjnum AND sd5.FieldId IN (55594, 50498, 50461) -- Indicate Sign
-    INNER JOIN SurveyData sd6 ON s.sbjnum = sd6.sbjnum AND sd6.FieldId IN (50557, 50500, 55595) -- Status of Building
+    INNER JOIN SurveyData sd6 ON s.sbjnum = sd6.sbjnum AND sd6.FieldId IN (50557, 50500, 55595) -- Status of Building Electricity Gass Water
     LEFT JOIN SurveyData sd7 ON s.sbjnum = sd7.sbjnum AND sd7.FieldId IN (50462, 50499, 55596)  -- Cleanliness
-    WHERE s.ProjectID IN ({req.ProjectId})
+	LEFT JOIN SurveyData sd8 ON s.sbjnum = sd8.sbjnum AND sd8.FieldId IN (555916,50495,52571) -- Premises Govt  ranted / PVT
+	LEFT JOIN SurveyData sd9 ON s.sbjnum = sd9.sbjnum AND sd9.FieldId IN (55590,50634,50437) -- status Branded , unbranded 
+     {Where}
 )
 SELECT  
     (SELECT TOP 1 p.[Name] FROM Project p WHERE p.Id = cte.ProjectID) AS ProjectName,
@@ -118,11 +122,13 @@ SELECT
     fs3.Title AS Center,
     FieldValue5 AS IndicateSign,
     FieldValue6 AS StatusOfBuilding,
+	isnull(FieldValue8,0) AS Premises,
+	isnull(FieldValue9,0) AS Branded,
     CASE 
         WHEN FieldValue7 = '1' THEN 'Satisfactory'
         WHEN FieldValue7 = '2' THEN 'Not Satisfactory'
-        ELSE ''
-    END AS Cleanliness,
+        ELSE '' END AS Cleanliness,
+
     CONVERT(VARCHAR, cte.DeviceTimestamp, 101) AS [asDate],
     cte.MonthName,
     cte.YearNum,
@@ -135,11 +141,13 @@ INNER JOIN ProjectFieldSample fs3 ON cte.FieldId3 = fs3.FieldID AND fs3.Code IN 
 LEFT JOIN ProjectFieldSample fs5 ON cte.FieldId5 = fs5.FieldID AND fs5.Code IN (cte.FieldValue5)
 LEFT JOIN ProjectFieldSample fs6 ON cte.FieldId6 = fs6.FieldID AND fs6.Code IN (cte.FieldValue6)
 LEFT JOIN ProjectFieldSample fs7 ON cte.FieldId7 = fs7.FieldID AND fs7.Code IN (cte.FieldValue7)
+LEFT JOIN ProjectFieldSample fs8 ON cte.FieldId8 = fs8.FieldID AND fs8.Code IN (cte.FieldValue8)
+LEFT JOIN ProjectFieldSample fs9 ON cte.FieldId9 = fs9.FieldID AND fs9.Code IN (cte.FieldValue9)
 WHERE RowNum = 1
   AND CONVERT(DATETIME, cte.DeviceTimestamp, 101) 
-      BETWEEN '{req.StartDate} 00:00:01' AND '{req.EndDate} 23:59:59';
+      BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' ;
 
-SELECT * FROM #Graph ORDER BY YearNum, MonthNum, Center;
+SELECT * FROM #Graph ORDER BY YearNum, MonthNum, Center;;
 
 
  
@@ -184,7 +192,7 @@ WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
         MAX(CASE WHEN sd.FieldId = 50482 THEN sd.[FieldValue] END) AS IsOpen,
         MAX(CASE WHEN sd.FieldId in( 50484) THEN sd.[FieldValue] END) AS District,
         MAX(CASE WHEN sd.FieldId = 50486 THEN sd.[FieldValue] END) AS Center
-    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and Convert(datetime, s.DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY s.ProjectID, sd.sbjnum),
+    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and Convert(datetime, s.DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' GROUP BY s.ProjectID, sd.sbjnum),
 cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
   INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 50484 
     INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  50486),
@@ -219,7 +227,7 @@ WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
         MAX(CASE WHEN sd.FieldId = 55585 THEN sd.[FieldValue] END) AS IsOpen,
         MAX(CASE WHEN sd.FieldId in( 55587) THEN sd.[FieldValue] END) AS District,
         MAX(CASE WHEN sd.FieldId = 55588 THEN sd.[FieldValue] END) AS Center
-    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and convert(datetime, s.DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY s.ProjectID, sd.sbjnum),
+    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and convert(datetime, s.DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' GROUP BY s.ProjectID, sd.sbjnum),
 cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
   INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 55587 
     INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  55588),
@@ -252,7 +260,7 @@ WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
         MAX(CASE WHEN sd.FieldId = 55570 THEN sd.[FieldValue] END) AS IsOpen,
         MAX(CASE WHEN sd.FieldId in( 50435) THEN sd.[FieldValue] END) AS District,
         MAX(CASE WHEN sd.FieldId = 50446 THEN sd.[FieldValue] END) AS Center
-    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and convert(datetime, s.DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY s.ProjectID, sd.sbjnum),
+    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and convert(datetime, s.DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' GROUP BY s.ProjectID, sd.sbjnum),
 cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
   INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 50435 
     INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  50446),
@@ -315,7 +323,7 @@ case when FieldValue6 =1 then 'Open' else 'Close' end as OpenClose,
 	inner join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
 	inner join ProjectFieldSample fs7 on cte.FieldId7 = fs7.FieldID and fs7.Code IN (cte.FieldValue7)
-    where RowNum = 1 and convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select * from #Graph";
+    where RowNum = 1 and convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph";
 
 
             if (string.IsNullOrEmpty(req.DistrictName))
@@ -363,7 +371,7 @@ select  convert(varchar, DeviceTimestamp,101) asDate,  fs2.Title as District ,fs
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
 	Left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 
-    where RowNum = 1 and len(FieldValue5)  between 1 and 19 and  convert(datetime,  DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select * from #Graph
+    where RowNum = 1 and len(FieldValue5)  between 1 and 19 and  convert(datetime,  DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph
 
  
 ";
@@ -427,7 +435,7 @@ END;
     LEFT JOIN ProjectFieldSample fs5 
         ON cte.FieldId5 = fs5.FieldID AND fs5.Code IN (cte.FieldValue5)
     WHERE  RowNum = 1 AND LEN(FieldValue5) > 20 
-      AND Convert(datetime, DeviceTimestamp,101) BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59'
+      AND Convert(datetime, DeviceTimestamp,101) BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59'
 ), filtered AS (
     SELECT *,
         ROW_NUMBER() OVER (
@@ -597,7 +605,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 	inner join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID 
 	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID 
 	
-    where RowNum = 1 and len(FieldValue6) > 5 and DeviceTimestamp  BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' select distinct * from #Graph   
+    where RowNum = 1 and len(FieldValue6) > 5 and DeviceTimestamp  BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select distinct * from #Graph   
 
  
 ";
@@ -619,7 +627,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
             string Sql = $@"select sd.fieldValue as StockOfContraceptive, sd.sbjnum,ProjectId,convert(varchar, DeviceTimestamp,101)   as asDate
 	                        from SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum 
                              where sd.FieldId in(55601,50504,50559) and s.ProjectID in ({req.ProjectId}) and 
-convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' ";
+convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' ";
 
 
             var con = dbContext.Database.SqlQuery<StockOfContraceptiveResponse>(Sql).ToList();
@@ -733,7 +741,7 @@ Convert(varchar,isnull((select top 1  sd.FieldId from SurveyData sd where sd.Fie
 , case when s.projectID = 7120 then 'RHS-S' when  s.projectID = 7121 then 'MSU' when s.projectID = 7122 then 'FWC' else '' end as Project
 into #SurveyReport
 from Survey  s 
-where s.projectID in ({req.ProjectId}) and s.DeviceTimestamp  BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' order by s.sbjnum desc
+where s.projectID in ({req.ProjectId}) and s.DeviceTimestamp  BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' order by s.sbjnum desc
  select sp.*,isnull(pfD.Title,'') DistrictName, isnull(pfC.Title,'') CenterName  from #SurveyReport sp 
  Left join   ProjectFieldSample pfC on sp.Center = pfC.Code and sp.CenterFieldId = pfC.FieldID
  Left join ProjectFieldSample pfD on sp.District = pfD.Code and sp.DistrictFieldID = pfD.FieldID 
@@ -808,7 +816,7 @@ SELECT
     CONVERT(VARCHAR, ISNULL(
         (SELECT TOP 1 sd.FieldId FROM SurveyData sd WHERE sd.FieldId IN (50446,50486,55588) AND sd.sbjnum = s.sbjnum), 0)) AS CenterFieldId,
     CASE 
-        WHEN s.projectID = 7120 THEN 'RHS-S' 
+        WHEN s.projectID = 7120 THEN 'RHS-A' 
         WHEN s.projectID = 7121 THEN 'MSU' 
         WHEN s.projectID = 7122 THEN 'FWC' 
         ELSE '' 
@@ -816,7 +824,7 @@ SELECT
 INTO #SurveyReport
 FROM Survey s 
 WHERE s.projectID IN (7120,7121,7122) 
-    AND s.DeviceTimestamp BETWEEN '2025-10-16 00:00:01' AND '2025-10-23 12:59:59'
+    AND s.DeviceTimestamp BETWEEN '2000-10-16 00:00:01' AND '2075-10-23 12:59:59'
 ORDER BY s.sbjnum DESC;
 
 WITH DistinctVisits AS (
@@ -931,7 +939,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 
 	
-    where RowNum = 1 and len(FieldValue5) > 20 and Convert(datetime, Created,101) between '{req.StartDate}' and '{req.EndDate}' select * from #Graph   
+    where RowNum = 1 and len(FieldValue5) > 20 and Convert(datetime, Created,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph   
 
  
 ";
@@ -1053,7 +1061,7 @@ END;
     LEFT JOIN ProjectFieldSample fs5 
         ON cte.FieldId5 = fs5.FieldID AND fs5.Code IN (cte.FieldValue5)
     WHERE  RowNum = 1 AND LEN(FieldValue5) > 20 
-      AND Convert(datetime, DeviceTimestamp,101) BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59'
+      AND Convert(datetime, DeviceTimestamp,101) BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59'
 ), filtered AS (
     SELECT *,
         ROW_NUMBER() OVER (
@@ -1138,7 +1146,7 @@ END;
     LEFT JOIN ProjectFieldSample fs5 
         ON cte.FieldId5 = fs5.FieldID AND fs5.Code IN (cte.FieldValue5)
     WHERE  RowNum = 1 AND LEN(FieldValue5) > 20 
-      AND Convert(datetime, DeviceTimestamp,101) BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59'
+      AND Convert(datetime, DeviceTimestamp,101) BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59'
 ), filtered AS (
     SELECT *,
         ROW_NUMBER() OVER (
@@ -1267,7 +1275,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 	inner join ProjectFieldSample fs1 on cte.FieldId1 = fs1.FieldID and fs1.Code IN (cte.FieldValue1)
 	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID --and fs3.Code IN (cte.FieldValue3)  
-  and created between '{req.StartDate}' and '{req.EndDate}' select distinct * from #Graph g where len(g.Technical) > 1
+  and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select distinct * from #Graph g where len(g.Technical) > 1
 
  
 ";
@@ -1390,7 +1398,7 @@ FieldValue6 as MECWheel,convert(varchar, Created,101) asDate,
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
 	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	left join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
-    where RowNum = 1 and  len(FieldValue5) > 1 and len(FieldValue5) < 4 and created between '{req.StartDate}' and '{req.EndDate}' select * from #Graph ";
+    where RowNum = 1 and  len(FieldValue5) > 1 and len(FieldValue5) < 4 and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph ";
             if (string.IsNullOrEmpty(req.DistrictName))
             {
                 req.DistrictName = string.Empty;
@@ -1401,10 +1409,10 @@ FieldValue6 as MECWheel,convert(varchar, Created,101) asDate,
                 req.CenterName = string.Empty;
             }
             var IECMatrial = dbContext.Database.SqlQuery<Grid6>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
-            
+
             IECMatrialResponse iECMatrialResponse = new IECMatrialResponse();
-            
-            
+
+
             foreach (var item in IECMatrial)
             {
                 var data = item.IECMatrial.Split(',');
@@ -1450,7 +1458,7 @@ FieldValue6 as MECWheel,convert(varchar, Created,101) asDate,
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
 	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	left join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
-    where RowNum = 1 and  len(FieldValue5) > 4 and created between '{req.StartDate}' and '{req.EndDate}' select * from #Graph ";
+    where RowNum = 1 and  len(FieldValue5) > 4 and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph ";
             if (string.IsNullOrEmpty(req.DistrictName))
             {
                 req.DistrictName = string.Empty;
@@ -1494,7 +1502,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
 	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 
-    where RowNum = 1 and  len(FieldValue5) > 4 and created between '{req.StartDate}' and '{req.EndDate}' select * from #Graph  ";
+    where RowNum = 1 and  len(FieldValue5) > 4 and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph  ";
             if (string.IsNullOrEmpty(req.DistrictName))
             {
                 req.DistrictName = string.Empty;
@@ -1535,6 +1543,196 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 
             }
             return performaceSdpResponse;
+        }
+
+
+        public StatusOfBuildingResponse StatusOfBuilding(DashboardRequest req)
+        {
+            string Where = $"where s.ProjectID in ({req.ProjectId})";
+            string Sql = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+    DROP TABLE #Graph;
+
+;WITH cte AS (
+    SELECT 
+        s.ProjectID,
+        s.sbjnum,
+        s.DeviceTimestamp,
+        sd2.FieldId AS FieldId2, sd2.FieldValue AS FieldValue2,
+        sd3.FieldId AS FieldId3, sd3.FieldValue AS FieldValue3,
+        sd5.FieldId AS FieldId5, sd5.FieldValue AS FieldValue5,
+        sd6.FieldId AS FieldId6, sd6.FieldValue AS FieldValue6,
+        sd7.FieldId AS FieldId7, sd7.FieldValue AS FieldValue7,
+		sd8.FieldId AS FieldId8, sd8.FieldValue AS FieldValue8,
+		sd9.FieldId AS FieldId9, sd9.FieldValue AS FieldValue9,
+        DATENAME(MONTH, s.DeviceTimestamp) AS MonthName,
+        MONTH(s.DeviceTimestamp) AS MonthNum,
+        YEAR(s.DeviceTimestamp) AS YearNum,
+        ROW_NUMBER() OVER (
+            PARTITION BY sd3.FieldValue, YEAR(s.DeviceTimestamp), MONTH(s.DeviceTimestamp)   -- per center per month
+            ORDER BY s.DeviceTimestamp ASC                                           -- first inserted record
+        ) AS RowNum
+    FROM Survey s
+    INNER JOIN SurveyData sd2 ON s.sbjnum = sd2.sbjnum AND sd2.FieldId IN (50435, 50484, 55587) -- District
+    INNER JOIN SurveyData sd3 ON s.sbjnum = sd3.sbjnum AND sd3.FieldId IN (50446, 50486, 55588) -- Center
+    INNER JOIN SurveyData sd5 ON s.sbjnum = sd5.sbjnum AND sd5.FieldId IN (55594, 50498, 50461) -- Indicate Sign
+    INNER JOIN SurveyData sd6 ON s.sbjnum = sd6.sbjnum AND sd6.FieldId IN (50557, 50500, 55595) -- Status of Building Electricity Gass Water
+    LEFT JOIN SurveyData sd7 ON s.sbjnum = sd7.sbjnum AND sd7.FieldId IN (50462, 50499, 55596)  -- Cleanliness
+	LEFT JOIN SurveyData sd8 ON s.sbjnum = sd8.sbjnum AND sd8.FieldId IN (555916,50495,52571) -- Premises Govt  ranted / PVT
+	LEFT JOIN SurveyData sd9 ON s.sbjnum = sd9.sbjnum AND sd9.FieldId IN (55590,50634,50437) -- status Branded , unbranded 
+     {Where}
+)
+SELECT  
+    (SELECT TOP 1 p.[Name] FROM Project p WHERE p.Id = cte.ProjectID) AS ProjectName,
+    fs2.Title AS District,
+    fs3.Title AS Center,
+    FieldValue5 AS IndicateSign,
+    FieldValue6 AS StatusOfBuilding,
+	isnull(FieldValue8,0) AS Premises,
+	isnull(FieldValue9,0) AS Branded,
+    CASE 
+        WHEN FieldValue7 = '1' THEN 'Satisfactory'
+        WHEN FieldValue7 = '2' THEN 'Not Satisfactory'
+        ELSE '' END AS Cleanliness,
+
+    CONVERT(VARCHAR, cte.DeviceTimestamp, 101) AS [asDate],
+    cte.MonthName,
+    cte.YearNum,
+    cte.sbjnum,
+    cte.MonthNum
+INTO #Graph
+FROM cte
+INNER JOIN ProjectFieldSample fs2 ON cte.FieldId2 = fs2.FieldID AND fs2.Code IN (cte.FieldValue2)
+INNER JOIN ProjectFieldSample fs3 ON cte.FieldId3 = fs3.FieldID AND fs3.Code IN (cte.FieldValue3)
+LEFT JOIN ProjectFieldSample fs5 ON cte.FieldId5 = fs5.FieldID AND fs5.Code IN (cte.FieldValue5)
+LEFT JOIN ProjectFieldSample fs6 ON cte.FieldId6 = fs6.FieldID AND fs6.Code IN (cte.FieldValue6)
+LEFT JOIN ProjectFieldSample fs7 ON cte.FieldId7 = fs7.FieldID AND fs7.Code IN (cte.FieldValue7)
+LEFT JOIN ProjectFieldSample fs8 ON cte.FieldId8 = fs8.FieldID AND fs8.Code IN (cte.FieldValue8)
+LEFT JOIN ProjectFieldSample fs9 ON cte.FieldId9 = fs9.FieldID AND fs9.Code IN (cte.FieldValue9)
+WHERE RowNum = 1
+  AND CONVERT(DATETIME, cte.DeviceTimestamp, 101) 
+      BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' ;
+
+SELECT * FROM #Graph ORDER BY YearNum, MonthNum, Center;;
+
+
+ 
+";
+            if (string.IsNullOrEmpty(req.DistrictName))
+            {
+                req.DistrictName = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(req.CenterName))
+            {
+                req.CenterName = string.Empty;
+            }
+            var Grid = dbContext.Database.SqlQuery<Grid3>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName)).ToList();
+
+
+            StatusOfBuildingResponse statusOfBuildingResponse = new StatusOfBuildingResponse();
+            foreach (var item in Grid)
+            {
+                // IndicateSign
+                try
+                {
+                    var IndicateSign = item.IndicateSign.Split(',');
+                    statusOfBuildingResponse.Indication += IndicateSign[0] == "1" ? 1 : 0;
+                    statusOfBuildingResponse.IndicationAll += 1;
+                }
+                catch (Exception)
+                {
+
+                }
+                try
+                {
+                    var StatusOfBuilding = item.StatusOfBuilding.Split(',');
+                    statusOfBuildingResponse.Electricity += StatusOfBuilding[0] == "1" ? 1 : 0;
+                    statusOfBuildingResponse.ElectricityAll += 1;
+
+                    statusOfBuildingResponse.Gas += StatusOfBuilding[1] == "1" ? 1 : 0;
+                    statusOfBuildingResponse.GasAll += 1;
+
+
+                    statusOfBuildingResponse.Water += 1;// StatusOfBuilding[2] == "1" ? 1 : 0;
+                    statusOfBuildingResponse.WaterAll += 1;
+
+                }
+                catch (Exception)
+                {
+
+                }
+                try
+                {
+
+                    statusOfBuildingResponse.Cleaness += (item.Cleanliness == "Satisfactory" ? 1 : 0);
+                    statusOfBuildingResponse.CleanessAll += 1; ;
+
+                }
+                catch (Exception)
+                {
+
+                }
+                try
+                {
+                    var Premises = item.Premises.Split(',');
+                    statusOfBuildingResponse.Goverment += Premises[0] == "1" ? 1 : 0;
+                    statusOfBuildingResponse.GovermentAll += 1;
+
+                    statusOfBuildingResponse.Ranted += Premises[0] == "2" ? 1 : 0;
+                    statusOfBuildingResponse.RantedAll += 1;
+
+                    if (Premises.Length > 2)
+                    {
+                        statusOfBuildingResponse.PVT += Premises[0] == "3" ? 1 : 0;
+                        statusOfBuildingResponse.PVTAll += 1;
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+                try
+                {
+                    var status = item.Branded.Split(',');
+                    statusOfBuildingResponse.Branded += status[0] == "1" ? 1 : 0;
+                    statusOfBuildingResponse.BrandedAll += 1;
+
+                    statusOfBuildingResponse.Unbranded += status[0] == "2" ? 1 : 0;
+                    statusOfBuildingResponse.UnbrandedAll += 1;
+
+                }
+                catch (Exception)
+                {
+
+                }
+
+                try
+                {
+                    statusOfBuildingResponse.IndicationPercentage = CalculatePercentage(statusOfBuildingResponse.Indication, statusOfBuildingResponse.IndicationAll);
+                    statusOfBuildingResponse.ElectricityPercentage = CalculatePercentage(statusOfBuildingResponse.Electricity, statusOfBuildingResponse.ElectricityAll);
+                    statusOfBuildingResponse.GasPercentage = CalculatePercentage(statusOfBuildingResponse.Gas, statusOfBuildingResponse.GasAll);
+                    statusOfBuildingResponse.WaterPercentage = CalculatePercentage(statusOfBuildingResponse.Water, statusOfBuildingResponse.WaterAll);
+                    statusOfBuildingResponse.CleanessPercentage = CalculatePercentage(statusOfBuildingResponse.Cleaness, statusOfBuildingResponse.CleanessAll);
+                    statusOfBuildingResponse.GovermentPercentage = CalculatePercentage(statusOfBuildingResponse.Goverment, statusOfBuildingResponse.GovermentAll);
+                    statusOfBuildingResponse.RantedPercentage = CalculatePercentage(statusOfBuildingResponse.Ranted, statusOfBuildingResponse.RantedAll);
+                    statusOfBuildingResponse.PVTPercentage = CalculatePercentage(statusOfBuildingResponse.PVT, statusOfBuildingResponse.PVTAll);
+                    statusOfBuildingResponse.BrandedPercentage = CalculatePercentage(statusOfBuildingResponse.Branded, statusOfBuildingResponse.BrandedAll);
+                    statusOfBuildingResponse.UnbrandedPercentage = CalculatePercentage(statusOfBuildingResponse.Unbranded, statusOfBuildingResponse.UnbrandedAll);
+                }
+                catch(Exception)
+                {
+
+                }
+            }
+
+            return statusOfBuildingResponse;
+
+        }
+
+        double CalculatePercentage(int count, int total)
+        {
+            if (total == 0) return 0;
+            return Math.Round(((double)count / total) * 100, 2);
         }
     }
 }

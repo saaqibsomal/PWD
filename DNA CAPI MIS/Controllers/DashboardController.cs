@@ -262,5 +262,19 @@ namespace DNA_CAPI_MIS.Controllers
                 throw;
             }
         }
+
+        [HttpPost]
+        public JsonResult StatusOfBuilding(DashboardRequest req)
+        {
+            try
+            {
+                var report = service.StatusOfBuilding(req);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
