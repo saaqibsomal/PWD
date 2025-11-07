@@ -1681,11 +1681,8 @@ SELECT * FROM #Graph ORDER BY YearNum, MonthNum, Center;;
                     statusOfBuildingResponse.Ranted += Premises[0] == "2" ? 1 : 0;
                     statusOfBuildingResponse.RantedAll += 1;
 
-                    if (Premises.Length > 2)
-                    {
-                        statusOfBuildingResponse.PVT += Premises[0] == "3" ? 1 : 0;
-                        statusOfBuildingResponse.PVTAll += 1;
-                    }
+                    statusOfBuildingResponse.PVT += Premises[0] == "3" ? 1 : 0;
+                    statusOfBuildingResponse.PVTAll += 1;
                 }
                 catch (Exception)
                 {
@@ -1719,7 +1716,7 @@ SELECT * FROM #Graph ORDER BY YearNum, MonthNum, Center;;
                     statusOfBuildingResponse.BrandedPercentage = CalculatePercentage(statusOfBuildingResponse.Branded, statusOfBuildingResponse.BrandedAll);
                     statusOfBuildingResponse.UnbrandedPercentage = CalculatePercentage(statusOfBuildingResponse.Unbranded, statusOfBuildingResponse.UnbrandedAll);
                 }
-                catch(Exception)
+                catch (Exception)
                 {
 
                 }
