@@ -65,4 +65,42 @@ namespace DNA_CAPI_MIS.Models
         public string Jodelle { get; set; }
         public string Date { get; set; }
     }
+
+    public class StatusOfBuildingResponse
+    {
+        public int Goverment { get; set; }
+        public int Ranted { get; set; }
+        public int PVT { get; set; }
+        public int Indication { get; set; }
+        public int Electricity { get; set; }
+        public int Gas { get; set; }
+        public int Water { get; set; }
+        public int Cleaness { get; set; }
+        public int Branded { get; set; }
+        public int Unbranded { get; set; }
+
+
+        public int GovermentAll { get; set; }
+        public int RantedAll { get; set; }
+        public int PVTAll { get; set; }
+        public int IndicationAll { get; set; }
+        public int ElectricityAll { get; set; }
+        public int GasAll { get; set; }
+        public int WaterAll { get; set; }
+        public int CleanessAll { get; set; }
+        public int BrandedAll { get; set; }
+        public int UnbrandedAll { get; set; }
+
+        public double GovermentPercentage { get; set; }
+        public double RantedPercentage { get; set; }
+        public double PVTPercentage { get; set; }
+        public double IndicationPercentage { get; set; }
+        public double ElectricityPercentage { get; set; }
+        public double GasPercentage { get; set; }
+        public double WaterPercentage { get; set; }
+        public double CleanessPercentage { get; set; }
+        public double BrandedPercentage { get; set; }
+        public double UnbrandedPercentage { get; set; }
+
+    }
 }

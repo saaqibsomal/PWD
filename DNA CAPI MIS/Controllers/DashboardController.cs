@@ -1,5 +1,6 @@
 ﻿using DNA_CAPI_MIS.Models;
 using DNA_CAPI_MIS.Service;
+using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -153,6 +154,127 @@ namespace DNA_CAPI_MIS.Controllers
                 throw;
             }
             return Json(report, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public JsonResult EquiptmentPositionDetail(DashboardRequest req)
+        {
+            List<EquiptmentModel> report = new List<EquiptmentModel>();
+            try
+            {
+
+                report = service.EquiptmentPosition(req);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Json(report, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult EquiptmentPositionStock(DashboardRequest req)
+        {
+            EquiptmentPositionResponse report = new EquiptmentPositionResponse();
+            try
+            {
+                report = service.EquiptmentPositionStock(req);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Json(report, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public JsonResult TechnicalMonitoringDetail(DashboardRequest req)
+        {
+            try
+            {
+                var report = service.TechnicalMonitoringDetail(req);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+           
+        }
+
+        [HttpPost]
+        public JsonResult TechnicalMonitoringStock(DashboardRequest req)
+        {
+            try
+            {
+                var report = service.TechnicalMonitoringStock(req);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+        }
+
+
+        [HttpPost]
+        public JsonResult IECMatrialDetail(DashboardRequest req)
+        {
+            try
+            {
+                var report = service.IECMatrialDetail(req);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+        }
+
+        [HttpPost]
+        public JsonResult IECMatrialStock(DashboardRequest req)
+        {
+            try
+            {
+                var report = service.IECMatrialStock(req);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public JsonResult PerformaceOfSdp(DashboardRequest req)
+        {
+            try
+            {
+                var report = service.PerformaceOfSdp(req);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public JsonResult StatusOfBuilding(DashboardRequest req)
+        {
+            try
+            {
+                var report = service.StatusOfBuilding(req);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

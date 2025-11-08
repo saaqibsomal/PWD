@@ -57,7 +57,7 @@ namespace DNA_CAPI_MIS.Models
 
         //[Display(Name = "Surveyor ID")]
         //public int SurveyorId { get; set; }
-        
+
         [Display(Name = "Surveyor Username")]
         public string SurveyorName { get; set; }
 
@@ -111,7 +111,7 @@ namespace DNA_CAPI_MIS.Models
 
         [Display(Name = "Response Time")]
         public int? ResponseTime { get; set; }      //In milliseconds
-        
+
         public virtual Survey Survey { get; set; }
 
     }
@@ -185,7 +185,7 @@ namespace DNA_CAPI_MIS.Models
         public int hh { get; set; }
         public int mins { get; set; }
         public int ss { get; set; }
-    
+
         public string time_spent_for_location { get; set; }
         public string cellid { get; set; }
         public string CITY_GPS { get; set; }
@@ -245,18 +245,20 @@ namespace DNA_CAPI_MIS.Models
         public int Color_Blue { get; set; }
     }
 
-    public class Surveyorname {
-       
+    public class Surveyorname
+    {
+
         public string Name { get; set; }
         public int count { get; set; }
-    
+
     }
-    public class SurveyDetail { 
-    
-        public DateTime Created{get;set;}
-        public double Latitude{get;set;}
+    public class SurveyDetail
+    {
+
+        public DateTime Created { get; set; }
+        public double Latitude { get; set; }
         public double Longitude { get; set; }
-    
+
     }
 
     public class PdfDetailReport
@@ -310,5 +312,96 @@ namespace DNA_CAPI_MIS.Models
         public string IUD { get; set; }
         public string Jadelle { get; set; }
 
+    }
+
+    public class EquiptmentPositionResponse
+    {
+        public int Minilapkits { get; set; }
+        public int Iudkits { get; set; }
+        public int BPApparatus { get; set; }
+        public int Stethoscope { get; set; }
+        public int Thermometer { get; set; }
+        public int WeightingMachine { get; set; }
+        public int Stove { get; set; }
+        public int OTLights { get; set; }
+        public int HydrolicTable { get; set; }
+        public int Autoclave { get; set; }
+        public int OxygenCylinder { get; set; }
+        public int AspiratingPumps { get; set; }
+        public int WheelChair { get; set; }
+        public int Stretcher { get; set; }
+        public int Generators { get; set; }
+        public int Screen { get; set; }
+
+        public int MinilapkitsTotal { get; set; }
+        public int IudkitsTotal { get; set; }
+        public int BPApparatusTotal { get; set; }
+        public int StethoscopeTotal { get; set; }
+        public int ThermometerTotal { get; set; }
+        public int WeightingMachineTotal { get; set; }
+        public int StoveTotal { get; set; }
+        public int OTLightsTotal { get; set; }
+        public int HydrolicTableTotal { get; set; }
+        public int AutoclaveTotal { get; set; }
+        public int OxygenCylinderTotal { get; set; }
+        public int AspiratingPumpsTotal { get; set; }
+        public int WheelChairTotal { get; set; }
+        public int StretcherTotal { get; set; }
+        public int GeneratorsTotal { get; set; }
+        public int ScreenTotal { get; set; }
+
+    }
+
+    public class EquiptmentModel
+    {
+        public string asDate { get; set; }
+        public string ProjectName { get; set; }
+        public string District { get; set; }
+        public string Center { get; set; }
+        public string EuiptmentPosition { get; set; }
+
+    }
+    public class MonitoringResponse
+    {
+        public int HandWashing { get; set; }
+        public int Decontamination { get; set; }
+        public int Cleaning { get; set; }
+        public int disinfection { get; set; }
+        public int Wastedisposal { get; set; }
+
+        public int HandWashingNo { get; set; }
+        public int DecontaminationNo { get; set; }
+        public int CleaningNo { get; set; }
+        public int disinfectionNo { get; set; }
+        public int WastedisposalNo { get; set; }
+
+    }
+
+    public class IECMatrialResponse
+    {
+        public int IECMatrialYes { get; set; }
+        public int IECMatrialNo { get; set; }
+        public int MECWheelYes { get; set; }
+        public int MECWheelNo { get; set; }
+    }
+    public class PerformaceSdpResponseModel
+    {
+        public string asDate { get; set; }
+        public string ProjectName { get; set; }
+        public string District { get; set; }
+        public string Center { get; set; }
+        public string PerformaceOfSdp { get; set; }
+ 
+    }
+    public class PerformaceSdpResponse
+    {
+        public int GeneralClientOld { get; set; }
+        public int GeneralClientNew { get; set; }
+        public int FPClientsOld { get; set; }
+        public int FPClientsNew { get; set; }
+        public int MCH_RH_Old { get; set; }
+        public int MCH_RH_New { get; set; }
+        public int CSCasesOld { get; set; }
+        public int CSCasesNew { get; set; }
     }
 }
