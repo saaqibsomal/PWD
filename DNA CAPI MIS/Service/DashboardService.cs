@@ -50,34 +50,122 @@ namespace DNA_CAPI_MIS.Service
         }
         private void NumberOfVisitor(DashboardRequest req, DashboardResponse response)
         {
-            var All = $@"SELECT SurveyorName, COUNT(*) AS SurveyCount FROM Survey WHERE ProjectID in( 7120,7121,7122) and Convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY SurveyorName ORDER BY COUNT(*) DESC";
-            var RHS = $@"SELECT SurveyorName, COUNT(*) AS SurveyCount FROM Survey WHERE ProjectID = 7120 and Convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY SurveyorName ORDER BY COUNT(*) DESC";
-            var MSU = $@"SELECT SurveyorName, COUNT(*) AS SurveyCount FROM Survey WHERE ProjectID = 7121 and Convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY SurveyorName ORDER BY COUNT(*) DESC";
-            var FWC = $@"SELECT SurveyorName, COUNT(*) AS SurveyCount FROM Survey WHERE ProjectID = 7122 and Convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 12:59:59' GROUP BY SurveyorName ORDER BY COUNT(*) DESC";
+            var All = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
 
-            var RHS_MSU_FWC = dbContext.Database.SqlQuery<SurveyorStats>(All);
-            var queryRHS = dbContext.Database.SqlQuery<SurveyorStats>(RHS);
-            var queryMSU = dbContext.Database.SqlQuery<SurveyorStats>(MSU);
-            var queryFWC = dbContext.Database.SqlQuery<SurveyorStats>(FWC);
+;with cte as (
+	  select s.ProjectID,  s.sbjnum, s.DeviceTimestamp, 
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue  order by s.DeviceTimestamp desc) as RowNum
+	from survey s
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+	    inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (55570,50482,55585) -- Open Close Center Status
+		where s.ProjectID in (7120,7121,7122))
+select  
+case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
+    into #Graph from cte
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
+	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
+    where  convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph";
+            var RHS = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
+
+;with cte as (
+	  select s.ProjectID,  s.sbjnum, s.DeviceTimestamp, 
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue  order by s.DeviceTimestamp desc) as RowNum
+	from survey s
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+	    inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (55570,50482,55585) -- Open Close Center Status
+		where s.ProjectID in (7120))
+select  
+case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
+    into #Graph from cte
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
+	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
+    where  convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph";
+            var MSU = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
+
+;with cte as (
+	  select s.ProjectID,  s.sbjnum, s.DeviceTimestamp, 
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue  order by s.DeviceTimestamp desc) as RowNum
+	from survey s
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+	    inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (55570,50482,55585) -- Open Close Center Status
+		where s.ProjectID in (7121))
+select  
+case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
+    into #Graph from cte
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
+	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
+    where  convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph";
+            var FWC = $@"IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
+
+;with cte as (
+	  select s.ProjectID,  s.sbjnum, s.DeviceTimestamp, 
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue  order by s.DeviceTimestamp desc) as RowNum
+	from survey s
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+	    inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (55570,50482,55585) -- Open Close Center Status
+		where s.ProjectID in (7122))
+select  
+case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
+    into #Graph from cte
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
+	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
+    where  convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph";
+
+            var RHS_MSU_FWC = dbContext.Database.SqlQuery<SurveyorStatsCount>(All);
+            var queryRHS = dbContext.Database.SqlQuery<SurveyorStatsCount>(RHS);
+            var queryMSU = dbContext.Database.SqlQuery<SurveyorStatsCount>(MSU);
+            var queryFWC = dbContext.Database.SqlQuery<SurveyorStatsCount>(FWC);
 
             if (RHS_MSU_FWC.Count() > 0)
             {
                 response.All.SurveyorName = "All";
-                response.All.SurveyCount = RHS_MSU_FWC.Sum(x => x.SurveyCount);
+                response.All.SurveyCount = RHS_MSU_FWC.Count();
             }
             if (queryRHS.Count() > 0)
             {
-                response.RHS.SurveyCount = queryRHS.Sum(x => x.SurveyCount);
+                response.RHS.SurveyCount = queryRHS.Count();
             }
             response.RHS.SurveyorName = "RHS";
             if (queryMSU.Count() > 0)
             {
-                response.MSU.SurveyCount = queryMSU.Sum(x => x.SurveyCount);
+                response.MSU.SurveyCount = queryMSU.Count();
             }
             response.MSU.SurveyorName = "MSU";
             if (queryFWC.Count() > 0)
             {
-                response.FWC.SurveyCount = queryFWC.Sum(x => x.SurveyCount);
+                response.FWC.SurveyCount = queryFWC.Count();
             }
             response.FWC.SurveyorName = "FWC";
         }
@@ -187,22 +275,30 @@ SELECT * FROM #Graph ORDER BY YearNum, MonthNum, Center;;
         {
             string Query = $@"
  
--- MSU
-WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
-        MAX(CASE WHEN sd.FieldId = 50482 THEN sd.[FieldValue] END) AS IsOpen,
-        MAX(CASE WHEN sd.FieldId in( 50484) THEN sd.[FieldValue] END) AS District,
-        MAX(CASE WHEN sd.FieldId = 50486 THEN sd.[FieldValue] END) AS Center
-    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and Convert(datetime, s.DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' GROUP BY s.ProjectID, sd.sbjnum),
-cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
-  INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 50484 
-    INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  50486),
-SplitStatus AS (    SELECT    cwt.ProjectID,   cwt.DistrictTitle,  cwt.CenterTitle,   value AS StatusCode
-    FROM   cte_with_titles cwt   CROSS APPLY dbo.SplitStringValue(cwt.IsOpen, ',') 
- where (cwt.DistrictTitle like '%{req.DistrictName}%' or '' = '{req.DistrictName}') and (cwt.CenterTitle like  '%{req.CenterName}%' or '' = '{req.CenterName}')
+IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
+
+;with cte as (
+	  select s.ProjectID,  s.sbjnum, s.DeviceTimestamp, 
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue  order by s.DeviceTimestamp desc) as RowNum
+	from survey s
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+	    inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (55570,50482,55585) -- Open Close Center Status
+		 where s.ProjectID in (7121)
 )
-SELECT 
-    ProjectID, CASE    WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close' END AS Title, COUNT(*) AS OpenClose
-FROM   SplitStatus ss GROUP BY  ProjectID,  CASE   WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close'   END ORDER BY  Title;
+select  
+case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
+    into #Graph from cte
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
+	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
+    where  convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph;
 ";
 
 
@@ -214,30 +310,44 @@ FROM   SplitStatus ss GROUP BY  ProjectID,  CASE   WHEN StatusCode = '1' THEN 'O
             {
                 req.CenterName = "";
             }
-            var OpenClose = dbContext.Database.SqlQuery<PieChartOC>(Query);
+            var OpenClose = dbContext.Database.SqlQuery<SurveyorStatsCount>(Query);
 
-            response.MSUOpenClose = OpenClose.ToList();
+            if(OpenClose.Count() > 0)
+            {
+                response.MSUOpenClose.Add(new PieChartOC { Title = "Close", OpenClose = OpenClose.Count(x=>x.SurveyCount == "Close") });
+                response.MSUOpenClose.Add(new PieChartOC { Title = "Open", OpenClose = OpenClose.Count(x => x.SurveyCount == "Open") });
+            }
+
+
+           
         }
         private void FWCOpenClose(DashboardRequest req, DashboardResponse response)
         {
             string Query = $@"
--- FWC
+IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
 
-WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
-        MAX(CASE WHEN sd.FieldId = 55585 THEN sd.[FieldValue] END) AS IsOpen,
-        MAX(CASE WHEN sd.FieldId in( 55587) THEN sd.[FieldValue] END) AS District,
-        MAX(CASE WHEN sd.FieldId = 55588 THEN sd.[FieldValue] END) AS Center
-    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and convert(datetime, s.DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' GROUP BY s.ProjectID, sd.sbjnum),
-cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
-  INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 55587 
-    INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  55588),
-SplitStatus AS (    SELECT    cwt.ProjectID,   cwt.DistrictTitle,  cwt.CenterTitle,   value AS StatusCode
-    FROM   cte_with_titles cwt   CROSS APPLY dbo.SplitStringValue(cwt.IsOpen, ',') 
- where (cwt.DistrictTitle like '%{req.DistrictName}%' or '' = '{req.DistrictName}') and (cwt.CenterTitle like  '%{req.CenterName}%' or '' = '{req.CenterName}')
+;with cte as (
+	  select s.ProjectID,  s.sbjnum, s.DeviceTimestamp, 
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue  order by s.DeviceTimestamp desc) as RowNum
+	from survey s
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+	    inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (55570,50482,55585) -- Open Close Center Status
+		 where s.ProjectID in (7122)
 )
-SELECT 
-    ProjectID, CASE    WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close' END AS Title, COUNT(*) AS OpenClose
-FROM   SplitStatus ss GROUP BY  ProjectID,  CASE   WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close'   END ORDER BY  Title;";
+select  
+case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
+    into #Graph from cte
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
+	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
+    where  convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph;";
 
 
             if (string.IsNullOrEmpty(req.DistrictName))
@@ -248,31 +358,41 @@ FROM   SplitStatus ss GROUP BY  ProjectID,  CASE   WHEN StatusCode = '1' THEN 'O
             {
                 req.CenterName = "";
             }
-            var OpenClose = dbContext.Database.SqlQuery<PieChartOC>(Query);
+            var OpenClose = dbContext.Database.SqlQuery<SurveyorStatsCount>(Query);
 
-            response.FWCOpenClose = OpenClose.ToList();
+            if (OpenClose.Count() > 0)
+            {
+                response.FWCOpenClose.Add(new PieChartOC { Title = "Close", OpenClose = OpenClose.Count(x => x.SurveyCount == "Close") });
+                response.FWCOpenClose.Add(new PieChartOC { Title = "Open", OpenClose = OpenClose.Count(x => x.SurveyCount == "Open") });
+            }
         }
         private void RHSOpenClose(DashboardRequest req, DashboardResponse response)
         {
             string Query = $@"
--- RHS
-WITH cte AS (  SELECT   s.ProjectID, sd.sbjnum,
-        MAX(CASE WHEN sd.FieldId = 55570 THEN sd.[FieldValue] END) AS IsOpen,
-        MAX(CASE WHEN sd.FieldId in( 50435) THEN sd.[FieldValue] END) AS District,
-        MAX(CASE WHEN sd.FieldId = 50446 THEN sd.[FieldValue] END) AS Center
-    FROM   SurveyData sd inner join survey s on sd.sbjnum = s.sbjnum and convert(datetime, s.DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' GROUP BY s.ProjectID, sd.sbjnum),
-cte_with_titles AS (  SELECT cte.ProjectID,   cte.sbjnum,  cte.IsOpen, p.Title AS DistrictTitle,  pp.Title AS CenterTitle  FROM  cte
-  INNER JOIN ProjectFieldSample p ON cte.District = p.Code AND p.FieldID = 50435 
-    INNER JOIN ProjectFieldSample pp ON cte.Center = pp.Code AND pp.FieldID =  50446),
-SplitStatus AS (    SELECT    cwt.ProjectID,   cwt.DistrictTitle,  cwt.CenterTitle,   value AS StatusCode
-    FROM   cte_with_titles cwt   CROSS APPLY dbo.SplitStringValue(cwt.IsOpen, ',') 
- where (cwt.DistrictTitle like '%{req.DistrictName}%' or '' = '{req.DistrictName}') and (cwt.CenterTitle like  '%{req.CenterName}%' or '' = '{req.CenterName}')
-)
-    
-SELECT 
-    ProjectID, CASE    WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close' END AS Title, COUNT(*) AS OpenClose
-FROM   SplitStatus ss GROUP BY  ProjectID,  CASE   WHEN StatusCode = '1' THEN 'Open'  ELSE 'Close'   END ORDER BY  Title;
+IF OBJECT_ID('tempdb..#Graph') IS NOT NULL
+BEGIN
+    DROP TABLE #Graph;
+END
 
+;with cte as (
+	  select s.ProjectID,  s.sbjnum, s.DeviceTimestamp, 
+		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
+		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
+		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue  order by s.DeviceTimestamp desc) as RowNum
+	from survey s
+		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
+		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
+	    inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (55570,50482,55585) -- Open Close Center Status
+		 where s.ProjectID in (7120)
+)
+select  
+case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
+    into #Graph from cte
+	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
+	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
+	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
+    where  convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph;
 ";
 
             if (string.IsNullOrEmpty(req.DistrictName))
@@ -283,9 +403,13 @@ FROM   SplitStatus ss GROUP BY  ProjectID,  CASE   WHEN StatusCode = '1' THEN 'O
             {
                 req.CenterName = "";
             }
-            var OpenClose = dbContext.Database.SqlQuery<PieChartOC>(Query);
+            var OpenClose = dbContext.Database.SqlQuery<SurveyorStatsCount>(Query);
 
-            response.RHSOpenClose = OpenClose.ToList();
+            if (OpenClose.Count() > 0)
+            {
+                response.RHSOpenClose.Add(new PieChartOC { Title = "Close", OpenClose = OpenClose.Count(x => x.SurveyCount == "Close") });
+                response.RHSOpenClose.Add(new PieChartOC { Title = "Open", OpenClose = OpenClose.Count(x => x.SurveyCount == "Open") });
+            }
         }
         public List<SDPsStatus> SDPStatus(DashboardRequest req)
         {
@@ -300,30 +424,26 @@ END
        
 		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
 		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
-	   
-		sd5.fieldId as FieldId5, sd5.fieldValue as FieldValue5,
 		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
-		sd7.fieldId as FieldId7, sd7.fieldValue as FieldValue7,
-	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue ,sd5.fieldId,sd5.fieldValue order by s.DeviceTimestamp desc) as RowNum
+
+	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue  order by s.DeviceTimestamp desc) as RowNum
 	from survey s
 		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
 		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
-		inner join SurveyData sd5 on s.sbjnum = sd5.sbjnum and sd5.FieldId in (55591,50495,52571) -- Premises
+		--inner join SurveyData sd5 on s.sbjnum = sd5.sbjnum and sd5.FieldId in (55591,50495,52571) -- Premises
 	    inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (55570,50482,55585) -- Open Close Center Status
-		inner join SurveyData sd7 on s.sbjnum = sd7.sbjnum and sd7.FieldId in (50437,50634,55590) -- Status 
+		--inner join SurveyData sd7 on s.sbjnum = sd7.sbjnum and sd7.FieldId in (50437,50634,55590) -- Status 
 		{Where})
 select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as ProjectName, fs2.Title as District ,fs3.Title as Center, 
- FieldValue5 
- as Premises,
 case when FieldValue6 =1 then 'Open' else 'Close' end as OpenClose,
- FieldValue7 as Status, convert(varchar, DeviceTimestamp,101) asDate
+ convert(varchar, DeviceTimestamp,101) asDate
     into #Graph from cte
 	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
-	inner join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
+	--inner join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
-	inner join ProjectFieldSample fs7 on cte.FieldId7 = fs7.FieldID and fs7.Code IN (cte.FieldValue7)
-    where RowNum = 1 and convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph";
+	--inner join ProjectFieldSample fs7 on cte.FieldId7 = fs7.FieldID and fs7.Code IN (cte.FieldValue7)
+    where  convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph";
 
 
             if (string.IsNullOrEmpty(req.DistrictName))
@@ -738,13 +858,13 @@ Convert(varchar,isnull((select top 1 sd.FieldValue from SurveyData sd where sd.F
 Convert(varchar,isnull((select top 1 sd.FieldValue from SurveyData sd where sd.FieldId in (50446,50486,55588) and sd.sbjnum = s.sbjnum),0)) as Center,
 Convert(varchar,isnull((select top 1 sd.FieldId from SurveyData sd where sd.FieldId in (50435,50484,55587) and sd.sbjnum = s.sbjnum),0)) as DistrictFieldID,
 Convert(varchar,isnull((select top 1  sd.FieldId from SurveyData sd where sd.FieldId in (50446,50486,55588) and sd.sbjnum = s.sbjnum),0)) as CenterFieldId
-, case when s.projectID = 7120 then 'RHS-S' when  s.projectID = 7121 then 'MSU' when s.projectID = 7122 then 'FWC' else '' end as Project
+, case when s.projectID = 7120 then 'RHS-A' when  s.projectID = 7121 then 'MSU' when s.projectID = 7122 then 'FWC' else '' end as Project
 into #SurveyReport
 from Survey  s 
 where s.projectID in ({req.ProjectId}) and s.DeviceTimestamp  BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' order by s.sbjnum desc
- select sp.*,isnull(pfD.Title,'') DistrictName, isnull(pfC.Title,'') CenterName  from #SurveyReport sp 
- Left join   ProjectFieldSample pfC on sp.Center = pfC.Code and sp.CenterFieldId = pfC.FieldID
- Left join ProjectFieldSample pfD on sp.District = pfD.Code and sp.DistrictFieldID = pfD.FieldID 
+ select distinct sp.*,isnull(pfD.Title,'') DistrictName, isnull(pfC.Title,'') CenterName  from #SurveyReport sp 
+ Inner join   ProjectFieldSample pfC on sp.Center = pfC.Code and sp.CenterFieldId = pfC.FieldID
+ Inner join ProjectFieldSample pfD on sp.District = pfD.Code and sp.DistrictFieldID = pfD.FieldID 
  order by DeviceTimestamp desc
 ";
 
@@ -824,7 +944,7 @@ SELECT
 INTO #SurveyReport
 FROM Survey s 
 WHERE s.projectID IN (7120,7121,7122) 
-    AND s.DeviceTimestamp BETWEEN '2000-10-16 00:00:01' AND '2075-10-23 12:59:59'
+    AND s.DeviceTimestamp BETWEEN '{StartDateDat} 00:00:01' AND '{EndDate} 12:59:59'
 ORDER BY s.sbjnum DESC;
 
 WITH DistinctVisits AS (
@@ -1060,7 +1180,7 @@ END;
         ON cte.FieldId3 = fs3.FieldID AND fs3.Code IN (cte.FieldValue3)
     LEFT JOIN ProjectFieldSample fs5 
         ON cte.FieldId5 = fs5.FieldID AND fs5.Code IN (cte.FieldValue5)
-    WHERE  RowNum = 1 AND LEN(FieldValue5) > 20 
+    WHERE  RowNum = 1 AND LEN(FieldValue5) > 10 
       AND Convert(datetime, DeviceTimestamp,101) BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59'
 ), filtered AS (
     SELECT *,
@@ -1145,7 +1265,7 @@ END;
         ON cte.FieldId3 = fs3.FieldID AND fs3.Code IN (cte.FieldValue3)
     LEFT JOIN ProjectFieldSample fs5 
         ON cte.FieldId5 = fs5.FieldID AND fs5.Code IN (cte.FieldValue5)
-    WHERE  RowNum = 1 AND LEN(FieldValue5) > 20 
+    WHERE  RowNum = 1 AND LEN(FieldValue5) > 10 
       AND Convert(datetime, DeviceTimestamp,101) BETWEEN '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59'
 ), filtered AS (
     SELECT *,
@@ -1275,7 +1395,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 	inner join ProjectFieldSample fs1 on cte.FieldId1 = fs1.FieldID and fs1.Code IN (cte.FieldValue1)
 	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID --and fs3.Code IN (cte.FieldValue3)  
-  and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select distinct * from #Graph g where len(g.Technical) > 1
+  and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select distinct g.ProjectName,g.District,g.Center,g.Technical,g.asDate from #Graph g where len(g.Technical) > 1
 
  
 ";
@@ -1327,7 +1447,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 	inner join ProjectFieldSample fs1 on cte.FieldId1 = fs1.FieldID and fs1.Code IN (cte.FieldValue1)
 	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID --and fs3.Code IN (cte.FieldValue3)  
-  and created between '{req.StartDate}' and '{req.EndDate}' select distinct * from #Graph g where len(g.Technical) > 1
+  and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select distinct g.ProjectName,g.District,g.Center,g.Technical,g.asDate from #Graph g where len(g.Technical) > 1
 
  
 ";
@@ -1349,16 +1469,19 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
             {
                 var data = item.Technical.Split(',');
                 monitoringResponse.HandWashing += data[0] == "1" ? 1 : 0;
-                monitoringResponse.Decontamination += data[1] == "1" ? 1 : 0;
-                monitoringResponse.Cleaning += data[2] == "1" ? 1 : 0;
-                monitoringResponse.disinfection += data[3] == "1" ? 1 : 0;
-                monitoringResponse.Wastedisposal += data[4] == "1" ? 1 : 0;
+                monitoringResponse.HandWashingNo += data[0] != "1" ? 1 : 0;
 
-                monitoringResponse.HandWashingNo += data[0] == "2" ? 1 : 0;
-                monitoringResponse.DecontaminationNo += data[1] == "2" ? 1 : 0;
-                monitoringResponse.CleaningNo += data[2] == "2" ? 1 : 0;
-                monitoringResponse.disinfectionNo += data[3] == "2" ? 1 : 0;
-                monitoringResponse.WastedisposalNo += data[4] == "2" ? 1 : 0;
+                monitoringResponse.Decontamination += data[1] == "1" ? 1 : 0;
+                monitoringResponse.DecontaminationNo += data[1] != "1" ? 1 : 0;
+
+                monitoringResponse.Cleaning += data[2] == "1" ? 1 : 0;
+                monitoringResponse.CleaningNo += data[2] != "1" ? 1 : 0;
+
+                monitoringResponse.disinfection += data[3] == "1" ? 1 : 0;
+                monitoringResponse.disinfectionNo += data[3] != "1" ? 1 : 0;
+
+                monitoringResponse.Wastedisposal += data[4] == "1" ? 1 : 0;
+                monitoringResponse.WastedisposalNo += data[4] != "1" ? 1 : 0;
             }
 
 
@@ -1398,7 +1521,7 @@ FieldValue6 as MECWheel,convert(varchar, Created,101) asDate,
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
 	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	left join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
-    where RowNum = 1 and  len(FieldValue5) > 1 and len(FieldValue5) < 4 and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph ";
+    where RowNum = 1 and  len(FieldValue5) > 0  and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph ";
             if (string.IsNullOrEmpty(req.DistrictName))
             {
                 req.DistrictName = string.Empty;
@@ -1458,7 +1581,7 @@ FieldValue6 as MECWheel,convert(varchar, Created,101) asDate,
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
 	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	left join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
-    where RowNum = 1 and  len(FieldValue5) > 4 and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph ";
+    where RowNum = 1 and  len(FieldValue5) > 0  and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph ";
             if (string.IsNullOrEmpty(req.DistrictName))
             {
                 req.DistrictName = string.Empty;
@@ -1502,7 +1625,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
 	left join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 
-    where RowNum = 1 and  len(FieldValue5) > 4 and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph  ";
+    where RowNum = 1 and  len(FieldValue5) > 1 and created between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph  ";
             if (string.IsNullOrEmpty(req.DistrictName))
             {
                 req.DistrictName = string.Empty;
@@ -1522,25 +1645,31 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
                 try
                 {
                     var data = item.PerformaceOfSdp.Split('|');
+                    var GeneralClientData = data[0].Split(',');
+                    var GeneralClient = GeneralClientData;
+                    string cc1 = GeneralClient[0].Split('-')[1];
+                    performaceSdpResponse.GeneralClientNew += string.IsNullOrEmpty(cc1) ? 0 : Convert.ToInt32(cc1);
+                    performaceSdpResponse.GeneralClientOld +=  string.IsNullOrEmpty(GeneralClient[1])   ? 0 : Convert.ToInt32(GeneralClient[1]);
 
-                    var GeneralClient = data[0].Split(',');
-                    performaceSdpResponse.GeneralClientNew += GeneralClient[0] == "1" ? 1 : 0;
-                    performaceSdpResponse.GeneralClientOld += GeneralClient[1] == "2" ? 1 : 0;
+                    var FPClientsData = data[1].Split(',');
+                    var FPClients = FPClientsData;
+                    string FPC = FPClientsData[0].Split('-')[1];
+                    performaceSdpResponse.FPClientsNew += string.IsNullOrEmpty(FPC) ? 0 : Convert.ToInt32(FPC);
+                    performaceSdpResponse.FPClientsOld += string.IsNullOrEmpty(FPClients[1]) ? 0 : Convert.ToInt32(FPClients[1]);
 
-                    var FPClients = data[1].Split(',');
-                    performaceSdpResponse.FPClientsNew += FPClients[0] == "1" ? 1 : 0;
-                    performaceSdpResponse.FPClientsOld += FPClients[1] == "2" ? 1 : 0;
+                    var MCH_RH_Data = data[2].Split(',');
+                    var MCH_RH = MCH_RH_Data;
+                    string MRN = MCH_RH[0].Split('-')[1];   
+                    performaceSdpResponse.MCH_RH_New += string.IsNullOrEmpty(MRN) ? 0 : Convert.ToInt32(MRN);
+                    performaceSdpResponse.MCH_RH_Old += string.IsNullOrEmpty(MCH_RH[1]) ? 0 : Convert.ToInt32(MCH_RH[1]);
 
-                    var MCH_RH = data[2].Split(',');
-                    performaceSdpResponse.MCH_RH_New += MCH_RH[0] == "1" ? 1 : 0;
-                    performaceSdpResponse.MCH_RH_Old += MCH_RH[1] == "2" ? 1 : 0;
-
-                    var CSCases = data[3].Split(',');
-                    performaceSdpResponse.CSCasesNew += CSCases[0] == "1" ? 1 : 0;
-                    performaceSdpResponse.CSCasesOld += CSCases[1] == "2" ? 1 : 0;
+                    var CSCasesData = data[3].Split(',');
+                    var CSCases = CSCasesData;
+                    string CSN = CSCases[0].Split('-')[1];
+                    performaceSdpResponse.CSCasesNew += string.IsNullOrEmpty(CSN) ? 0 : Convert.ToInt32(CSN);
+                    performaceSdpResponse.CSCasesOld += string.IsNullOrEmpty(CSCases[1]) ? 0 : Convert.ToInt32(CSCases[1]);
                 }
                 catch (Exception) { }
-
             }
             return performaceSdpResponse;
         }
@@ -1577,7 +1706,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
     INNER JOIN SurveyData sd5 ON s.sbjnum = sd5.sbjnum AND sd5.FieldId IN (55594, 50498, 50461) -- Indicate Sign
     INNER JOIN SurveyData sd6 ON s.sbjnum = sd6.sbjnum AND sd6.FieldId IN (50557, 50500, 55595) -- Status of Building Electricity Gass Water
     LEFT JOIN SurveyData sd7 ON s.sbjnum = sd7.sbjnum AND sd7.FieldId IN (50462, 50499, 55596)  -- Cleanliness
-	LEFT JOIN SurveyData sd8 ON s.sbjnum = sd8.sbjnum AND sd8.FieldId IN (555916,50495,52571) -- Premises Govt  ranted / PVT
+	LEFT JOIN SurveyData sd8 ON s.sbjnum = sd8.sbjnum AND sd8.FieldId IN (52571,50495,55591) -- Premises Govt  ranted / PVT
 	LEFT JOIN SurveyData sd9 ON s.sbjnum = sd9.sbjnum AND sd9.FieldId IN (55590,50634,50437) -- status Branded , unbranded 
      {Where}
 )

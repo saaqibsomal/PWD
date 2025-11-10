@@ -3410,7 +3410,7 @@ Convert(varchar,isnull((select top 1  sd.FieldId from SurveyData sd where sd.Fie
 into #SurveyReport
 from Survey  s 
 where s.projectID in ({Ids}) and created  between '{fromDate} 00:00:01' and '{toDate} 11:59:59' order by s.sbjnum desc
- select sp.*,isnull(pfD.Title,'') DistrictName, isnull(pfC.Title,'') CenterName  from #SurveyReport sp 
+ select distinct sp.*,isnull(pfD.Title,'') DistrictName, isnull(pfC.Title,'') CenterName  from #SurveyReport sp 
  Left join   ProjectFieldSample pfC on sp.Center = pfC.Code and sp.CenterFieldId = pfC.FieldID
  Left join ProjectFieldSample pfD on sp.District = pfD.Code and sp.DistrictFieldID = pfD.FieldID 
  order by sbjnum desc,DeviceTimestamp desc

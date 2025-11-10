@@ -451,4 +451,8 @@ public class ProjectsList
         public int  Qty { get; set; }
     }
 
+    public class SurveyorStatsCount
+    {
+        public string SurveyCount { get; set; }
+    }
 }
