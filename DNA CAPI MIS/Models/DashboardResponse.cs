@@ -41,6 +41,7 @@ namespace DNA_CAPI_MIS.Models
         public string Premises { get; set; }
         public string OpenClose { get; set; }
         public string Status { get; set; }
+        public string Photos { get; set; }
 
     }
     public class StockOfContraceptiveResponse

@@ -276,5 +276,19 @@ namespace DNA_CAPI_MIS.Controllers
                 throw;
             }
         }
+
+        [HttpGet]
+        public JsonResult GetImages(string ImageName)
+        {
+            try
+            {
+                var report = service.GetImage(ImageName);
+                return Json(report, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DNA_CAPI_MIS.Models;
+using DNA_CAPI_MIS.Utility;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Office2010.Ink;
 using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
@@ -7,6 +8,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using Org.BouncyCastle.Ocsp;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -312,14 +314,14 @@ case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
             }
             var OpenClose = dbContext.Database.SqlQuery<SurveyorStatsCount>(Query);
 
-            if(OpenClose.Count() > 0)
+            if (OpenClose.Count() > 0)
             {
-                response.MSUOpenClose.Add(new PieChartOC { Title = "Close", OpenClose = OpenClose.Count(x=>x.SurveyCount == "Close") });
+                response.MSUOpenClose.Add(new PieChartOC { Title = "Close", OpenClose = OpenClose.Count(x => x.SurveyCount == "Close") });
                 response.MSUOpenClose.Add(new PieChartOC { Title = "Open", OpenClose = OpenClose.Count(x => x.SurveyCount == "Open") });
             }
 
 
-           
+
         }
         private void FWCOpenClose(DashboardRequest req, DashboardResponse response)
         {
@@ -425,24 +427,22 @@ END
 		sd2.fieldId as FieldId2, sd2.fieldValue as FieldValue2,
 		sd3.fieldId as FieldId3, sd3.fieldValue as FieldValue3,
 		sd6.fieldId as FieldId6, sd6.fieldValue as FieldValue6,
-
+        sd7.fieldId as FieldId7, sd7.fieldValue as FieldValue7,
 	row_number() over (partition by  sd2.fieldId, sd2.fieldValue,sd3.fieldId,sd3.fieldValue  order by s.DeviceTimestamp desc) as RowNum
 	from survey s
 		inner join SurveyData sd2 on s.sbjnum = sd2.sbjnum and sd2.FieldId in (50435, 50484, 55587) --District
 		inner join SurveyData sd3 on s.sbjnum = sd3.sbjnum and sd3.FieldId in (50446, 50486, 55588)--Center close Survey Ids
-		--inner join SurveyData sd5 on s.sbjnum = sd5.sbjnum and sd5.FieldId in (55591,50495,52571) -- Premises
 	    inner join SurveyData sd6 on s.sbjnum = sd6.sbjnum and sd6.FieldId in (55570,50482,55585) -- Open Close Center Status
-		--inner join SurveyData sd7 on s.sbjnum = sd7.sbjnum and sd7.FieldId in (50437,50634,55590) -- Status 
+        left join SurveyData sd7 on s.sbjnum = sd7.sbjnum and sd7.FieldId in (55586,55569,50482) -- Images
 		{Where})
 select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as ProjectName, fs2.Title as District ,fs3.Title as Center, 
 case when FieldValue6 =1 then 'Open' else 'Close' end as OpenClose,
- convert(varchar, DeviceTimestamp,101) asDate
+ convert(varchar, DeviceTimestamp,101) asDate ,FieldValue7 as [Photos]
     into #Graph from cte
 	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
-	--inner join ProjectFieldSample fs5 on cte.FieldId5 = fs5.FieldID and fs5.Code IN (cte.FieldValue5)
 	inner join ProjectFieldSample fs6 on cte.FieldId6 = fs6.FieldID and fs6.Code IN (cte.FieldValue6)
-	--inner join ProjectFieldSample fs7 on cte.FieldId7 = fs7.FieldID and fs7.Code IN (cte.FieldValue7)
+    left join ProjectFieldSample fs7 on cte.FieldId7 = fs7.FieldID and fs7.Code IN (cte.FieldValue7)
     where  convert(datetime, DeviceTimestamp,101) between '{req.StartDate} 00:00:01' and '{req.EndDate} 11:59:59' select * from #Graph";
 
 
@@ -1649,7 +1649,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
                     var GeneralClient = GeneralClientData;
                     string cc1 = GeneralClient[0].Split('-')[1];
                     performaceSdpResponse.GeneralClientNew += string.IsNullOrEmpty(cc1) ? 0 : Convert.ToInt32(cc1);
-                    performaceSdpResponse.GeneralClientOld +=  string.IsNullOrEmpty(GeneralClient[1])   ? 0 : Convert.ToInt32(GeneralClient[1]);
+                    performaceSdpResponse.GeneralClientOld += string.IsNullOrEmpty(GeneralClient[1]) ? 0 : Convert.ToInt32(GeneralClient[1]);
 
                     var FPClientsData = data[1].Split(',');
                     var FPClients = FPClientsData;
@@ -1659,7 +1659,7 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 
                     var MCH_RH_Data = data[2].Split(',');
                     var MCH_RH = MCH_RH_Data;
-                    string MRN = MCH_RH[0].Split('-')[1];   
+                    string MRN = MCH_RH[0].Split('-')[1];
                     performaceSdpResponse.MCH_RH_New += string.IsNullOrEmpty(MRN) ? 0 : Convert.ToInt32(MRN);
                     performaceSdpResponse.MCH_RH_Old += string.IsNullOrEmpty(MCH_RH[1]) ? 0 : Convert.ToInt32(MCH_RH[1]);
 
@@ -1859,6 +1859,28 @@ SELECT * FROM #Graph ORDER BY YearNum, MonthNum, Center;;
         {
             if (total == 0) return 0;
             return Math.Round(((double)count / total) * 100, 2);
+        }
+
+
+        public string GetImage(string PhotoName)
+        {
+            string imagesPath = ConfigurationManager.AppSettings["ImagesPath"];
+            string ImageBytes = string.Empty;
+            Common com = new Common();
+
+            string Path = imagesPath + PhotoName;
+            if (System.IO.File.Exists(Path))
+            {
+                byte[] data = com.Photo(imagesPath + PhotoName);
+                string base64String = Convert.ToBase64String(data);
+                ImageBytes = base64String;
+            }
+            else
+            {
+                ImageBytes = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/zeVCeQAAAAASUVORK5CYII=";
+            }
+            return ImageBytes;
+
         }
     }
 }
