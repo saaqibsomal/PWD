@@ -377,6 +377,7 @@ public class ProjectsList
         public string District { get; set; }
         public string Center { get; set; }
         public string ConStockPosition { get; set; }
+        public int sbjnum { get; set; }
 
     }
 

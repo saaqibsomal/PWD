@@ -20,6 +20,7 @@ namespace DNA_CAPI_MIS.Models
         public int DefoStock { get; set; }
         public int IUD { get; set; }
         public int Jadelle { get; set; }
+        public int sbjnum { get; set; }
 
     }
 
@@ -42,6 +43,7 @@ namespace DNA_CAPI_MIS.Models
         public int DefoStock { get; set; }
         public int IUD { get; set; }
         public int Jadelle { get; set; }
+        public int sbjnum { get; set; }
 
     }
 
@@ -52,5 +54,6 @@ namespace DNA_CAPI_MIS.Models
         public string Message { get; set; }
         public string AlertLevel { get; set; }
         public int TotalStock { get; set; }    // Added for sorting
+        public int sbjnum { get; set; }    // Added for sorting
     }
 }

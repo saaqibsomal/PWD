@@ -609,6 +609,7 @@ SELECT * FROM #Graph order by asDate desc;
                         DefoStock = int.TryParse(Mon6, out var v6) ? v6 : 0,
                         IUD = int.TryParse(Mon7, out var v7) ? v7 : 0,
                         Jadelle = int.TryParse(Mon8, out var v8) ? v8 : 0,
+                        sbjnum = item.sbjnum
                     });
                 }
                 catch (Exception)
@@ -630,7 +631,8 @@ SELECT * FROM #Graph order by asDate desc;
                     ThreemonthsInj = g.Sum(x => x.ThreemonthsInj),
                     DefoStock = g.Sum(x => x.DefoStock),
                     IUD = g.Sum(x => x.IUD),
-                    Jadelle = g.Sum(x => x.Jadelle)
+                    Jadelle = g.Sum(x => x.Jadelle),
+                    
                 })
                 .ToList();
 
@@ -672,7 +674,9 @@ SELECT * FROM #Graph order by asDate desc;
                         District = g.Key.District,
                         AlertLevel = level,
                         Message = message,
-                        TotalStock = totalStock
+                        TotalStock = totalStock,
+                        sbjnum = g.First().sbjnum
+
                     };
                 })
                 .Where(x => x.AlertLevel != "full") // Skip full-stock if not needed
@@ -1359,7 +1363,6 @@ SELECT * FROM #Graph order by asDate desc;
             }
             return calculate;
         }
-
         public dynamic TechnicalMonitoringDetail(DashboardRequest req)
         {
             string Where = $"where s.ProjectID in ({req.ProjectId})";
@@ -1411,7 +1414,6 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
             var con = dbContext.Database.SqlQuery<Grid11>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
             return con;
         }
-
         public dynamic TechnicalMonitoringStock(DashboardRequest req)
         {
             string Where = $"where s.ProjectID in ({req.ProjectId})";
@@ -1487,8 +1489,6 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
 
             return monitoringResponse;
         }
-
-
         public IECMatrialResponse IECMatrialStock(DashboardRequest req)
         {
             string Where = $"where s.ProjectID in ({req.ProjectId})";
@@ -1546,7 +1546,6 @@ FieldValue6 as MECWheel,convert(varchar, Created,101) asDate,
             }
             return iECMatrialResponse;
         }
-
         public List<Grid6> IECMatrialDetail(DashboardRequest req)
         {
 
@@ -1594,7 +1593,6 @@ FieldValue6 as MECWheel,convert(varchar, Created,101) asDate,
             var IECMatrial = dbContext.Database.SqlQuery<Grid6>(Sql).ToList().Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
             return IECMatrial.ToList();
         }
-
         public PerformaceSdpResponse PerformaceOfSdp(DashboardRequest req)
         {
             string Where = $"where s.ProjectID in ({req.ProjectId})";
@@ -1673,8 +1671,6 @@ select  (select top 1 p.[Name] from Project p where p.Id=  ProjectID) as Project
             }
             return performaceSdpResponse;
         }
-
-
         public StatusOfBuildingResponse StatusOfBuilding(DashboardRequest req)
         {
             string Where = $"where s.ProjectID in ({req.ProjectId})";
@@ -1854,14 +1850,11 @@ SELECT * FROM #Graph ORDER BY YearNum, MonthNum, Center;;
             return statusOfBuildingResponse;
 
         }
-
         double CalculatePercentage(int count, int total)
         {
             if (total == 0) return 0;
             return Math.Round(((double)count / total) * 100, 2);
         }
-
-
         public string GetImage(string PhotoName)
         {
             string imagesPath = ConfigurationManager.AppSettings["ImagesPath"];
