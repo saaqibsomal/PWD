@@ -32,23 +32,29 @@ namespace DNA_CAPI_MIS.Service
             StatusOfBuilding(req, response);
             response.contraceptiveStockPositionModel = ContraceptiveStockPosition(req);
             response.FuniturePosition = FuniturePosition(req);
+
+            response.FWCCenter = GetFWCCenter();
+            response.MSUCenter = GetMSUCenter();
+            response.RHSCenter = GetRHSCenter();
+
+
             return response;
         }
 
-        public int GetFHSCenter()
+        public int GetRHSCenter()
         {
             var Central = dbContext.ProjectFieldSample.Where(x => x.IsActive && "50446".Contains(x.FieldID.ToString()));
-            return 0;
+            return Central.Count();
         }
         public int GetMSUCenter()
         {
             var Central = dbContext.ProjectFieldSample.Where(x => x.IsActive && "50486".Contains(x.FieldID.ToString()));
-            return 0;
+            return Central.Count();
         }
         public int GetFWCCenter()
         {
             var Central = dbContext.ProjectFieldSample.Where(x => x.IsActive && "55588".Contains(x.FieldID.ToString()));
-            return 0;
+            return Central.Count();
         }
         private void NumberOfVisitor(DashboardRequest req, DashboardResponse response)
         {
@@ -295,7 +301,7 @@ END
 		 where s.ProjectID in (7121)
 )
 select  
-case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
+case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount ,fs2.Title as District,fs3.Title as Center
     into #Graph from cte
 	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
@@ -312,7 +318,7 @@ case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
             {
                 req.CenterName = "";
             }
-            var OpenClose = dbContext.Database.SqlQuery<SurveyorStatsCount>(Query);
+            var OpenClose = dbContext.Database.SqlQuery<SurveyorStatsCount>(Query).Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName)); ;
 
             if (OpenClose.Count() > 0)
             {
@@ -344,7 +350,7 @@ END
 		 where s.ProjectID in (7122)
 )
 select  
-case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
+case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount ,fs2.Title as District,fs3.Title as Center
     into #Graph from cte
 	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
@@ -360,7 +366,7 @@ case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
             {
                 req.CenterName = "";
             }
-            var OpenClose = dbContext.Database.SqlQuery<SurveyorStatsCount>(Query);
+            var OpenClose = dbContext.Database.SqlQuery<SurveyorStatsCount>(Query).Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName)); ;
 
             if (OpenClose.Count() > 0)
             {
@@ -389,7 +395,7 @@ END
 		 where s.ProjectID in (7120)
 )
 select  
-case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
+case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount ,fs2.Title as District,fs3.Title as Center
     into #Graph from cte
 	inner join ProjectFieldSample fs2 on cte.FieldId2 = fs2.FieldID and fs2.Code IN (cte.FieldValue2)
 	inner join ProjectFieldSample fs3 on cte.FieldId3 = fs3.FieldID and fs3.Code IN (cte.FieldValue3)
@@ -405,7 +411,7 @@ case when FieldValue6 =1 then 'Open' else 'Close' end as SurveyCount
             {
                 req.CenterName = "";
             }
-            var OpenClose = dbContext.Database.SqlQuery<SurveyorStatsCount>(Query);
+            var OpenClose = dbContext.Database.SqlQuery<SurveyorStatsCount>(Query).Where(x => x.District.Contains(req.DistrictName) && x.Center.Contains(req.CenterName));
 
             if (OpenClose.Count() > 0)
             {

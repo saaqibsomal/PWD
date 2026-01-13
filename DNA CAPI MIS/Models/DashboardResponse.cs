@@ -28,6 +28,15 @@ namespace DNA_CAPI_MIS.Models
         public int FWCCnt { get; set; } = 0;
 
 
+        public int MSUDistrict { get; set; } = 0;
+        public int FWCDistrict { get; set; } = 0;
+        public int RHSDistrict { get; set; } = 0;
+
+        public int MSUCenter { get; set; } = 0;
+        public int FWCCenter { get; set; } = 0;
+        public int RHSCenter { get; set; } = 0;
+
+
         public ContraceptiveStockPositionModel contraceptiveStockPositionModel { get; set; } = new ContraceptiveStockPositionModel();
     }
 

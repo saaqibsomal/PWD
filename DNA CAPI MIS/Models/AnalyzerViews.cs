@@ -455,5 +455,7 @@ public class ProjectsList
     public class SurveyorStatsCount
     {
         public string SurveyCount { get; set; }
+        public string District { get; set; }
+        public string Center { get; set; }
     }
 }
